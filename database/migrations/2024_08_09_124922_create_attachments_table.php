@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('messages_id')->constrained('messages')->onDelete('cascade');
+            $table->string("file_path");
+            $table->foreignId("uploaded_by")->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
