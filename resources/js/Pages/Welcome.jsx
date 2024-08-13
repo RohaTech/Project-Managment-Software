@@ -1,7 +1,7 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
-import { Link, Head } from "@inertiajs/react";
+import { Link, Head, router } from "@inertiajs/react";
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
   const handleImageError = () => {
@@ -22,11 +22,26 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 <ApplicationLogo />
               </a>
               <div className="flex items-center lg:order-2">
-                <Link>
-                  <PrimaryButton className="bg-primaryColor">
-                    Sign Up
-                  </PrimaryButton>
-                </Link>
+                {auth.user ? (
+                  <Link method="post" href={route("logout")}>
+                    <PrimaryButton className="bg-primaryColor">
+                      Log Out
+                    </PrimaryButton>
+                  </Link>
+                ) : (
+                  <div className="space-x-4">
+                    <Link href={route("login")}>
+                      <PrimaryButton className="bg-primaryColor">
+                        Log in
+                      </PrimaryButton>
+                    </Link>
+                    <Link href={route("register")}>
+                      <PrimaryButton className="bg-primaryColor">
+                        Sign Up
+                      </PrimaryButton>
+                    </Link>
+                  </div>
+                )}
                 <button
                   data-collapse-toggle="mobile-menu-2"
                   type="button"

@@ -106,9 +106,6 @@ export default function Register() {
             Already registered?
           </Link>
 
-          <SecondaryButton className="ms-4 " disabled={processing}>
-            Register
-          </SecondaryButton>
           <PrimaryButton className="ms-4 " disabled={processing}>
             Register
           </PrimaryButton>
