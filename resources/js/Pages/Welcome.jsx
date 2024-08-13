@@ -42,9 +42,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                   <svg
@@ -54,9 +54,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                 </button>
@@ -80,7 +80,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                       href="#"
                       className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                     >
-                      Company
+                      Templates
                     </a>
                   </li>
                   <li>
@@ -104,7 +104,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                       href="#"
                       className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                     >
-                      Team
+                      Contact
                     </a>
                   </li>
                   <li>
@@ -112,7 +112,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                       href="#"
                       className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                     >
-                      Contact
+                      About us
                     </a>
                   </li>
                 </ul>
@@ -120,27 +120,24 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             </div>
           </nav>
         </header>
-        <section class="bg-white   ">
-          <div class="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
-            <div class="mr-auto place-self-center lg:col-span-7">
-              <h1 class="max-w-2xl mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl ">
+        <section className="bg-white   ">
+          <div className="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
+            <div className="mr-auto place-self-center lg:col-span-7">
+              <h1 className="max-w-2xl mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl ">
                 Unify Your Team's Workflow.
               </h1>
-              <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl ">
+              <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl ">
                 Bring tasks, tools, and teams together in one place, empowering
                 you to achieve more with seamless collaboration .
               </p>
-              <div class="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                <PrimaryButton className="bg-primaryColor">
+              <div className="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+                <PrimaryButton className="bg-primaryColor py-3">
                   Get Started
                 </PrimaryButton>
               </div>
             </div>
-            <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-              <svg
-                src="resources/image/hero-animation-homepage-600-1.svg"
-                alt=""
-              />
+            <div className=" hidden lg:mt-0 lg:col-span-5 lg:flex">
+              <img src="/image/hero-animation-homepage-600-1.svg" alt="" />
             </div>
           </div>
         </section>

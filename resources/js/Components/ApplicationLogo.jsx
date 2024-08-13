@@ -3,7 +3,7 @@ export default function ApplicationLogo(props) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       xmlns:svgjs="http://svgjs.dev/svgjs"
       width="150"
       height="50"
@@ -17,7 +17,7 @@ export default function ApplicationLogo(props) {
           height="323"
           width="2000"
           xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
         >
           <g
             id="tight-bounds"
@@ -65,7 +65,7 @@ export default function ApplicationLogo(props) {
                                     opacity="1"
                                     transform="matrix(1,0,0,1,0,0)"
                                     fill="#152232"
-                                    class="wordmark-text-0"
+                                    className="wordmark-text-0"
                                     data-fill-palette-color="primary"
                                     id="text-0"
                                   ></path>
@@ -86,16 +86,16 @@ export default function ApplicationLogo(props) {
                       <g>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink"
+                          xmlnsXlink="http://www.w3.org/1999/xlink"
                           version="1.0"
                           x="0"
                           y="0"
                           viewBox="5 32.653 90.02058228862379 40.244495279002"
-                          enable-background="new 0 0 100 100"
-                          xml:space="preserve"
+                          enableBackground="new 0 0 100 100"
+                          xmlSpace="preserve"
                           height="103.11310246575341"
                           width="230.64773110465103"
-                          class="icon-icon-0"
+                          className="icon-icon-0"
                           data-fill-palette-color="accent"
                           id="icon-0"
                         >
