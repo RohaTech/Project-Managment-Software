@@ -13,12 +13,13 @@ class Task extends Model
     protected $fillable = [
         'name',
         'content',
-        'priority ',
+        'priority',
         'status',
         'due_date',
         'project_id',
         'start_date',
         'created_by',
+        'column_id',
     ];
     protected $casts = [
         'created_at' => 'datetime',
@@ -46,5 +47,9 @@ class Task extends Model
     {
         return $this->hasMany(Attachment::class);
     }
+    public function column()
+    {
+       return  $this->hasMany(Column::class);
 
+    }
 }
