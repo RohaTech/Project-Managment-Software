@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('columns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->constrained('tasks')->onDelete("cascade");
+            $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete("cascade");
+            $table->foreignId('subtask_id')->nullable()->constrained('tasks')->onDelete("cascade");
             $table->string("name");
             $table->string("type");
             $table->string("value");
