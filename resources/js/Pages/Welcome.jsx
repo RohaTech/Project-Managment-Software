@@ -146,9 +146,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 you to achieve more with seamless collaboration .
               </p>
               <div className="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                <PrimaryButton className="bg-primaryColor py-3">
-                  Get Started
-                </PrimaryButton>
+                <Link href={route("register")}>
+                  <PrimaryButton className="bg-primaryColor py-3">
+                    Get Started
+                  </PrimaryButton>
+                </Link>
               </div>
             </div>
             <div className=" hidden lg:mt-0 lg:col-span-5 lg:flex">

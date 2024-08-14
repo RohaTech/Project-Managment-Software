@@ -24,15 +24,14 @@ class SubTask extends Model
     ];
     protected $casts = [
         'created_at' => 'datetime',
-        'updated_at' => 'datetime', 
-        'due_date' => 'datetime', 
+        'updated_at' => 'datetime',
+        'due_date' => 'datetime',
         'start_date' => 'datetime',
     ];
 
     public function creator()
     {
-        return $this->belongsTo(User::class,'created_by');
-
+        return $this->belongsTo(User::class);
     }
     public function task()
     {

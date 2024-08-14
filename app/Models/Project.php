@@ -21,12 +21,11 @@ class Project extends Model
         'created_at' => 'datetime',
     ];
     public function creator()
-    {                   
-        return $this->belongsTo(User::class, 'created_by');
+    {
+        return $this->belongsTo(User::class);
     }
     public function projects()
     {
-        return $this->hasMany(Task::class, 'project_Id');
+        return $this->hasMany(Task::class);
     }
-
 }
