@@ -30,5 +30,9 @@ class ProjectMember extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 
 }
