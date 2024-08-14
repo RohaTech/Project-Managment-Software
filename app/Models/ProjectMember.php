@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProjectMember extends Model
 {
-    
+
     use HasFactory;
     protected $table = 'ProjectMember';
     protected $primaryKey = 'id';
@@ -24,15 +24,14 @@ class ProjectMember extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class);
     }
     public function projects()
     {
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(Project::class);
     }
     public function task()
     {
         return $this->belongsTo(Task::class);
     }
-
 }

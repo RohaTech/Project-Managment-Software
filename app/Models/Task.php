@@ -29,8 +29,7 @@ class Task extends Model
     ];
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by');
-
+        return $this->belongsTo(User::class);
     }
     public function project()
     {
@@ -50,8 +49,7 @@ class Task extends Model
     }
     public function column()
     {
-       return  $this->hasMany(Column::class);
-
+        return  $this->hasMany(Column::class);
     }
     public function projectmember()
     {
