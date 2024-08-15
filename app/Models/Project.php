@@ -10,11 +10,11 @@ class Project extends Model
 {
     use HasFactory;
     protected $table = 'projects';
-    protected $primaryKey = 'project_id';
     protected $fillable = [
         'name',
-        'content',
-        'user_id',
+        'description',
+        'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
