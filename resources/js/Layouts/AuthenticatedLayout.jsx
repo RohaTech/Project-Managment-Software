@@ -6,7 +6,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 
-export default function AuthenticatedLayout({ header, children, auth }) {
+export default function AuthenticatedLayout({ header, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
@@ -19,26 +19,12 @@ export default function AuthenticatedLayout({ header, children, auth }) {
               <ApplicationLogo />
             </div>
             <div className="flex items-center lg:order-2">
-              {auth.user ? (
-                <Link method="post" href={route("logout")}>
-                  <PrimaryButton className="bg-primaryColor">
-                    Log Out
-                  </PrimaryButton>
-                </Link>
-              ) : (
-                <div className="space-x-4">
-                  <Link href={route("login")}>
-                    <PrimaryButton className="bg-primaryColor">
-                      Log in
-                    </PrimaryButton>
-                  </Link>
-                  <Link href={route("register")}>
-                    <PrimaryButton className="bg-primaryColor">
-                      Sign Up
-                    </PrimaryButton>
-                  </Link>
-                </div>
-              )}
+              <Link method="post" href={route("logout")}>
+                <PrimaryButton className="bg-primaryColor">
+                  Log Out
+                </PrimaryButton>
+              </Link>
+
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
