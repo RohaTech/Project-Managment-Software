@@ -22,10 +22,19 @@ class Project extends Model
     ];
     public function creator()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function updateBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
     public function projects()
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function members()
+    {
+        return $this->hasMany(ProjectMember::class);
     }
 }

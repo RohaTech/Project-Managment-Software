@@ -26,6 +26,12 @@ Route::middleware('auth')->group(function () {
 
 
 
+
+
+
+require __DIR__ . '/auth.php';
+require __DIR__ . '/project.php';
+
 use App\Http\Controllers\ProjectMemberController;
 #all route about the project memeber
 Route::get('/project-members', [ProjectMemberController::class, 'index'])->name('project-members.index');
@@ -40,7 +46,8 @@ Route::delete('/project-members/{projectMember}', [ProjectMemberController::clas
 
 
 
-require __DIR__ . '/auth.php';
+
+
 
 
 
