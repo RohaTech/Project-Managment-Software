@@ -17,9 +17,6 @@ class ProjectMember extends Model
         "role"
     ];
 
-
-
-
     public function creator()
     {
         return $this->belongsTo(User::class);

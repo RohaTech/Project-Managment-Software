@@ -10,8 +10,13 @@ class ProjectMemberController extends Controller
 {
     public function index()
     {   
-        $projectMembers = ProjectMember::all();
-        return response()->json($projectMembers);
+        $projectMembers = ProjectMember::latest()->simplePaginate(10);
+
+        return  Inertia::render('projectmember/show', [
+            'projectMembers' => $projectMembers
+        ]);
+        // $projectMembers = ProjectMember::all();
+        // return response()->json($projectMembers);
     }
     public function create(): Response
     {
@@ -26,31 +31,25 @@ class ProjectMemberController extends Controller
             'role'=>'required|string'
         ]);
 
-        
-        $projectMember = ProjectMember::create([
+        ProjectMember::create([
             "project_id"=>$request->project_id,
             "user_id"=>$request->user_id,
             "role"=>$request->role 
-
         ]);
-
-        event(new $projectMember($projectMember));
-        // return response()->json($projectMember, 201);
         return redirect(route('dashboard', absolute: false));
-
+        
     }
     public function show(ProjectMember $projectMember)
     {
         return response()->json($projectMember);
     }
-
     public function update(Request $request, ProjectMember $projectMember)
     {
         $request->validate([
             'project_id' => 'sometimes|required|integer|exists:projects,id',
             'user_id' => 'sometimes|required|integer|exists:users,id',
+            'role'=>'sometimes|required|string'
         ]);
-
         $projectMember->update($request->all());
         return response()->json($projectMember);
     }
