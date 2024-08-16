@@ -20,6 +20,7 @@ class Task extends Model
         'start_date',
         'updated_by',
         'created_by',
+        'assigned',
         'column_id',
     ];
     protected $casts = [
@@ -50,5 +51,10 @@ class Task extends Model
     public function column()
     {
         return $this->hasMany(Column::class);
+    }
+    public function projectmember()
+    {
+       return  $this->hasMany(ProjectMember::class,'assigned');
+    
     }
 }

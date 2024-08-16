@@ -10,17 +10,15 @@ class ProjectMember extends Model
 {
 
     use HasFactory;
-    protected $table = 'ProjectMember';
-    protected $primaryKey = 'id';
+    protected $table = 'project_members';
     protected $fillable = [
         'project_id',
-        'created_by',
+        'user_id',
+        "role"
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
-    public $timestamps = true;
+
+
 
     public function creator()
     {
@@ -29,5 +27,9 @@ class ProjectMember extends Model
     public function projects()
     {
         return $this->belongsTo(Project::class);
+    }
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
     }
 }
