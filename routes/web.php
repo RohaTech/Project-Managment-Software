@@ -26,6 +26,12 @@ Route::middleware('auth')->group(function () {
 
 
 
+
+
+
+require __DIR__ . '/auth.php';
+require __DIR__ . '/project.php';
+
 use App\Http\Controllers\ProjectMemberController;
 #all route about the project memeber
 Route::middleware('auth')->group(function () {
@@ -44,7 +50,8 @@ Route::delete('/projectmembers/{projectMember}', [ProjectMemberController::class
 
 
 
-require __DIR__ . '/auth.php';
+
+
 
 
 
