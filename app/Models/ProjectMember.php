@@ -11,16 +11,14 @@ class ProjectMember extends Model
 
     use HasFactory;
     protected $table = 'ProjectMember';
-    protected $primaryKey = 'id';
     protected $fillable = [
         'project_id',
-        'created_by',
+        'user_id',
+        "role,"
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
-    public $timestamps = true;
+
+
 
     public function creator()
     {
