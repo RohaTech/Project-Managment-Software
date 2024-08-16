@@ -24,4 +24,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+use App\Http\Controllers\ProjectMemberController;
+#all route about the project memeber
+Route::get('/project-members', [ProjectMemberController::class, 'index'])->name('project-members.index');
+Route::get('/project-members/{projectMember}', [ProjectMemberController::class, 'show'])->name('project-members.show');
+Route::get('/project-members/create', [ProjectMemberController::class, 'create'])->name('project-members.create');
+Route::post('/project-members', [ProjectMemberController::class, 'store'])->name('project-members.store');
+Route::get('/project-members/{projectMember}/edit', [ProjectMemberController::class, 'edit'])->name('project-members.edit');
+Route::put('/project-members/{projectMember}', [ProjectMemberController::class, 'update'])->name('project-members.update');
+Route::delete('/project-members/{projectMember}', [ProjectMemberController::class, 'destroy'])->name('project-members.destroy');
+
+
+
+
+
 require __DIR__ . '/auth.php';
+
+
+
