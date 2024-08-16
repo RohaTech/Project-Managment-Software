@@ -18,18 +18,27 @@ class ProjectMemberController extends Controller
         return Inertia::render('projectmember/register');
     }
 
-
     public function store(Request $request)
-    {
+    { 
         $request->validate([
             'project_id' => 'required|integer|exists:projects,id',
-            'created_by' => 'required|integer|exists:users,id',
+            'user_id' => 'required|integer|exists:users,id',
+            'role'=>'required|string'
         ]);
 
-        $projectMember = ProjectMember::create($request->all());
-        return response()->json($projectMember, 201);
-    }
+        
+        $projectMember = ProjectMember::create([
+            "project_id"=>$request->project_id,
+            "user_id"=>$request->user_id,
+            "role"=>$request->role 
 
+        ]);
+
+        event(new $projectMember($projectMember));
+        // return response()->json($projectMember, 201);
+        return redirect(route('dashboard', absolute: false));
+
+    }
     public function show(ProjectMember $projectMember)
     {
         return response()->json($projectMember);
@@ -39,7 +48,7 @@ class ProjectMemberController extends Controller
     {
         $request->validate([
             'project_id' => 'sometimes|required|integer|exists:projects,id',
-            'created_by' => 'sometimes|required|integer|exists:users,id',
+            'user_id' => 'sometimes|required|integer|exists:users,id',
         ]);
 
         $projectMember->update($request->all());

@@ -28,13 +28,17 @@ Route::middleware('auth')->group(function () {
 
 use App\Http\Controllers\ProjectMemberController;
 #all route about the project memeber
-Route::get('/project-members', [ProjectMemberController::class, 'index'])->name('project-members.index');
-Route::get('/project-members/{projectMember}', [ProjectMemberController::class, 'show'])->name('project-members.show');
-Route::get('/project-members/create', [ProjectMemberController::class, 'create'])->name('project-members.create');
-Route::post('/project-members', [ProjectMemberController::class, 'store'])->name('project-members.store');
-Route::get('/project-members/{projectMember}/edit', [ProjectMemberController::class, 'edit'])->name('project-members.edit');
-Route::put('/project-members/{projectMember}', [ProjectMemberController::class, 'update'])->name('project-members.update');
-Route::delete('/project-members/{projectMember}', [ProjectMemberController::class, 'destroy'])->name('project-members.destroy');
+Route::middleware('auth')->group(function () {
+Route::get('/projectmembers', [ProjectMemberController::class, 'index'])->name('projectmembers.index');
+Route::get('/projectmembers/create', [ProjectMemberController::class, 'create'])->name('projectmembers.create');
+Route::get('/projectmembers/{projectMember}', [ProjectMemberController::class, 'show'])->name('projectmembers.show');
+Route::post('/projectmembers/store', [ProjectMemberController::class, 'store'])->name('projectmembers.store');
+Route::get('/projectmembers/{projectMember}/edit', [ProjectMemberController::class, 'edit'])->name('projectmembers.edit');
+Route::put('/projectmembers/{projectMember}', [ProjectMemberController::class, 'update'])->name('projectmembers.update');
+Route::delete('/projectmembers/{projectMember}', [ProjectMemberController::class, 'destroy'])->name('projectmembers.destroy');
+
+});
+
 
 
 
