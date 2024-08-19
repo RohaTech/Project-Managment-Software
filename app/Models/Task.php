@@ -18,6 +18,7 @@ class Task extends Model
         'due_date',
         'project_id',
         'start_date',
+        'updated_by',
         'created_by',
         'assigned',
         'column_id',
@@ -49,7 +50,7 @@ class Task extends Model
     }
     public function column()
     {
-        return  $this->hasMany(Column::class);
+        return $this->hasMany(Column::class);
     }
     public function projectmember()
     {

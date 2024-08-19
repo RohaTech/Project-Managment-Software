@@ -3,6 +3,7 @@
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ProjectMemberController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,9 +31,17 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/project.php';
 require __DIR__ . '/message.php';
 require __DIR__ . '/projectmember.php';
+require __DIR__ . '/task.php';
 
 
-use App\Http\Controllers\ProjectMemberController;
+
+
+
+
+ 
+
+
+
 
 
 
