@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -13,8 +15,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-
+        /*
         $tasks = Task::all();
+        */
+
+        $tasks = Task::where('created_by', auth()->id())->get();
         return Inertia::render('Task', [
             // 'auth' => auth()->user(),
             'tasks' => $tasks
@@ -56,7 +61,13 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return Inertia::render('ShowTask', ['task' => $task]);
+        $messages = Message::where('task_id', $task->id)->get();
+        $task->load('project');
+        return Inertia::render('ShowTask', [
+            'task' => $task,
+            'messages' => $messages,
+            'user_id' => Auth::id()
+        ]);
     }
 
     /**
