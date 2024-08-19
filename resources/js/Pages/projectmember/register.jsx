@@ -8,14 +8,13 @@ import { Head, useForm } from "@inertiajs/react";
 export default function ProjectMemberRegistration() {
   const { data, setData, post, processing, errors, reset } = useForm({
     project_id: "",
-    created_by: "",
+    usere_id: "",
+    role:"",
   });
 
-  // Handle form submission
   const submit = (e) => {
     e.preventDefault();
-
-    post(route("project-members.store"), {
+    post(route("projectmembers.store"), {
       onFinish: () => reset(),
     });
   };
@@ -45,17 +44,33 @@ export default function ProjectMemberRegistration() {
           <InputLabel htmlFor="created_by" value="Created By" />
 
           <TextInput
-            id="created_by"
-            name="created_by"
-            value={data.created_by}
+            id="user_id"
+            name="user_id"
+            value={data.user_id}
             className="mt-1 block w-full"
-            autoComplete="created_by"
-            onChange={(e) => setData("created_by", e.target.value)}
+            autoComplete="user_id"
+            onChange={(e) => setData("user_id", e.target.value)}
             required
           />
 
           <InputError message={errors.created_by} className="mt-2" />
         </div>
+        <div>
+          <InputLabel htmlFor="roel" value="role" />
+
+          <TextInput
+            id="role"
+            name="role"
+            value={data.role}
+            className="mt-1 block w-full"
+            autoComplete="role"
+            onChange={(e) => setData("role", e.target.value)}
+            required
+          />
+
+          <InputError message={errors.role} className="mt-2" />
+        </div>
+
 
         <div className="flex items-center justify-end mt-4">
           <PrimaryButton className="ms-4" disabled={processing}>

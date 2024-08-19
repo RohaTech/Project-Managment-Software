@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ProjectMemberController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,30 +27,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-
-
-
 require __DIR__ . '/auth.php';
 require __DIR__ . '/project.php';
+require __DIR__ . '/message.php';
+require __DIR__ . '/projectmember.php';
 require __DIR__ . '/task.php';
 
-use App\Http\Controllers\ProjectMemberController;
-#all route about the project memeber
-Route::middleware('auth')->group(function () {
-    Route::get('/projectmembers', [ProjectMemberController::class, 'index'])->name('projectmembers.index');
-    Route::get('/projectmembers/create', [ProjectMemberController::class, 'create'])->name('projectmembers.create');
-    Route::get('/projectmembers/{projectMember}', [ProjectMemberController::class, 'show'])->name('projectmembers.show');
-    Route::post('/projectmembers/store', [ProjectMemberController::class, 'store'])->name('projectmembers.store');
-    Route::get('/projectmembers/{projectMember}/edit', [ProjectMemberController::class, 'edit'])->name('projectmembers.edit');
-    Route::put('/projectmembers/{projectMember}', [ProjectMemberController::class, 'update'])->name('projectmembers.update');
-    Route::delete('/projectmembers/{projectMember}', [ProjectMemberController::class, 'destroy'])->name('projectmembers.destroy');
-
-});
 
 
 
+
+
+ 
 
 
 
