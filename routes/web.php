@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,24 +28,11 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/project.php';
+require __DIR__ . '/message.php';
+require __DIR__ . '/projectmember.php';
+
 
 use App\Http\Controllers\ProjectMemberController;
-#all route about the project memeber
-Route::get('/projectmembers', [ProjectMemberController::class, 'index'])->name('projectmembers.index');
-Route::get('/projectmembers/create', [ProjectMemberController::class, 'create'])->name('projectmembers.create');
-Route::post('/projectmembers/store', [ProjectMemberController::class, 'store'])->name('projectmembers.store')
-->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-Route::get('/projectmembers/{projectMember}', [ProjectMemberController::class, 'show'])->name('projectmembers.show');
-Route::get('/projectmembers/{projectMember}/edit', [ProjectMemberController::class, 'edit'])->name('projectmembers.edit');
-Route::put('/projectmembers/{projectMember}', [ProjectMemberController::class, 'update'])->name('projectmembers.update');
-Route::delete('/projectmembers/{projectMember}', [ProjectMemberController::class, 'destroy'])->name('projectmembers.destroy');
-
-
-
-
-
-
-
 
 
 

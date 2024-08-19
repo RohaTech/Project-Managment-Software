@@ -1,64 +1,64 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Message;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+
 
 class MessageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+       public function index($taskId)
+    {   
+        $Messages = Message::where('task_id', $taskId)->with('user')->get();
+        return response()->json($Messages);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+   
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        $Message = Message::create([
+            'task_id' => $request->input('task_id'),
+            'user_id' => Auth::id(),
+            'content' => $request->input('content'),
+        ]);
+
+        // return response()->json($Message, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        $Message = Message::findOrFail($id);
+
+        if ($Message->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        
+        $Message->content = $request->input('content');
+        $Message->save();
+
+        return response()->json($Message);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $Message = Message::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        if ($Message->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $Message->delete();
+
+        return response()->json(['message' => 'Message deleted successfully']);
     }
 }
