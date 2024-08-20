@@ -60,7 +60,7 @@ class SubTaskController extends Controller
      */
     public function show(SubTask $subtask)
     {
-        $messages = Message::where('subtask_id', $subtask->id)->get();
+        $messages = Message::where('sub_task_id', $subtask->id)->get();
 
         return Inertia::render('Subtask/Show', [
             'subtask' => $subtask,
