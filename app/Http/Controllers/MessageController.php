@@ -22,7 +22,7 @@ class MessageController extends Controller
             'content' => 'required|string|max:255',
         ]);
 
-        $Message = Message::create([
+        Message::create([
             'task_id' => $request->input('task_id'),
             'user_id' => Auth::id(),
             'content' => $request->input('content'),
@@ -46,19 +46,12 @@ class MessageController extends Controller
         $Message->content = $request->input('content');
         $Message->save();
 
-        return response()->json($Message);
+        // return response()->json($Message);
     }
 
-    public function destroy($id)
+    public function destroy(Message $message)
     {
-        $Message = Message::findOrFail($id);
-
-        if ($Message->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $Message->delete();
-
-        return response()->json(['message' => 'Message deleted successfully']);
+        
+        $message->delete();
     }
 }
