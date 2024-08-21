@@ -53,7 +53,8 @@ class Task extends Model
     }
     public function projectmember()
     {
-        return $this->hasMany(ProjectMember::class, 'assigned');
+
+        return  $this->hasMany(ProjectMember::class, 'assigned');
 
     }
 }

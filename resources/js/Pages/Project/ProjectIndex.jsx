@@ -2,7 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Link, router, useForm } from "@inertiajs/react";
 import React from "react";
 
-export default function Project_Index({ projects }) {
+export default function Project_Index({ projects, user }) {
   const { delete: destroy } = useForm();
 
   const submit = (project_id) => {
@@ -93,7 +93,7 @@ export default function Project_Index({ projects }) {
     </div>
   ));
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout user={user}>
       <div className=" container max-w-[1200px] mx-auto ">
         <div className="py-3 px-3">
           <div className="space-y-4px-4  ">{mappedProjects}</div>

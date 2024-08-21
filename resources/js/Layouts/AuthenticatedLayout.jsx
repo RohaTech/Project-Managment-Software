@@ -5,8 +5,9 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import DropdownUser from "@/Components/DropdownUser";
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({ header, children, user }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
@@ -19,11 +20,7 @@ export default function AuthenticatedLayout({ header, children }) {
               <ApplicationLogo />
             </div>
             <div className="flex items-center lg:order-2">
-              <Link method="post" href={route("logout")}>
-                <PrimaryButton className="bg-primaryColor">
-                  Log Out
-                </PrimaryButton>
-              </Link>
+              <DropdownUser user={user} />
 
               <button
                 data-collapse-toggle="mobile-menu-2"
