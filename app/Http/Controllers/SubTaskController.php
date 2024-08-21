@@ -52,6 +52,14 @@ class SubTaskController extends Controller
             'updated_by' => Auth::id() // Assuming you're storing the creator's ID
         ]);
 
+        $subtask = SubTask::find($request->task_id);
+
+        $project = $subtask->task->project;
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' created Sub-Task ' . $request->name,
+        ]);
         return redirect()->route('subtask.index')->with('success', 'SubTask created successfully.');
     }
 
@@ -103,6 +111,12 @@ class SubTaskController extends Controller
             'updated_by' => Auth::id() // Assuming you're storing the updater's ID
         ]);
 
+
+        $project = $subtask->task->project;
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Update Sub-Task ' . $request->name,
+        ]);
         return redirect()->route('subtask.index')->with('success', 'SubTask updated successfully.');
     }
 
@@ -111,8 +125,12 @@ class SubTaskController extends Controller
      */
     public function destroy(Subtask $subtask)
     {
+        $project = $subtask->task->project;
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Deleted Sub-Task ' . $subtask->name,
+        ]);
         $subtask->delete();
         return redirect()->route('subtask.index')->with('success', 'Task deleted successfully.');
-
     }
 }
