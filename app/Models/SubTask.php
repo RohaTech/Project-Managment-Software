@@ -8,15 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class SubTask extends Model
 {
     use HasFactory;
-    protected $table = 'subtasks';
-    protected $primaryKey = 'project_id';
+    protected $table = 'sub_tasks';
     protected $fillable = [
         'name',
-        'content',
         'priority',
         'status',
         'due_date',
         'created_by',
+        'updated_by',
         'task_id',
         'start_date',
         'user_id',
