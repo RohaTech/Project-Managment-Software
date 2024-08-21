@@ -19,7 +19,6 @@ class ProjectController extends Controller
     {
         $userId = Auth::id();
 
-        // Fetch projects where the current user is a member or owner, including the user who created the project
         $projects = Project::whereHas('members', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })->with(['creator', 'updateBy']) // Load the creator relationship
@@ -28,6 +27,7 @@ class ProjectController extends Controller
 
         return Inertia::render('Project/ProjectIndex', [
             'projects' => $projects,
+            'user' => auth()->user(),
         ]);
     }
 
@@ -38,7 +38,7 @@ class ProjectController extends Controller
     public function create()
     {
 
-        return Inertia::render('Project/ProjectCreate');
+        return Inertia::render('Project/ProjectCreate', ['user' => auth()->user(),]);
     }
 
     /**
@@ -46,7 +46,6 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->name);
 
         $request->validate([
             'name' => ['required ', 'max:255'],
@@ -64,13 +63,16 @@ class ProjectController extends Controller
                 'updated_by' => Auth::id(),
             ]
         );
-        ProjectMember::create(
-            [
-                "project_id" => $project->id,
-                "user_id" => Auth::id(),
-                "role" => "owner",
-            ]
-        );
+
+        $project->members()->create([
+            'user_id' => Auth::id(),
+            'role' => 'owner',
+        ]);
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' created project ' . $request->name,
+        ]);
     }
 
     /**
@@ -78,10 +80,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        // dd($project);
 
         $tasks = Task::where('project_id', $project->id)->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks]);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(),]);
     }
 
     /**
@@ -89,7 +90,7 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render('Project/ProjectEdit', ["project_id" => $id]);
+        return Inertia::render('Project/ProjectEdit', ["project_id" => $id, 'user' => auth()->user(),]);
     }
 
     /**
@@ -97,8 +98,6 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // dd($request->request);
-
         $validate = $request->validate([
             'name' => ['required ', 'max:255'],
             'description' => ['nullable'],
@@ -107,6 +106,11 @@ class ProjectController extends Controller
         $validate['updated_by'] = Auth::id();
         $project = Project::find($id);
         $project->update($validate);
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' updated project ' . $request->name,
+        ]);
         return back();
     }
 

@@ -2,9 +2,10 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Guest from "@/Layouts/GuestLayout";
 import { Link, Head, router } from "@inertiajs/react";
 
-export default function Welcome({ auth, laravelVersion, phpVersion }) {
+export default function Welcome({ laravelVersion, phpVersion }) {
   const handleImageError = () => {
     document.getElementById("screenshot-container")?.classList.add("!hidden");
     document.getElementById("docs-card")?.classList.add("!row-span-1");
@@ -13,7 +14,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
   };
 
   return (
-    <AuthenticatedLayout auth={auth}>
+    <Guest>
       <Head title="Welcome" />
       <div className="min-h-svh ">
         <section className="bg-white   ">
@@ -40,6 +41,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
           </div>
         </section>
       </div>
-    </AuthenticatedLayout>
+    </Guest>
   );
 }

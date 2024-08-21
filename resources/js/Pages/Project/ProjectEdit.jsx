@@ -8,7 +8,7 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 
-export default function ProjectEdit({ project_id }) {
+export default function ProjectEdit({ project_id, user }) {
   const { data, setData, patch, processing, errors, reset } = useForm({
     name: "",
     description: "",
@@ -20,7 +20,7 @@ export default function ProjectEdit({ project_id }) {
   };
   console.log(project_id);
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout user={user}>
       <div className="mx-auto max-w-[720px] mt-24">
         <form onSubmit={submit}>
           <div>
