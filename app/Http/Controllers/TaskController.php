@@ -113,7 +113,7 @@ class TaskController extends Controller
             'activity' => ' Update Task ' . $request->name,
         ]);
 
-        // Redirect back with a success message
+
         return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
 
