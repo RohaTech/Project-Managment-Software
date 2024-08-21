@@ -14,7 +14,7 @@ export default function TaskEdit({ task }) {
         e.preventDefault();
         patch(`/task/${task.id}`);
     };
-
+    
     return (
         <AuthenticatedLayout
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Edit Task</h2>}
