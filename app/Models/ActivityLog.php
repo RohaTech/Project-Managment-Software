@@ -10,9 +10,10 @@ class ActivityLog extends Model
     use HasFactory;
 
 
-    protected $fillable =[
-      '	user_id ',
-      'activity ',
+    protected $fillable = [
+        'user_id',
+        'project_id',
+        'activity',
     ];
     protected function casts(): array
     {
@@ -23,7 +24,10 @@ class ActivityLog extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
-    
+    public function projects()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

@@ -8,7 +8,7 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 
-export default function Project() {
+export default function Project({ user }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
     description: "",
@@ -19,7 +19,7 @@ export default function Project() {
     post(route("project.store"));
   };
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout user={user}>
       <div className="mx-auto max-w-[720px] mt-24">
         <form onSubmit={submit}>
           <div>

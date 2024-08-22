@@ -12,7 +12,6 @@ class Task extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
-        'content',
         'priority',
         'status',
         'due_date',
@@ -54,7 +53,8 @@ class Task extends Model
     }
     public function projectmember()
     {
-       return  $this->hasMany(ProjectMember::class,'assigned');
-    
+
+        return  $this->hasMany(ProjectMember::class, 'assigned');
+
     }
 }
