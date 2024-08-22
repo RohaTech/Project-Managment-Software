@@ -5,7 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Guest from "@/Layouts/GuestLayout";
 import { Link, Head, router } from "@inertiajs/react";
 
-export default function Welcome({ laravelVersion, phpVersion }) {
+export default function Welcome({ user }) {
   const handleImageError = () => {
     document.getElementById("screenshot-container")?.classList.add("!hidden");
     document.getElementById("docs-card")?.classList.add("!row-span-1");
@@ -14,7 +14,7 @@ export default function Welcome({ laravelVersion, phpVersion }) {
   };
 
   return (
-    <Guest>
+    <Guest user={user}>
       <Head title="Welcome" />
       <div className="min-h-svh ">
         <section className="bg-white   ">

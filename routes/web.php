@@ -10,18 +10,13 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-
-
+        'user' => auth()->user()
     ]);
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Home', ['user' => auth()->user()]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', function () {
+    return Inertia::render('Home', ['user' => auth()->user(), 'projects' => auth()->user()->projects]);
+})->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,5 +31,3 @@ require __DIR__ . '/projectmember.php';
 require __DIR__ . '/task.php';
 require __DIR__ . '/activityLogs.php';
 require __DIR__ . '/subtask.php';
-
-
