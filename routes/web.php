@@ -10,12 +10,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-
-
+        'user' => auth()->user()
     ]);
 })->name('welcome');
 
@@ -36,5 +31,3 @@ require __DIR__ . '/projectmember.php';
 require __DIR__ . '/task.php';
 require __DIR__ . '/activityLogs.php';
 require __DIR__ . '/subtask.php';
-
-
