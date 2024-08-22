@@ -11,10 +11,9 @@ class Attachment extends Model
 
 
     protected $fillable =[
-      'message_id',
-      'file_path',
-      'message_id ',
-      'user_id',
+      'message_id', 
+      'file_path', 
+      'file_name'
     ];
     protected function casts(): array
     {
@@ -27,8 +26,8 @@ class Attachment extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function task()
+    public function message()
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(Message::class);
     }
 }

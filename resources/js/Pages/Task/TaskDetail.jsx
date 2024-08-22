@@ -189,7 +189,10 @@ const TaskDetail = ({ task, messages, user_id }) => {
                             <p>No messages yet.</p>
                         )}
                     </div>
-                    <form onSubmit={handleSendMessage} className="flex">
+                    <form
+                        onSubmit={handleSendMessage}
+                        className="flex flex-col"
+                    >
                         <textarea
                             value={data.content || ""} // Provide a default value
                             onChange={(e) => setData("content", e.target.value)}
@@ -197,10 +200,17 @@ const TaskDetail = ({ task, messages, user_id }) => {
                             placeholder="Write a message..."
                             rows="3"
                         />
+                        <input
+                            type="file"
+                            onChange={(e) =>
+                                setData("attachment", e.target.files[0])
+                            }
+                            className="mb-2"
+                        />
                         <button
                             type="submit"
                             disabled={processing}
-                            className="bg-blue-500 text-white p-2 ml-2"
+                            className="bg-blue-500 text-white p-2"
                         >
                             {processing ? "Sending..." : "Send"}
                         </button>
