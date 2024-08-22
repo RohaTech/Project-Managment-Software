@@ -6,15 +6,16 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import DropdownUser from "@/Components/DropdownUser";
+import DefaultLayout from "./DefaultLayout";
 
 export default function AuthenticatedLayout({ header, children, user }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
   return (
-    <div className="min-h-screen ">
-      <header className="w-full py-4">
-        <nav className="bg-white border-gray-200 py-5 shadow-md ">
+    <div className="min-h-screen  relative">
+      <header className="w-full mb-0.5 ">
+        <nav className="bg-white border-gray-200 py-4 shadow-md ">
           <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
             <div href="#" className="flex items-center">
               <ApplicationLogo />
@@ -115,16 +116,9 @@ export default function AuthenticatedLayout({ header, children, user }) {
           </div>
         </nav>
       </header>
-
-      {header && (
-        <header className="bg-white shadow">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {header}
-          </div>
-        </header>
-      )}
-
-      <main>{children}</main>
+      <main>
+        <DefaultLayout>{children}</DefaultLayout>
+      </main>
     </div>
   );
 }
