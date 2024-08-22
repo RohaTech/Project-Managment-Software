@@ -62,7 +62,7 @@ export default function Home({ user, projects }) {
                                         </div>
                                     </div>
                                         <div>
-                                                <h3 className="text-graydark text-xs"> Work management > Main Workspace</h3>
+                                                <h3 className="text-graydark text-xs"> Work management &gt; Main Workspace</h3>
                                         </div>
                                     </div>))}
                             </div>
