@@ -10,7 +10,7 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-[9999] flex h-full w-72.5 flex-col overflow-y-hidden bg-[#f7f8f9] duration-300 ease-linear   lg:static lg:translate-x-0 `}
+      className={`absolute left-0 top-0 z-[50] flex h-full w-72.5 flex-col overflow-y-hidden bg-[#f7f8f9] duration-300 ease-linear   lg:static lg:translate-x-0 `}
     >
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
