@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -9,22 +10,22 @@ use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
-       public function index($taskId)
-    {   
+    public function index($taskId)
+    {
         $Messages = Message::where('task_id', $taskId)->with('user')->get();
         return response()->json($Messages);
     }
 
-   
+
     public function store(Request $request)
     {
         $request->validate([
             'content' => 'required|string|max:255',
         ]);
 
-        $Message = Message::create([
+        Message::create([
             'task_id' => $request->input('task_id'),
-            'user_id' => Auth::id(),
+            'user_id' =>  auth()->id(),
             'content' => $request->input('content'),
         ]);
 
@@ -39,26 +40,18 @@ class MessageController extends Controller
 
         $Message = Message::findOrFail($id);
 
-        if ($Message->user_id !== Auth::id()) {
+        if ($Message->user_id !==  auth()->id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        
+
         $Message->content = $request->input('content');
         $Message->save();
 
-        return response()->json($Message);
+        // return response()->json($Message);
     }
 
-    public function destroy($id)
+    public function destroy(Message $message)
     {
-        $Message = Message::findOrFail($id);
-
-        if ($Message->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $Message->delete();
-
-        return response()->json(['message' => 'Message deleted successfully']);
+        $message->delete();
     }
 }

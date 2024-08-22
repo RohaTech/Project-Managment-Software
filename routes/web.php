@@ -14,11 +14,13 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+
+
     ]);
 })->name('welcome');
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Home');
+    return Inertia::render('Home', ['user' => auth()->user()]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -32,18 +34,7 @@ require __DIR__ . '/project.php';
 require __DIR__ . '/message.php';
 require __DIR__ . '/projectmember.php';
 require __DIR__ . '/task.php';
-
-
-
-
-
-
- 
-
-
-
-
-
-
+require __DIR__ . '/activityLogs.php';
+require __DIR__ . '/subtask.php';
 
 
