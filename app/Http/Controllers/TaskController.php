@@ -87,9 +87,7 @@ class TaskController extends Controller
         return Inertia::render('TaskEdit', ['task' => $task, 'user' => auth()->user()]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, Task $task)
     {
         $validated = $request->validate([
