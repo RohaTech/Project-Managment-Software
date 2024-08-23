@@ -1,12 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import React from "react";
 
-export default function ProjectShow({ project, tasks }) {
+export default function ProjectShow({ project, tasks, user }) {
   console.log(tasks);
   //   console.log(project);
 
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout user={user}>
       <div className="">
         <h1 className="">SHOW</h1>
       </div>
