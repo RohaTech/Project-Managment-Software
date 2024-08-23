@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Models\Attachment;
+
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,22 +17,53 @@ class MessageController extends Controller
         $Messages = Message::where('task_id', $taskId)->with('user')->get();
         return response()->json($Messages);
     }
+    public function show($taskId)
+    {
+    $messages = Message::with('attachments')
+        ->where('task_id', $taskId)
+        ->get();
+
+    return response()->json(['data' => $messages]);
+    }
 
 
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'required|string|max:255',
+            'task_id' => 'required|exists:tasks,id',
+            'content' => 'nullable|string',
+            'attachment' => 'nullable|file|max:10240', // max 10 MB, adjust as needed
         ]);
 
-        Message::create([
+        // Create a new message
+    
+        $message=Message::create([
             'task_id' => $request->input('task_id'),
-            'user_id' =>  auth()->id(),
+            'user_id' => auth()->id(),
             'content' => $request->input('content'),
         ]);
+    
+        if ($request->has('content')) {
+            $message->content = $request->input('content');
+        }
+    
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filePath = $file->store('attachments', 'public');
+            $fileName = $file->getClientOriginalName();
+        
+    
+        Attachment::create([
+            'message_id' => $message->id,
+            'file_path' => $filePath,
+            'file_name' => $fileName,
+        ]);
 
-        // return response()->json($Message, 201);
     }
+        $message->save();
+        // return response()->json(['data' => $message->load('attachments')], 201);
+    }
+    
 
     public function update(Request $request, $id)
     {

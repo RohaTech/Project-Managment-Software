@@ -48,7 +48,7 @@ class ProjectMemberController extends Controller
             'activity' => ' Added ' . User::find($request->user_id)->name . ' to Project as  ' . $request->role,
         ]);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('home', absolute: false));
     }
     public function show(ProjectMember $projectMember)
     {
