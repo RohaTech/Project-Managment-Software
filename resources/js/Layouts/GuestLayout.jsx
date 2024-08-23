@@ -6,7 +6,7 @@ import DropdownUser from "@/Components/DropdownUser";
 export default function Guest({ children, user }) {
   return (
     <div className="min-h-screen">
-      <header className="w-full py-4">
+      <header className="w-full py-2">
         <nav className="bg-white border-gray-200 py-5 shadow-md ">
           <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
             <a href="#" className="flex items-center">

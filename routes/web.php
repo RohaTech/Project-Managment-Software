@@ -4,6 +4,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectMemberController;
+use App\Models\Project;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,7 +16,14 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/home', function () {
-    return Inertia::render('Home', ['user' => auth()->user(), 'projects' => auth()->user()->projects]);
+    $userId = auth()->id();
+    $projects = Project::whereHas('members', function ($query) use ($userId) {
+        $query->where('user_id', $userId);
+    })->with(['creator', 'updateBy']) // Load the creator relationship
+        ->latest()
+        ->get();
+
+    return Inertia::render('Home', ['user' => auth()->user(), 'projects' => $projects]);
 })->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
