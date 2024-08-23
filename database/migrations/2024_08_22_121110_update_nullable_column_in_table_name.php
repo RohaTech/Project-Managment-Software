@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("user_id")->constrained('users')->onDelete("cascade");
-            $table->foreignId("task_id")->constrained('task')->onDelete("cascade");
+        Schema::table('messages', function (Blueprint $table) {
             $table->longText("content")->nullable();
-            $table->timestamps();
+
         });
     }
 
