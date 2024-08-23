@@ -5,40 +5,24 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import DropdownUser from "@/Components/DropdownUser";
+import DefaultLayout from "./DefaultLayout";
 
-export default function AuthenticatedLayout({ header, children, auth }) {
+export default function AuthenticatedLayout({ header, children, user }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
   return (
-    <div className="min-h-screen ">
-      <header className="w-full py-4">
-        <nav className="bg-white border-gray-200 py-5 shadow-md ">
+    <div className="h-screen  relative">
+      <header className="w-full mb-0.5 sticky top-0 left-0 z-[10000] bg-white">
+        <nav className="bg-white border-gray-200 py-4 shadow-md ">
           <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
             <div href="#" className="flex items-center">
               <ApplicationLogo />
             </div>
             <div className="flex items-center lg:order-2">
-              {auth.user ? (
-                <Link method="post" href={route("logout")}>
-                  <PrimaryButton className="bg-primaryColor">
-                    Log Out
-                  </PrimaryButton>
-                </Link>
-              ) : (
-                <div className="space-x-4">
-                  <Link href={route("login")}>
-                    <PrimaryButton className="bg-primaryColor">
-                      Log in
-                    </PrimaryButton>
-                  </Link>
-                  <Link href={route("register")}>
-                    <PrimaryButton className="bg-primaryColor">
-                      Sign Up
-                    </PrimaryButton>
-                  </Link>
-                </div>
-              )}
+              <DropdownUser user={user} />
+
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
@@ -80,7 +64,7 @@ export default function AuthenticatedLayout({ header, children, auth }) {
               <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                 <li>
                   <Link
-                    href={route("welcome")}
+                    href={route("home")}
                     className="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 "
                     aria-current="page"
                   >
@@ -132,16 +116,9 @@ export default function AuthenticatedLayout({ header, children, auth }) {
           </div>
         </nav>
       </header>
-
-      {header && (
-        <header className="bg-white shadow">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {header}
-          </div>
-        </header>
-      )}
-
-      <main>{children}</main>
+      <main>
+        <DefaultLayout>{children}</DefaultLayout>
+      </main>
     </div>
   );
 }

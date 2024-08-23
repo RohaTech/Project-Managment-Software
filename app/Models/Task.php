@@ -12,12 +12,12 @@ class Task extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
-        'content',
         'priority',
         'status',
         'due_date',
         'project_id',
         'start_date',
+        'updated_by',
         'created_by',
         'assigned',
         'column_id',
@@ -49,11 +49,12 @@ class Task extends Model
     }
     public function column()
     {
-        return  $this->hasMany(Column::class);
+        return $this->hasMany(Column::class);
     }
     public function projectmember()
     {
-       return  $this->hasMany(ProjectMember::class,'assigned');
-    
+
+        return  $this->hasMany(ProjectMember::class, 'assigned');
+
     }
 }

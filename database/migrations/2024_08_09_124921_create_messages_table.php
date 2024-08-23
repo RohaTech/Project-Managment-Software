@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained('users')->onDelete("cascade");
             $table->foreignId("task_id")->constrained('task')->onDelete("cascade");
-            $table->longText("content");
+            $table->longText("content")->nullable();
             $table->timestamps();
         });
     }
