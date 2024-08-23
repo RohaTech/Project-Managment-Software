@@ -14,12 +14,13 @@ class TaskController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $tasks = Task::all();
         // $tasks = Task::where('created_by', auth()->id())->get();
         return Inertia::render('Task/Task', [
-            // 'auth' => auth()->user(),
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'user' => auth()->user()
+
         ]);
     }
     /**
@@ -27,7 +28,8 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return Inertia::render('CreateTask');
+
+        return Inertia::render('CreateTask', ['user' => auth()->user()]);
     }
 
     /**
@@ -69,7 +71,8 @@ class TaskController extends Controller
         return Inertia::render('Task/TaskDetail', [
             'task' => $task,
             'messages' => $messages,
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
+            'user' => auth()->user()
         ]);
     }
 
@@ -113,4 +116,3 @@ class TaskController extends Controller
         return redirect()->route('task.index')->with('success', 'Task deleted successfully.');
     }
 }
-
