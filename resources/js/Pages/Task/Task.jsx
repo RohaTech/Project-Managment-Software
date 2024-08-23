@@ -31,7 +31,7 @@ const Task = ({ tasks }) => {
                                     {task.assigned}
                                 </td>
                                 <td className="py-2 px-4 border-b">
-                                    <Link href={route('tasks.show', task.id)}>
+                                    <Link href={route('task.show', task.id)}>
                                         <PrimaryButton>
                                             View Details
                                         </PrimaryButton>

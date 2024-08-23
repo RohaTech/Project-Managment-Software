@@ -32,18 +32,42 @@ const TaskDetail = ({ task, messages, user_id }) => {
         setMessageList(messages || []);
     }, [messages]);
 
-    const handleSendMessage = (e) => {
-        e.preventDefault();
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('task_id', data.task_id);
+
+    // Only append 'content' if it's not empty
+    if (data.content.trim() !== "") {
+        formData.append('content', data.content);
+    }
+
+    // Only append 'attachment' if a file is selected
+    if (data.attachment) {
+        formData.append('attachment', data.attachment);
+    }
+
+    // Ensure that either content or attachment is provided
+    if (formData.has('content') || formData.has('attachment')) {
         post(route("messages.store"), {
+            data: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
             onSuccess: (response) => {
                 setMessageList((prevMessages) => [...prevMessages, response.data]);
-                reset();
+                reset(); // Reset the form
             },
             onError: (error) => {
                 console.error("There was an error sending the message:", error);
             },
         });
-    };
+    } else {
+        console.error("Either a message or an attachment must be provided.");
+    }
+};
+
 
     const handleEditMessage = (messageId, content) => {
         setEditingMessageId(messageId);
