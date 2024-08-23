@@ -41,13 +41,13 @@ const DropdownUser = ({ user }) => {
       {/* <!-- Dropdown Start --> */}
       {dropdownOpen && (
         <div
-          className={`absolute right-0 mt-4 flex w-70.5 flex-col rounded-sm border border-stroke bg-white shadow-default  `}
+          className={`absolute left-0 mt-4 flex w-50 flex-col rounded-sm border border-stroke bg-white shadow-default  `}
         >
           <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 ">
             <li>
               <Link
                 href={route("profile.edit")}
-                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary "
               >
                 <svg
                   className="fill-current"
@@ -72,7 +72,7 @@ const DropdownUser = ({ user }) => {
             <li>
               <Link
                 href="#"
-                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary "
               >
                 <svg
                   className="fill-current"
@@ -93,7 +93,7 @@ const DropdownUser = ({ user }) => {
             <li>
               <Link
                 href="/settings"
-                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary "
               >
                 <svg
                   className="fill-current"
@@ -120,7 +120,7 @@ const DropdownUser = ({ user }) => {
           <Link
             method="post"
             href={route("logout")}
-            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-red-600 "
           >
             <svg
               className="fill-current"
