@@ -20,6 +20,9 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "apexcharts": "^3.52.0",
+        "react-apexcharts": "^1.4.1",
+        "react-google-charts": "^4.0.1",
         "react-router-dom": "^6.26.1"
     }
 }

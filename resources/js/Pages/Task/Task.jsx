@@ -1,14 +1,16 @@
 // src/pages/task.js
+
 import React, { useState, useEffect } from "react";
 // import axios from 'axios';
 
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-const Task = ({ tasks }) => {
+const Task = ({ tasks, user }) => {
     return (
-        <GuestLayout>
+        <AuthenticatedLayout user={user}>
             <Head title="Task List" />
             <div className="container mx-auto">
                 <h1 className="text-2xl font-bold mb-4">Task List</h1>
@@ -30,9 +32,9 @@ const Task = ({ tasks }) => {
                                     {task.assigned}
                                 </td>
                                 <td className="py-2 px-4 border-b">
-                                    <Link href={route('task.show', task.id)}>
-                                        <PrimaryButton>
-                                        View Details
+                                    <Link href={route("task.show", task.id)}>
+                                        <PrimaryButton className="bg-primaryColor">
+                                            View Details
                                         </PrimaryButton>
                                     </Link>
                                 </td>
@@ -41,7 +43,7 @@ const Task = ({ tasks }) => {
                     </tbody>
                 </table>
             </div>
-        </GuestLayout>
+        </AuthenticatedLayout>
     );
 };
 
