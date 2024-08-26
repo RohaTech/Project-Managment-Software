@@ -1,5 +1,4 @@
 // src/pages/task.js
-
 import React, { useState, useEffect } from "react";
 // import axios from 'axios';
 
@@ -33,7 +32,7 @@ const Task = ({ tasks }) => {
                                 <td className="py-2 px-4 border-b">
                                     <Link href={route('task.show', task.id)}>
                                         <PrimaryButton>
-                                            View Details
+                                        View Details
                                         </PrimaryButton>
                                     </Link>
                                 </td>
