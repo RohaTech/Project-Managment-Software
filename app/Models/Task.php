@@ -35,6 +35,10 @@ class Task extends Model
     {
         return $this->belongsTo(Project::class);
     }
+    public function assigned()
+    {
+        return $this->belongsTo(User::class, 'assigned');
+    }
     public function subTask()
     {
         return $this->hasMany(SubTask::class);
@@ -50,11 +54,5 @@ class Task extends Model
     public function column()
     {
         return $this->hasMany(Column::class);
-    }
-    public function projectmember()
-    {
-
-        return  $this->hasMany(ProjectMember::class, 'assigned');
-
     }
 }
