@@ -16,7 +16,7 @@ export default function Guest({ children, user }) {
               <div className="space-x-4">
                 {user ? (
                   <div className="flex items-center lg:order-2">
-                    <DropdownUser user={user} />
+                    <DropdownUser />
                     <button
                       data-collapse-toggle="mobile-menu-2"
                       type="button"

@@ -69,7 +69,15 @@ Route::get('/dashboard', function () {
         'taskCancelled' => $personalTasks->where('status', 'cancelled')->count(),
     ];
 
-    return Inertia::render('Dashboard/Dashboard', ['user' => auth()->user(), 'projectsCount' => $projectsCount, 'taskStats' => $taskStats, "personalTasksStats" => $personalTasksStats]);
+    return Inertia::render(
+        'Dashboard/Dashboard',
+        [
+            'user' => auth()->user(),
+            'projectsCount' => $projectsCount,
+            'taskStats' => $taskStats,
+            "personalTasksStats" => $personalTasksStats
+        ]
+    );
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
