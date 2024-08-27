@@ -20,30 +20,44 @@ Route::get('/home', function () {
     $userId = auth()->id();
 
     // Get project IDs where the user is a member
-    $projectIds = Project::whereHas('members', function ($query) use ($userId) {
+    // $projectIds = Project::whereHas('members', function ($query) use ($userId) {
+    //     $query->where('user_id', $userId);
+    // })->get();
+
+
+    $projects = Project::whereHas('members', function ($query) use ($userId) {
         $query->where('user_id', $userId);
-    })->pluck('id');
-
-
-    // Get activity logs related to these projects and activities created by the project members
-    $activityLogs = ActivityLog::whereIn('project_id', $projectIds)
-        ->orWhereIn('user_id', function ($query) use ($projectIds) {
-            $query->select('user_id')
-                ->from('project_members')
-                ->whereIn('project_id', $projectIds);
-        })
-        ->get();
-
-    // Fetch projects with their creator, updater, and related activities
-    $projects = Project::whereIn('id', $projectIds)
-        ->with(['creator', 'updateBy', 'activities'])
+    })->with(['creator', 'updateBy']) // Load the creator relationship
         ->latest()
         ->get();
 
-    return Inertia::render('Home', [
+    $allActivities = collect();
+    foreach ($projects as $project) {
+        $activities = $project->activities()->get(); // Get activities for each project
+        $allActivities = $allActivities->merge($activities); // Merge activities into the collection
+    }
+
+    // $activities = $projects->activities()->get();
+
+    // Get activity logs related to these projects and activities created by the project members
+    // $activityLogs = ActivityLog::whereIn('project_id', $projectIds)
+    //     ->orWhereIn('user_id', function ($query) use ($projectIds) {
+    //         $query->select('user_id')
+    //             ->from('project_members')
+    //             ->whereIn('project_id', $projectIds);
+    //     })
+    //     ->get();
+
+    // // Fetch projects with their creator, updater, and related activities
+    // $projects = Project::whereIn('id', $projectIds)
+    //     ->with(['creator', 'updateBy', 'activities'])
+    //     ->latest()
+    //     ->get();
+
+    return Inertia::render('Home/Home', [
         'user' => auth()->user(),
         'projects' => $projects,
-        'activities' => $activityLogs,
+        'activities' => $allActivities,
     ]);
 })->middleware(['auth', 'verified'])->name('home');
 Route::middleware('auth')->group(function () {
