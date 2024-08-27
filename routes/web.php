@@ -4,6 +4,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectMemberController;
+use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Application;
@@ -24,7 +25,16 @@ Route::get('/home', function () {
         ->latest()
         ->get();
 
-    return Inertia::render('Home', ['user' => auth()->user(), 'projects' => $projects]);
+    $allActivities = collect();
+    foreach ($projects as $project) {
+        $activities = $project->activities()->get(); // Get activities for each project
+        $allActivities = $allActivities->merge($activities); // Merge activities into the collection
+    }
+    return Inertia::render('Home/Home', [
+        'user' => auth()->user(),
+        'projects' => $projects,
+        'activities' => $allActivities,
+    ]);
 })->middleware(['auth', 'verified'])->name('home');
 
 Route::get('/dashboard', function () {
@@ -59,13 +69,9 @@ Route::get('/dashboard', function () {
         'taskCancelled' => $personalTasks->where('status', 'cancelled')->count(),
     ];
 
-
-
-
-
-
     return Inertia::render('Dashboard/Dashboard', ['user' => auth()->user(), 'projectsCount' => $projectsCount, 'taskStats' => $taskStats, "personalTasksStats" => $personalTasksStats]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
