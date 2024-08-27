@@ -19,7 +19,7 @@ export default function Project({ user }) {
     post(route("project.store"));
   };
   return (
-    <AuthenticatedLayout user={user}>
+    <AuthenticatedLayout>
       <div className="mx-auto max-w-[720px] mt-24">
         <form onSubmit={submit}>
           <div>

@@ -6,9 +6,9 @@ export default function ProjectShow({ project, tasks, user }) {
   //   console.log(project);
 
   return (
-    <AuthenticatedLayout user={user}>
+    <AuthenticatedLayout>
       <div className="">
-        <h1 className="">SHOW</h1>
+        <h1 className="">{project.name}</h1>
       </div>
     </AuthenticatedLayout>
   );

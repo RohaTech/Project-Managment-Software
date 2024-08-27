@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,11 +15,14 @@ class TaskController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
+        /*
         $tasks = Task::all();
-        // $tasks = Task::where('created_by', auth()->id())->get();
-        return Inertia::render('Task/Task', [
-            // 'auth' => auth()->user(),
+        */
+
+        $tasks = Task::where('created_by', auth()->id())->get();
+        return Inertia::render('Task', [
+            'user' => auth()->user(),
             'tasks' => $tasks
         ]);
     }
@@ -27,7 +31,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return Inertia::render('CreateTask');
+        return Inertia::render('CreateTask', ['user' => auth()->user(),]);
     }
 
     /**
@@ -38,7 +42,7 @@ class TaskController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
-            'assigned' => 'nullable|exists:project_members,id',
+            'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
@@ -49,8 +53,14 @@ class TaskController extends Controller
 
         // dd($validated);
         Task::create($validated);
+        $project = Project::find($request->project_id);
 
-        return redirect()->route('task.index')->with('success', 'Task created successfully.');
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' created Task called ' . $request->name,
+        ]);
+
+        // return redirect()->route('task.index')->with('success', 'Task created successfully.');
     }
 
     /**
@@ -60,16 +70,12 @@ class TaskController extends Controller
     {
         $messages = Message::where('task_id', $task->id)->get();
         $task->load('project');
-        // return Inertia::render('ShowTask', [
-        //     'task' => $task,
-        //     'messages' => $messages,
-        //     'user_id' => Auth::id()
-        // ]);
-
-        return Inertia::render('Task/TaskDetail', [
+        return Inertia::render('ShowTask', [
             'task' => $task,
             'messages' => $messages,
+            'user' => auth()->user(),
             'user_id' => Auth::id()
+
         ]);
     }
 
@@ -78,7 +84,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        return Inertia::render('TaskEdit', ['task' => $task]);
+        return Inertia::render('TaskEdit', ['task' => $task, 'user' => auth()->user()]);
     }
 
     /**
@@ -100,7 +106,14 @@ class TaskController extends Controller
             'updated_by' => auth()->id(), // Set the updated_by field
         ]);
 
-        // Redirect back with a success message
+        $project = Project::find($task->project_id);
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Update Task called ' . $request->name,
+        ]);
+
+
         return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
 
@@ -109,8 +122,13 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $project = Project::find($task->project_id);
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Deleted Task called ' . $task->name,
+        ]);
         $task->delete();
         return redirect()->route('task.index')->with('success', 'Task deleted successfully.');
     }
 }
-

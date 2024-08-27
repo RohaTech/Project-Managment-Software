@@ -17,7 +17,6 @@ export default function Task({ tasks, user }) {
           Add Tasks
         </h2>
       }
-      user={user}
     >
       <Head title="tasks" />
 
