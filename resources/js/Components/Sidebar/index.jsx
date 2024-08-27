@@ -22,7 +22,7 @@ const Sidebar = () => {
 
   const mappedAsideProjects = projects.map((project) => (
     <Link href={route("project.show", project.id)} key={project.id}>
-      <li className="px-1 py-2 hover:text-primary">
+      <li className="px-1 py-2 hover:text-primary hover:font-bold">
         <h1 className="text-sm  capitalize">{project.name}</h1>
       </li>
     </Link>
@@ -159,7 +159,7 @@ const Sidebar = () => {
 
                 {/* <!-- Dropdown Menu Start --> */}
                 <div className={`translate transform overflow-hidden`}>
-                  <ul className="mt-4 mb-5.5 flex flex-col gap-1 pl-6">
+                  <ul className="mt-4 ml-4 mb-5.5 flex flex-col gap-1 pl-6">
                     {mappedAsideProjects}
                   </ul>
                 </div>
