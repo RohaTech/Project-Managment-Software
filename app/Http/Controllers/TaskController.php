@@ -57,7 +57,7 @@ class TaskController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' created Task ' . $request->name,
+            'activity' => ' created Task called ' . $request->name,
         ]);
 
         // return redirect()->route('task.index')->with('success', 'Task created successfully.');
@@ -110,7 +110,7 @@ class TaskController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' Update Task ' . $request->name,
+            'activity' => ' Update Task called ' . $request->name,
         ]);
 
 
@@ -126,7 +126,7 @@ class TaskController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' Deleted Task ' . $task->name,
+            'activity' => ' Deleted Task called ' . $task->name,
         ]);
         $task->delete();
         return redirect()->route('task.index')->with('success', 'Task deleted successfully.');
