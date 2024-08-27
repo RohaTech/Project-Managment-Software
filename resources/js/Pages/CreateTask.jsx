@@ -18,7 +18,6 @@ export default function CreateTask({ projects, user }) {
 
   return (
     <AuthenticatedLayout
-      user={user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
           Create Task

@@ -14,7 +14,7 @@ export default function Welcome({ user }) {
   };
 
   return (
-    <Guest user={user}>
+    <Guest>
       <Head title="Welcome" />
       <div className="min-h-svh ">
         <section className="bg-white   ">

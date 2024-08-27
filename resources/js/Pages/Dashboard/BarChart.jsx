@@ -9,7 +9,6 @@ export const options = {
 };
 
 export function BarChart({ personalTasksStats }) {
-  console.log(personalTasksStats);
   const data = [
     ["Task Status", "Count"],
     ["Completed", personalTasksStats.taskCompleted],

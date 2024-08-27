@@ -5,14 +5,13 @@ import { PieChart } from "./PieChart";
 import { BarChart } from "./BarChart";
 
 export default function Dashboard({
-  user,
   projectsCount,
   taskStats,
   personalTasksStats,
 }) {
   //   console.log(taskStats);
   return (
-    <AuthenticatedLayout user={user}>
+    <AuthenticatedLayout>
       <Head title="Dashboard" />
 
       <div className="grid  cursor-pointer grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">

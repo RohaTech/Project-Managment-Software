@@ -64,7 +64,15 @@ Route::get('/dashboard', function () {
 
 
 
-    return Inertia::render('Dashboard/Dashboard', ['user' => auth()->user(), 'projectsCount' => $projectsCount, 'taskStats' => $taskStats, "personalTasksStats" => $personalTasksStats]);
+    return Inertia::render(
+        'Dashboard/Dashboard',
+        [
+            'user' => auth()->user(),
+            'projectsCount' => $projectsCount,
+            'taskStats' => $taskStats,
+            "personalTasksStats" => $personalTasksStats
+        ]
+    );
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
