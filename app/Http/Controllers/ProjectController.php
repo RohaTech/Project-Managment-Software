@@ -67,7 +67,7 @@ class ProjectController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => auth()->user()->name .' created project ' . $request->name,
+            'activity' => auth()->user()->name . ' created project called ' . $request->name,
         ]);
     }
 
@@ -105,7 +105,7 @@ class ProjectController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' updated project ' . $request->name,
+            'activity' => ' updated project called' . $request->name,
         ]);
         return back();
     }
