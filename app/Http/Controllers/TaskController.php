@@ -42,7 +42,7 @@ class TaskController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
-            'assigned' => 'nullable|exists:project_members,id',
+            'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
@@ -60,7 +60,7 @@ class TaskController extends Controller
             'activity' => ' created Task ' . $request->name,
         ]);
 
-        return redirect()->route('task.index')->with('success', 'Task created successfully.');
+        // return redirect()->route('task.index')->with('success', 'Task created successfully.');
     }
 
     /**
