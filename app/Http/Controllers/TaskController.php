@@ -21,7 +21,7 @@ class TaskController extends Controller
         */
 
         $tasks = Task::where('created_by', auth()->id())->get();
-        return Inertia::render('Task', [
+        return Inertia::render('Task/Task', [
             'user' => auth()->user(),
             'tasks' => $tasks
         ]);
@@ -70,12 +70,12 @@ class TaskController extends Controller
     {
         $messages = Message::where('task_id', $task->id)->get();
         $task->load('project');
-        return Inertia::render('ShowTask', [
+        return Inertia::render('Task/TaskDetail', [
             'task' => $task,
             'messages' => $messages,
             'user' => auth()->user(),
             'user_id' => Auth::id()
-
+         
         ]);
     }
 
