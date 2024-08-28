@@ -8,9 +8,15 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import DropdownUser from "@/Components/DropdownUser";
 import DefaultLayout from "./DefaultLayout";
 
-export default function AuthenticatedLayout({ header, children, user }) {
+export default function AuthenticatedLayout({ header, children, projects }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
+
+  let asideProjects;
+  if (projects) {
+    asideProjects = projects;
+    console.log(asideProjects);
+  }
 
   return (
     <div className="h-screen  relative ">
@@ -21,7 +27,7 @@ export default function AuthenticatedLayout({ header, children, user }) {
               <ApplicationLogo />
             </div>
             <div className="flex items-center lg:order-2">
-              <DropdownUser user={user} />
+              <DropdownUser />
 
               <button
                 data-collapse-toggle="mobile-menu-2"
@@ -117,7 +123,7 @@ export default function AuthenticatedLayout({ header, children, user }) {
         </nav>
       </header>
       <main>
-        <DefaultLayout>{children}</DefaultLayout>
+        <DefaultLayout asideProjects={asideProjects}>{children}</DefaultLayout>
       </main>
     </div>
   );

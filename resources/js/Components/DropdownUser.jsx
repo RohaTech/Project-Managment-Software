@@ -1,9 +1,10 @@
 import { useState } from "react";
 import ClickOutside from "./ClickOutside";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
-const DropdownUser = ({ user }) => {
+const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { auth } = usePage().props;
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -13,7 +14,7 @@ const DropdownUser = ({ user }) => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black ">
-            {user.name}
+            {auth.user.name}
           </span>
         </span>
 

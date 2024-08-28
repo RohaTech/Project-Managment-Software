@@ -29,11 +29,20 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $projects = null;
+        if ($request->user()) {
+            $userId = $request->user()->id;
+            $projects = \App\Models\Project::whereHas('members', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->with(['creator', 'updateBy'])->latest()->get();
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()
             ],
+            'projects' => $projects
         ];
     }
 }

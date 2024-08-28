@@ -109,7 +109,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
   };
 
   return (
-    <AuthenticatedLayout user={user}>
+    <AuthenticatedLayout>
       <Head title={`Task Detail - ${task.name}`} />
       <div className="container mx-auto">
         <h1 className="text-2xl font-bold mb-4">Task Details</h1>

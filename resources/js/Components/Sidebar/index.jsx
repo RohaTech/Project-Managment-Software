@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import ApplicationLogo from "../ApplicationLogo";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 const Sidebar = () => {
   const [isSideBar, setIsSideBar] = useState(true);
+  const { projects } = usePage().props;
   const { pathname } = window.location;
   const sidebar = useRef(null);
-
   useEffect(() => {
     const sidebarElement = sidebar.current;
     sidebarElement.addEventListener("wheel", (e) => {
@@ -19,6 +19,14 @@ const Sidebar = () => {
       });
     };
   }, []);
+
+  const mappedAsideProjects = projects.map((project) => (
+    <Link href={route("project.show", project.id)} key={project.id}>
+      <li className="px-1 py-2 hover:text-primary hover:font-bold">
+        <h1 className="text-sm  capitalize">{project.name}</h1>
+      </li>
+    </Link>
+  ));
 
   return (
     <aside
@@ -151,17 +159,8 @@ const Sidebar = () => {
 
                 {/* <!-- Dropdown Menu Start --> */}
                 <div className={`translate transform overflow-hidden`}>
-                  <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                    <li>
-                      <Link
-                        to="/"
-                        className={
-                          "group relative flex items-center gap-2.5 ml-4 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-primary "
-                        }
-                      >
-                        project lists
-                      </Link>
-                    </li>
+                  <ul className="mt-4 ml-4 mb-5.5 flex flex-col gap-1 pl-6">
+                    {mappedAsideProjects}
                   </ul>
                 </div>
                 {/* <!-- Dropdown Menu End --> */}

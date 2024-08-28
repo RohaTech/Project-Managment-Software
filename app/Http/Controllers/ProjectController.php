@@ -51,10 +51,6 @@ class ProjectController extends Controller
             'name' => ['required ', 'max:255'],
             'description' => ['nullable'],
         ]);
-
-
-
-
         $project = Project::create(
             [
                 'name' => $request->name,
@@ -71,7 +67,7 @@ class ProjectController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' created project ' . $request->name,
+            'activity' => auth()->user()->name . ' created project called ' . $request->name,
         ]);
     }
 
@@ -113,7 +109,7 @@ class ProjectController extends Controller
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' updated project ' . $request->name,
+            'activity' => ' updated project called ' . $request->name,
         ]);
         return back();
     }

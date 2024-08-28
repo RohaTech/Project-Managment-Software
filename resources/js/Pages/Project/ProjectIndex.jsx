@@ -93,7 +93,7 @@ export default function Project_Index({ projects, user }) {
     </div>
   ));
   return (
-    <AuthenticatedLayout user={user}>
+    <AuthenticatedLayout>
       <div className=" container max-w-[1200px] mx-auto ">
         <div className="py-3 px-3">
           <div className="space-y-4px-4  ">{mappedProjects}</div>

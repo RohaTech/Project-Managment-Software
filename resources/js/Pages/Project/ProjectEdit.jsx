@@ -20,7 +20,7 @@ export default function ProjectEdit({ project_id, user }) {
   };
   console.log(project_id);
   return (
-    <AuthenticatedLayout user={user}>
+    <AuthenticatedLayout>
       <div className="mx-auto max-w-[720px] mt-24">
         <form onSubmit={submit}>
           <div>

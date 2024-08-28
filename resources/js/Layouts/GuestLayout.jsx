@@ -1,9 +1,11 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import DropdownUser from "@/Components/DropdownUser";
 
-export default function Guest({ children, user }) {
+export default function Guest({ children }) {
+  const { auth } = usePage().props;
+
   return (
     <div className="min-h-screen">
       <header className="w-full py-2">
@@ -14,9 +16,9 @@ export default function Guest({ children, user }) {
             </a>
             <div className="flex items-center lg:order-2">
               <div className="space-x-4">
-                {user ? (
+                {auth ? (
                   <div className="flex items-center lg:order-2">
-                    <DropdownUser user={user} />
+                    <DropdownUser />
                     <button
                       data-collapse-toggle="mobile-menu-2"
                       type="button"
