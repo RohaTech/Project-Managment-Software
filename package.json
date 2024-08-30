@@ -27,6 +27,7 @@
         "apexcharts": "^3.52.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "date-fns": "^3.6.0",
         "framer-motion": "^11.3.30",
         "lucide-react": "^0.436.0",
         "react-apexcharts": "^1.4.1",

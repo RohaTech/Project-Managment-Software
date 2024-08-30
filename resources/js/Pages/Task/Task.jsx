@@ -380,6 +380,9 @@ const Task = ({ tasks, user }) => {
               ) : (
                 task.name
               )}
+               <Link href={route("task.show", [task.id])} >
+              <button>show</button>
+              </Link>
             </td>
             {/* Assignee */}
             <td
@@ -449,6 +452,9 @@ const Task = ({ tasks, user }) => {
                 task.priority
               )}
             </td>
+            
+             
+          
           </tr>
         ))}
       </tbody>

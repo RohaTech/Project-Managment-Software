@@ -76,12 +76,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $members = Project::where('project_id', $project->id)->get();
         $tasks = Task::where('project_id', $project->id)->get();
         return Inertia::render('Project/ProjectShow', [
             "project" => $project,
              "tasks" => $tasks,
-             "members" => $members,
              'user' => auth()->user(),]);
     }
 

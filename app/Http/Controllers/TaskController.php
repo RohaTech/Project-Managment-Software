@@ -68,7 +68,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $messages = Message::where('task_id', $task->id)->get();
+        $messages = Message::where('task_id', $task->id)->with('user')->get();
         $task->load('project');
         return Inertia::render('Task/TaskDetail', [
             'task' => $task,
