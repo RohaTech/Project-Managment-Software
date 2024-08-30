@@ -8,7 +8,6 @@ export default function Project_Index({ projects, user }) {
   const submit = (project_id) => {
     destroy(route("project.delete", project_id));
   };
-
   const mappedProjects = projects.map((project) => (
     <div
       key={project.id}
