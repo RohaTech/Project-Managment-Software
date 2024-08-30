@@ -16,7 +16,7 @@ export default function Guest({ children }) {
             </a>
             <div className="flex items-center lg:order-2">
               <div className="space-x-4">
-                {auth ? (
+                {auth.user ? (
                   <div className="flex items-center lg:order-2">
                     <DropdownUser />
                     <button
@@ -126,22 +126,7 @@ export default function Guest({ children }) {
                     Templates
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
-                  >
-                    Marketplace
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
-                  >
-                    Features
-                  </a>
-                </li>
+
                 <li>
                   <a
                     href="#"

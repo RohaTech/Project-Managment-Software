@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import ActivityIcon from "./ActivityIcon";
 import ProjectIcon from "./ProjectIcon";
 import RightSide from "./RightSide";
+import { QuickSearch } from "./QuickSearch";
 
 export default function Home({ user, projects, activities }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -80,19 +81,7 @@ export default function Home({ user, projects, activities }) {
                   </svg>
                   Give feedback
                 </div>
-                <div className="text-white flex gap-x-2 items-center bg-[#0060b9eb] hover:bg-[#779cbeeb] transition duration-300 ease-in-out px-4 py-2 rounded-lg cursor-pointer">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4"
-                    viewBox="0 0 448 512"
-                  >
-                    <path
-                      fill="#ffffff"
-                      d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288l111.5 0L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7l-111.5 0L349.4 44.6z"
-                    />
-                  </svg>
-                  Quick Search
-                </div>
+                <QuickSearch />
               </div>
             </div>
           </div>
@@ -135,7 +124,7 @@ export default function Home({ user, projects, activities }) {
                         <div className="w-full">
                           <img
                             className="w-full rounded-md"
-                            src="/image/homePageImage/quick_search_recent_board.svg"
+                            src="/image/homePageImage/image.png"
                             alt=""
                           />
                         </div>
