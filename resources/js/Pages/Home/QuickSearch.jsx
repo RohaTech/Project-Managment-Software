@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 
 export const QuickSearch = () => {
@@ -49,32 +50,38 @@ export const QuickSearch = () => {
   const mappedProjects =
     fetchedData &&
     fetchedData.projects.map((project) => (
-      <li
-        key={project.id}
-        className=" p-2 border border-gray-300 rounded-lg hover:bg-primary/50 cursor-pointer "
-      >
-        {project.name}
-      </li>
+      <Link href={route("project.show", project.id)} className=" block">
+        <li
+          key={project.id}
+          className=" p-2 border border-gray-300 rounded-lg hover:bg-primary/50 cursor-pointer "
+        >
+          {project.name}
+        </li>
+      </Link>
     ));
   const mappedTasks =
     fetchedData &&
     fetchedData.tasks.map((task) => (
-      <li
-        key={task.id}
-        className=" p-2  border border-gray-300 rounded-lg hover:bg-primary/50 cursor-pointer"
-      >
-        {task.name}
-      </li>
+      <Link href={route("task.show", task.id)} className=" block">
+        <li
+          key={task.id}
+          className=" p-2  border border-gray-300 rounded-lg hover:bg-primary/50 cursor-pointer"
+        >
+          {task.name}
+        </li>
+      </Link>
     ));
   const mappedSubtasks =
     fetchedData &&
     fetchedData.subtasks.map((subtask) => (
-      <li
-        key={subtask.id}
-        className=" p-2  border border-gray-300 rounded-lg hover:bg-primary/50 cursor-pointer"
-      >
-        {subtask.name}
-      </li>
+      <Link href={route("subtask.show", subtask.id)} className=" block">
+        <li
+          key={subtask.id}
+          className=" p-2  border border-gray-300 rounded-lg hover:bg-primary/50 cursor-pointer"
+        >
+          {subtask.name}
+        </li>
+      </Link>
     ));
   return (
     <div className="">
