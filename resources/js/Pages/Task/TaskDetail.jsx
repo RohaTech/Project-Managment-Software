@@ -140,7 +140,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
     return (
         <AuthenticatedLayout>
             <div className=" mx-auto h-screen overflow-hidden">
-                <div className="flex justify-between sticky top-0 z-50 bg-gray-400 w-[100%] h-[50px] mb-0 h-full">
+                <div className="flex justify-between sticky top-0 z-50 bg-gray-400 w-[100%] h-[50px] mb-0 ">
                     <div className="flex items-center ">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

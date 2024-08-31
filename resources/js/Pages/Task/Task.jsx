@@ -59,15 +59,6 @@ const Task = ({ tasks, user }) => {
     const handleroute =(id) =>{
         route("task.show", );
     };
-
-
-
-
-
-
-
-
-    
     const [editing, setEditing] = useState({ taskId: null, field: null });
     const [taskData, setTaskData] = useState(tasks);
   
