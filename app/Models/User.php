@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     protected $fillable = [
         'name',
@@ -35,20 +38,19 @@ class User extends Authenticatable
         return $this->belongsToMany(ProjectMember::class, 'project_members');
     }
     public function message()
-    {   
+    {
         return $this->hasMany(Message::class);
     }
     public function attachment()
-    {   
+    {
         return $this->hasMany(User::class);
     }
     public function activitylog()
-    {   
+    {
         return $this->hasMany(ActivityLog::class);
     }
     public function subtask()
-    {   
+    {
         return $this->hasMany(SubTask::class);
     }
-
 }

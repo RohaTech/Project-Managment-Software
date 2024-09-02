@@ -5,14 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Guest from "@/Layouts/GuestLayout";
 import { Link, Head, router } from "@inertiajs/react";
 
-export default function Welcome({ user }) {
-  const handleImageError = () => {
-    document.getElementById("screenshot-container")?.classList.add("!hidden");
-    document.getElementById("docs-card")?.classList.add("!row-span-1");
-    document.getElementById("docs-card-content")?.classList.add("!flex-row");
-    document.getElementById("background")?.classList.add("!hidden");
-  };
-
+export default function Welcome() {
   return (
     <Guest>
       <Head title="Welcome" />
@@ -28,7 +21,7 @@ export default function Welcome({ user }) {
                 you to achieve more with seamless collaboration .
               </p>
               <div className="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                <Link href={route("register")}>
+                <Link href={route("home")}>
                   <PrimaryButton className="bg-primaryColor py-3">
                     Get Started
                   </PrimaryButton>

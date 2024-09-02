@@ -4,6 +4,7 @@ import { Link, usePage } from "@inertiajs/react";
 const Sidebar = () => {
   const [isSideBar, setIsSideBar] = useState(true);
   const { projects } = usePage().props;
+
   const { pathname } = window.location;
   const sidebar = useRef(null);
   useEffect(() => {
@@ -20,7 +21,7 @@ const Sidebar = () => {
     };
   }, []);
 
-  const mappedAsideProjects = projects.map((project) => (
+  const mappedAsideProjects = projects.slice(0, 5).map((project) => (
     <Link href={route("project.show", project.id)} key={project.id}>
       <li className="px-1 py-2 hover:text-primary hover:font-bold">
         <h1 className="text-sm  capitalize">{project.name}</h1>
@@ -45,6 +46,7 @@ const Sidebar = () => {
                 MENU
               </h3>
               <div className="">
+                {/* back button */}
                 {/* <svg
                   className="size-5 fill-primary"
                   xmlns="http://www.w3.org/2000/svg"
