@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Project;
+use App\Models\ProjectMember;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,18 +15,41 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     /*
+    //     $tasks = Task::all();
+    //     */
+        
+
+    //     $tasks = Task::where('created_by', auth()->id())->get();
+    //     return Inertia::render('Task/Task', [
+    //         'user' => auth()->user(),
+    //         'tasks' => $tasks
+    //     ]);
+    // }
+
+
     public function index()
     {
-        /*
-        $tasks = Task::all();
-        */
-
-        $tasks = Task::where('created_by', auth()->id())->get();
+        // Get the current user's ID
+        $userId = auth()->id();
+    
+        // Get the project IDs that the user is a member of
+        $projectIds =ProjectMember::where('user_id', $userId)
+                        ->pluck('project_id');
+    
+        // Get the tasks that belong to the projects where the user is a member
+        $tasks = Task::whereIn('project_id', $projectIds)->get();
+    
         return Inertia::render('Task/Task', [
             'user' => auth()->user(),
             'tasks' => $tasks
         ]);
     }
+
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -68,7 +92,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $messages = Message::where('task_id', $task->id)->with('user')->get();
+        $messages = Message::where('task_id', $task->id)->with('user','attachments')->get();
         $task->load('project');
         return Inertia::render('Task/TaskDetail', [
             'task' => $task,

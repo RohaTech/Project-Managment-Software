@@ -9,6 +9,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
     const [editingMessageId, setEditingMessageId] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState({});
     const [attachmentPreview, setAttachmentPreview] = useState(null);
+    const serverUrl = "http://localhost:8001/storage/";
 
     //Se
     const { data, setData, post, processing, reset } = useForm({
@@ -89,22 +90,28 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
         e.preventDefault();
         patch(route("messages.update", editingMessageId), {
             content: editData.content,
-        })
-            .then((response) => {
-                const updatedMessageList = messageList.map((message) =>
-                    message?.id === editingMessageId ? response.data : message
-                );
-                setMessageList(updatedMessageList);
-                setEditingMessageId(null);
-                resetEditData();
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.error(
-                    "There was an error updating the message:",
-                    error
-                );
-            });
+        });
+        window.location.reload();
+        // .then((response) => {
+        //     console.log("it is in updating mood");
+
+        //     const updatedMessageList = messageList.map((message) =>
+        //         message?.id === editingMessageId ? response.data : message
+        //     );
+        //     setMessageList(updatedMessageList);
+        //     console.log("it is in updating mood");
+
+        //     setEditingMessageId(null);
+
+        //     resetEditData();
+        //     window.location.reload();
+        // })
+        // .catch((error) => {
+        //     console.error(
+        //         "There was an error updating the message:",
+        //         error
+        //     );
+        // });
     };
 
     const handleDeleteMessage = (messageId) => {
@@ -153,7 +160,9 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                         >
                             <path d="M 25 9 C 16.178 9 9 16.178 9 25 C 9 33.822 16.178 41 25 41 C 33.822 41 41 33.822 41 25 C 41 16.178 33.822 9 25 9 z M 25.021484 10.003906 C 33.291484 10.003906 40.021484 16.732906 40.021484 25.003906 C 40.021484 33.274906 33.292484 40.003906 25.021484 40.003906 C 16.750484 40.003906 10.021484 33.274906 10.021484 25.003906 C 10.021484 16.732906 16.750484 10.003906 25.021484 10.003906 z M 32.816406 20.642578 C 32.688406 20.642578 32.560391 20.689609 32.462891 20.787109 L 23.484375 29.765625 L 18.064453 24.347656 C 17.869453 24.152656 17.552422 24.152656 17.357422 24.347656 C 17.162422 24.542656 17.162422 24.859687 17.357422 25.054688 L 23.130859 30.826172 C 23.228859 30.923172 23.356375 30.972656 23.484375 30.972656 C 23.612375 30.972656 23.740891 30.922172 23.837891 30.826172 L 33.169922 21.494141 C 33.364922 21.299141 33.364922 20.982109 33.169922 20.787109 C 33.072422 20.689609 32.944406 20.642578 32.816406 20.642578 z"></path>
                         </svg>
-                        <h1 className=" text-black font-bold p-4 ">{task.name}</h1>
+                        <h1 className=" text-black font-bold p-4 ">
+                            {task.name}
+                        </h1>
                     </div>
                     <Link href={route("task.index")}>
                         <PrimaryButton className="bg-transparent">
@@ -192,143 +201,243 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                         </div>
                         <div className="mb-6">
                             <h2 className="text-xl font-bold">Messages</h2>
-                            <div className="mb-4 mr-8">
-                                {messageList.length > 0 ? (
-                                    messageList.map((message, index) => (
-                                        <div
-                                            key={message?.id || index}
-                                            className="py-2 flex justify-between items-center"
-                                        >
-                                            {editingMessageId ===
-                                            message?.id ? (
-                                                <form
-                                                    onSubmit={
-                                                        handleUpdateMessage
-                                                    }
-                                                    className="flex flex-col"
-                                                >
-                                                    <textarea
-                                                        value={editData.content}
-                                                        onChange={(e) =>
-                                                            setEditData(
-                                                                "content",
-                                                                e.target.value
-                                                            )
+                            <div className="">
+                                <div className="mb-4 mr-8">
+                                    {messageList.length > 0 ? (
+                                        messageList.map((message, index) => (
+                                            <div
+                                                key={message?.id || index}
+                                                className="py-2 flex justify-end items-center"
+                                            >
+                                                {editingMessageId ===
+                                                message?.id ? (
+                                                    <form
+                                                        onSubmit={
+                                                            handleUpdateMessage
                                                         }
-                                                        className="border p-2 flex-grow"
-                                                        placeholder="Edit message..."
-                                                        rows="3"
-                                                    />
-                                                    <div className="mt-2 flex">
-                                                        <button
-                                                            type="submit"
-                                                            disabled={
-                                                                editProcessing
+                                                        className="flex flex-col justify-end  "
+                                                    >
+                                                        <textarea
+                                                            value={
+                                                                editData.content
                                                             }
-                                                            className="bg-green-500 text-white p-2 mr-2"
-                                                        >
-                                                            {editProcessing
-                                                                ? "Updating..."
-                                                                : "Update"}
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                setEditingMessageId(
-                                                                    null
-                                                                );
-                                                                resetEditData();
-                                                            }}
-                                                            className="bg-gray-500 text-white p-2"
-                                                        >
-                                                            Cancel
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            ) : (
-                                                <>
-                                                    <div className="flex">
-                                                        <div className="ml-2 mr-2  rounded-full h-8 w-8 flex items-center justify-center text-white bg-blue-400">
-                                                            {getUserInitials(
-                                                                message.user
-                                                                    ?.name
-                                                            )}
-                                                        </div>
-                                                        <p className="font-bold">
-                                                            {message?.content ||
-                                                                "No Content"}
-                                                        </p>
-                                                        <span className="text-sm text-gray-600 ml-2 mt-3 font-light">
-                                                            {format(
-                                                                new Date(
-                                                                    message.created_at
-                                                                ),
-                                                                "h:mm a"
-                                                            )}
-                                                        </span>
-                                                    </div>
-
-                                                    {message?.user_id ===
-                                                        user_id && (
-                                                        <div className="relative flex mt-2">
+                                                            onChange={(e) =>
+                                                                setEditData(
+                                                                    "content",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            className="border p-2 flex-grow rounded-lg"
+                                                            placeholder="Edit message..."
+                                                            rows="2"
+                                                        />
+                                                        <div className="mt-2 flex">
                                                             <button
-                                                                onClick={() =>
-                                                                    toggleDropdown(
-                                                                        message?.id
-                                                                    )
+                                                                type="submit"
+                                                                disabled={
+                                                                    editProcessing
                                                                 }
-                                                                className="text-blue-500 mr-2 hover:via-blue-300"
+                                                                className="bg-green-500 rounded-xl h-8 w-15  text-white  mr-2 text-sm"
                                                             >
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    x="0px"
-                                                                    y="0px"
-                                                                    width="20"
-                                                                    height="20"
-                                                                    viewBox="0 0 50 50"
-                                                                >
-                                                                    <path
-                                                                        fill="#888888"
-                                                                        d="M9.781,18.278l3.188-3.188c0.781-0.781,2.047-0.781,2.828,0L25,24.292l9.202-9.202c0.781-0.781,2.047-0.781,2.828,0	l3.188,3.188c0.781,0.781,0.781,2.047,0,2.828L26.415,34.91c-0.781,0.781-2.047,0.781-2.828,0L9.782,21.107	C9,20.325,9,19.059,9.781,18.278z"
-                                                                    ></path>
-                                                                </svg>
+                                                                {editProcessing
+                                                                    ? "Updating..."
+                                                                    : "Update"}
                                                             </button>
-                                                            {dropdownVisible[
-                                                                message?.id
-                                                            ] && (
-                                                                <div className="absolute bg-white border rounded shadow-md p-4">
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            handleEditMessage(
-                                                                                message?.id,
-                                                                                message?.content
-                                                                            )
-                                                                        }
-                                                                        className="block text-primary hover:text-blue-700 hover:bg-gray"
-                                                                    >
-                                                                        Edit
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            handleDeleteMessage(
-                                                                                message?.id
-                                                                            )
-                                                                        }
-                                                                        className="block text-red-500 hover:text-red-700"
-                                                                    >
-                                                                        Delete
-                                                                    </button>
-                                                                </div>
-                                                            )}
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setEditingMessageId(
+                                                                        null
+                                                                    );
+                                                                    resetEditData();
+                                                                }}
+                                                                className="bg-gray-500  rounded-xl h-8 w-15 text-white  text-sm"
+                                                            >
+                                                                Cancel
+                                                            </button>
                                                         </div>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No messages yet.</p>
-                                )}
+                                                    </form>
+                                                ) : (
+                                                    <div
+                                                        className={`w-full flex ${
+                                                            message?.user_id ===
+                                                            user_id
+                                                                ? "justify-end"
+                                                                : "justify-start"
+                                                        }`}
+                                                    >
+                                                        {message?.user_id ===
+                                                            user_id && (
+                                                            <div className="relative flex mt-2">
+                                                                <button
+                                                                    onClick={() =>
+                                                                        toggleDropdown(
+                                                                            message?.id
+                                                                        )
+                                                                    }
+                                                                    className="text-blue-500 mr-2 hover:via-blue-300"
+                                                                >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        x="0px"
+                                                                        y="0px"
+                                                                        width="20"
+                                                                        height="20"
+                                                                        viewBox="0 0 50 50"
+                                                                    >
+                                                                        <path
+                                                                            fill="#888888"
+                                                                            d="M9.781,18.278l3.188-3.188c0.781-0.781,2.047-0.781,2.828,0L25,24.292l9.202-9.202c0.781-0.781,2.047-0.781,2.828,0	l3.188,3.188c0.781,0.781,0.781,2.047,0,2.828L26.415,34.91c-0.781,0.781-2.047,0.781-2.828,0L9.782,21.107	C9,20.325,9,19.059,9.781,18.278z"
+                                                                        ></path>
+                                                                    </svg>
+                                                                </button>
+                                                                {dropdownVisible[
+                                                                    message?.id
+                                                                ] && (
+                                                                    <div className="absolute mt-10 ml-6 bg-white border rounded shadow-md p-4">
+                                                                        {message?.content && (
+                                                                            <button
+                                                                                onClick={() =>
+                                                                                    handleEditMessage(
+                                                                                        message?.id,
+                                                                                        message?.content
+                                                                                    )
+                                                                                }
+                                                                                className="block text-primary hover:text-blue-700 hover:bg-gray"
+                                                                            >
+                                                                                Edit
+                                                                            </button>
+                                                                        )}
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                handleDeleteMessage(
+                                                                                    message?.id
+                                                                                )
+                                                                            }
+                                                                            className="block text-red-500 hover:text-red-700"
+                                                                        >
+                                                                            Delete
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        <div className="flex flex-col gap-0 align-middle items-center">
+                                                            <div className="flex">
+                                                                {message?.user_id !==
+                                                                user_id ? (
+                                                                    <div className="ml-2 mr-2 rounded-full h-8 w-8 flex items-center justify-center text-white bg-blue-400">
+                                                                        {getUserInitials(
+                                                                            message
+                                                                                ?.user
+                                                                                ?.name
+                                                                        )}
+                                                                    </div>
+                                                                ) : null}
+
+                                                                {message?.content && (
+                                                                    <div className="flex bg-blue-400  rounded-2xl p-2">
+                                                                        <p className="font-bold">
+                                                                            {message?.content ||
+                                                                                null}
+                                                                        </p>
+                                                                        {message &&
+                                                                            message.created_at && (
+                                                                                <span className="text-sm text-gray-100 ml-2 mt-3 font-light">
+                                                                                    {format(
+                                                                                        new Date(
+                                                                                            message.created_at
+                                                                                        ),
+                                                                                        "h:mm a"
+                                                                                    )}
+                                                                                </span>
+                                                                            )}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {message?.attachments &&
+                                                                message
+                                                                    .attachments
+                                                                    .length >
+                                                                    0 && (
+                                                                    <div className="attachments mt-2">
+                                                                        {message.attachments.map(
+                                                                            (
+                                                                                attachment
+                                                                            ) => (
+                                                                                <div
+                                                                                    key={
+                                                                                        attachment.id
+                                                                                    }
+                                                                                    className="attachment-item mt-1"
+                                                                                >
+                                                                                    <a
+                                                                                        href={
+                                                                                            serverUrl +
+                                                                                            attachment.file_path
+                                                                                        }
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                    >
+                                                                                        {/* Check if the file is an image */}
+                                                                                        {serverUrl +
+                                                                                        attachment.file_path.match(
+                                                                                            /\.(jpeg|jpg|gif|png)$/
+                                                                                        ) ? ( <div className="flex flex-col  items-end">
+                                                                                            <img
+                                                                                                src={
+                                                                                                    serverUrl +
+                                                                                                    attachment.file_path
+                                                                                                }
+                                                                                                alt={
+                                                                                                    attachment.file_name
+                                                                                                }
+                                                                                                className="w-50 h-40 object-cover rounded"
+                                                                                            />
+                                                                                            {
+                                                                                                !message.content && (
+                                                                                                    <span className="text-sm text-gray-600 ml-8 ml-2 mt-3 font-light rounded-xl  ">
+                                                                                                        {format(
+                                                                                                            new Date(
+                                                                                                                message.created_at
+                                                                                                            ),
+                                                                                                            "h:mm a"
+                                                                                                        )}
+                                                                                                    </span>
+                                                                                                )}
+                                                                                                </div>
+                                                                                        ) : (
+                                                                                            <div className="text-sm  text-blue-500 underline flex flex-col gap-0">
+                                                                                                <img
+                                                                                                    width="100"
+                                                                                                    height="100"
+                                                                                                    src="https://img.icons8.com/color/48/file.png"
+                                                                                                    alt="file"
+                                                                                                />
+                                                                                                <span className="text-sm text-gray-500"></span>
+                                                                                                {
+                                                                                                    attachment.file_name
+                                                                                                }
+                                                                                            </div>
+
+                                                                                        )}
+                                                                                    </a>
+                                                                                </div>
+                                                                            )
+                                                                        )}
+                                                                    </div>
+                                                                )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No messages yet.</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

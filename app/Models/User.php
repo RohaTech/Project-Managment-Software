@@ -38,10 +38,7 @@ class User extends Authenticatable
     {   
         return $this->hasMany(Message::class);
     }
-    public function attachment()
-    {   
-        return $this->hasMany(User::class);
-    }
+ 
     public function activitylog()
     {   
         return $this->hasMany(ActivityLog::class);
