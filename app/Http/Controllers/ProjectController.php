@@ -76,9 +76,11 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
         $tasks = Task::where('project_id', $project->id)->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(),]);
+        return Inertia::render('Project/ProjectShow', [
+            "project" => $project,
+             "tasks" => $tasks,
+             'user' => auth()->user(),]);
     }
 
     /**
