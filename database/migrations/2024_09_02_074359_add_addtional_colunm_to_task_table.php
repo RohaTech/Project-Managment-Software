@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activity_logs', function (Blueprint $table) {
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->json('additional_column')->nullable();
         });
     }
 
-    /**0
+    /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('activity_logs', function (Blueprint $table) {
-            $table->dropForeign(['project_id']);
-            $table->dropColumn('project_id');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('additional_column');
         });
     }
 };
