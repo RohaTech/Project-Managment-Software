@@ -22,10 +22,7 @@ class Attachment extends Model
         ];
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+
     public function message()
     {
         return $this->belongsTo(Message::class);

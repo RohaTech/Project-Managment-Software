@@ -1,13 +1,9 @@
 <?php
 
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\ProjectMemberController;
-use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Task;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -82,10 +78,19 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/home/all-search', [ApiController::class, 'search'])->name('all.search');
+    Route::get('/project-search', [ApiController::class, 'projectOnlySearch'])->name('project.search');
+});
+
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/project.php';

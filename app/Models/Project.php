@@ -15,10 +15,12 @@ class Project extends Model
         'description',
         'created_by',
         'updated_by',
+        "additional_column"
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'additional_columns' => 'array'
     ];
     public function creator()
     {
@@ -28,7 +30,7 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    public function projects()
+    public function tasks()
     {
         return $this->hasMany(Task::class);
     }
@@ -40,5 +42,10 @@ class Project extends Model
     public function members()
     {
         return $this->hasMany(ProjectMember::class);
+    }
+
+    public function invitation()
+    {
+        return $this->hasMany(ProjectInvitation::class);
     }
 }

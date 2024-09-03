@@ -318,6 +318,7 @@ const handlePriorityChange = (e, taskId) => {
     </div>
 </AuthenticatedLayout>
     );
+ 
 }
 
 {/* <span className="ml-auto cursor-pointer p-[5px] rounded-lg hover:bg-slate-200 transition duration-300 ease-in-out">

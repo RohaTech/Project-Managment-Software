@@ -12,14 +12,14 @@ export default function AuthenticatedLayout({ header, children, projects }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
-  let asideProjects;
+  let asideProjects; 
   if (projects) {
     asideProjects = projects;
     console.log(asideProjects);
   }
 
   return (
-    <div className="h-screen  relative">
+    <div className="h-screen  relative overflow-x-hidden overflow-y-hidden ">
       <header className="w-full mb-0.5 sticky top-0 left-0 z-[10000] bg-white">
         <nav className="bg-white border-gray-200 py-4 shadow-md ">
           <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
@@ -85,22 +85,7 @@ export default function AuthenticatedLayout({ header, children, projects }) {
                     Templates
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
-                  >
-                    Marketplace
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
-                  >
-                    Features
-                  </a>
-                </li>
+
                 <li>
                   <a
                     href="#"

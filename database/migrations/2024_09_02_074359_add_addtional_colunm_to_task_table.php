@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->longText("content")->nullable();
-
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->json('additional_column')->nullable();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('messages');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('additional_column');
+        });
     }
 };
