@@ -8,17 +8,17 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 
-export default function ProjectEdit({ project_id, user }) {
+export default function ProjectEdit({ project, user }) {
   const { data, setData, patch, processing, errors, reset } = useForm({
-    name: "",
-    description: "",
+    name: project.name,
+    description: project.description,
   });
   const submit = (e) => {
     e.preventDefault();
 
-    patch(route("project.update", [project_id]));
+    patch(route("project.update", [project.id]));
   };
-  console.log(project_id);
+//   console.log(project_id);
   return (
     <AuthenticatedLayout>
       <div className="mx-auto max-w-[720px] mt-24">
@@ -48,12 +48,11 @@ export default function ProjectEdit({ project_id, user }) {
               value={data.description}
               onChange={(e) => setData("description", e.target.value)}
             />
-
             <InputError message={errors.description} className="mt-2" />
           </div>
 
           <div className="flex items-center justify-end mt-4">
-            <PrimaryButton className="ms-4" disabled={processing}>
+            <PrimaryButton className="ms-4 bg-primary" disabled={processing}>
               Post
             </PrimaryButton>
           </div>

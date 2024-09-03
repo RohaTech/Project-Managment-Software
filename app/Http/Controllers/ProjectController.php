@@ -76,17 +76,23 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
+        $members = $project->members;
+        $allNames = collect();
+        foreach ($members as $member) {
+            $names = $member->creator()->get();
+            $allNames = $allNames->merge($names);
+        }
         $tasks = Task::where('project_id', $project->id)->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(),]);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(), "members" => $allNames]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        return Inertia::render('Project/ProjectEdit', ["project_id" => $id, 'user' => auth()->user(),]);
+        // dd($project);
+        return Inertia::render('Project/PopEditProject', ["project" => $project, 'user' => auth()->user(),]);
     }
 
     /**
@@ -107,7 +113,9 @@ class ProjectController extends Controller
             'user_id' => Auth::id(),
             'activity' => ' updated project called ' . $request->name,
         ]);
-        return back();
+        return redirect()->route('project.show', $id)->with('success', 'Project updated successfully.');
+
+        // return back();
     }
 
     /**

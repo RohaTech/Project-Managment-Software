@@ -19,10 +19,14 @@ class ProjectMember extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
+    // public function members()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
     public function projects()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, "project_id");
     }
 }

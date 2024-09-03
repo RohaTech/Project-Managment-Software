@@ -16,7 +16,7 @@ export default function Guest({ children }) {
             </a>
             <div className="flex items-center lg:order-2">
               <div className="space-x-4">
-                {auth ? (
+                {auth.user ? (
                   <div className="flex items-center lg:order-2">
                     <DropdownUser />
                     <button
