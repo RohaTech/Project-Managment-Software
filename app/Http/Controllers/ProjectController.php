@@ -82,9 +82,13 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+ 
 
         $tasks = $project->tasks()->get();
         return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(),]);
+ 
+        
+ 
     }
 
     /**

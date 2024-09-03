@@ -51,7 +51,7 @@ class ProjectMemberController extends Controller
         return redirect(route('home', absolute: false));
     }
     public function show(ProjectMember $projectMember)
-    {
+    {   
         return response()->json($projectMember);
     }
     public function update(Request $request, ProjectMember $projectMember)
