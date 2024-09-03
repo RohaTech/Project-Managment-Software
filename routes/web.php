@@ -78,7 +78,8 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home/project-search', [ApiController::class, 'search'])->name('project.search');
+    Route::get('/home/all-search', [ApiController::class, 'search'])->name('all.search');
+    Route::get('/project-search', [ApiController::class, 'projectOnlySearch'])->name('project.search');
 });
 
 Route::middleware('auth')->group(function () {

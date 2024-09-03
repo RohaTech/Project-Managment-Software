@@ -51,8 +51,4 @@ class Task extends Model
     {
         return $this->hasMany(Attachment::class);
     }
-    public function column()
-    {
-        return $this->hasMany(Column::class);
-    }
 }

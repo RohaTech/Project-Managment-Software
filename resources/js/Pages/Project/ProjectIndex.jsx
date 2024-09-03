@@ -1,10 +1,24 @@
+import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Link, router, useForm } from "@inertiajs/react";
 import React from "react";
 
-export default function Project_Index({ projects }) {
-  console.log(projects);
+export default function Project_Index({ projects, queryParams = null }) {
+  queryParams = queryParams || {};
+  const handleSearch = (name, value) => {
+    if (value) {
+      queryParams[name] = value;
+    } else {
+      delete queryParams[name];
+    }
 
+    router.get(route("project.index"), queryParams);
+  };
+  const onKeyPress = (name, e) => {
+    if (e.key == "Enter") {
+      handleSearch(name, e.target.value);
+    }
+  };
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, "0");
@@ -12,10 +26,40 @@ export default function Project_Index({ projects }) {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  console.log(projects);
   return (
     <AuthenticatedLayout>
       <div className="rounded-sm border border-stroke bg-white cursor-pointer  pt-6   shadow-default   px-7 pb-1">
-        <h4 className="mb-6 text-xl font-semibold text-primary">Projects</h4>
+        <div className=" flex gap-x-8 items-center mb-6 ">
+          <h4 className="text-3xl uppercase font-semibold text-primary">
+            Projects
+          </h4>
+          <div className="relative">
+            <TextInput
+              className="py-1"
+              defaultValue={queryParams.name}
+              onBlur={(e) => handleSearch("name", e.target.value)}
+              onKeyPress={(e) => onKeyPress("name", e)}
+            />
+
+            <svg
+              className="w-4 h-4 text-primary z-20 absolute top-[10px] right-3 "
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+        </div>
 
         <div className="flex flex-col">
           <div className="grid grid-cols-4 p-5 font-semibold text-primary  uppercase  rounded-sm bg-[#f7f9fc] ">
@@ -36,7 +80,7 @@ export default function Project_Index({ projects }) {
           {projects.map((project, key) => (
             <Link
               key={project.id}
-              href={route("project.show", project.id)}
+              href={route("project.additional-column.edit", project)}
               className="block"
             >
               <div
