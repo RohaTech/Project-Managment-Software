@@ -13,6 +13,23 @@ use function Pest\Laravel\get;
 
 class ApiController extends Controller
 {
+
+
+    public function projectOnlySearch(Request $request)
+    {
+        $userId = Auth::id();
+        $query = $request->query('query');
+
+        $projects = Project::whereHas('members', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->when($query, function ($q) use ($query) {
+            $q->where('name', 'like', '%' . $query . '%');
+        })->with(['creator', 'updateBy'])
+            ->latest()
+            ->get();
+
+        return response()->json(['projects' => $projects]);
+    }
     public function search(Request $request)
     {
         if ($request->user()) {
