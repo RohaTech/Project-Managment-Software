@@ -37,8 +37,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#0b71d9"></stop>
-              <stop offset=".628" stop-color="#264774"></stop>
+              <stop offset="0" stopColor="#0b71d9"></stop>
+              <stop offset=".628" stopColor="#264774"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWa_bY5t0noHcfXn_gr1)"
@@ -53,8 +53,8 @@ function RightSide() {
               gradientTransform="scale(-1 1) rotate(-45 9 106.674)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#0b71d9"></stop>
-              <stop offset="1" stop-color="#264774"></stop>
+              <stop offset="0" stopColor="#0b71d9"></stop>
+              <stop offset="1" stopColor="#264774"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWb_bY5t0noHcfXn_gr2)"
@@ -68,16 +68,16 @@ function RightSide() {
               gradientTransform="matrix(.6804 .7329 -2.6254 2.4374 66.197 -45.252)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset=".17" stop-color="#999"></stop>
-              <stop offset=".481" stop-color="#eee"></stop>
-              <stop offset=".707" stop-color="#ececec"></stop>
-              <stop offset=".788" stop-color="#e5e5e5"></stop>
-              <stop offset=".846" stop-color="#dadada"></stop>
-              <stop offset=".893" stop-color="#c9c9c9"></stop>
-              <stop offset=".933" stop-color="#b3b3b3"></stop>
-              <stop offset=".968" stop-color="#989898"></stop>
-              <stop offset=".999" stop-color="#797979"></stop>
-              <stop offset="1" stop-color="#787878"></stop>
+              <stop offset=".17" stopColor="#999"></stop>
+              <stop offset=".481" stopColor="#eee"></stop>
+              <stop offset=".707" stopColor="#ececec"></stop>
+              <stop offset=".788" stopColor="#e5e5e5"></stop>
+              <stop offset=".846" stopColor="#dadada"></stop>
+              <stop offset=".893" stopColor="#c9c9c9"></stop>
+              <stop offset=".933" stopColor="#b3b3b3"></stop>
+              <stop offset=".968" stopColor="#989898"></stop>
+              <stop offset=".999" stopColor="#797979"></stop>
+              <stop offset="1" stopColor="#787878"></stop>
             </radialGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWc_bY5t0noHcfXn_gr3)"
@@ -92,8 +92,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#0b71d9"></stop>
-              <stop offset="1" stop-color="#264774"></stop>
+              <stop offset="0" stopColor="#0b71d9"></stop>
+              <stop offset="1" stopColor="#264774"></stop>
             </linearGradient>
             <polygon
               fill="url(#0fNVDNBGs8zFiB7cDozbWd_bY5t0noHcfXn_gr4)"
@@ -108,8 +108,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#ff7900"></stop>
-              <stop offset="1" stop-color="#e51e25"></stop>
+              <stop offset="0" stopColor="#ff7900"></stop>
+              <stop offset="1" stopColor="#e51e25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWe_bY5t0noHcfXn_gr5)"
@@ -123,10 +123,10 @@ function RightSide() {
               gradientTransform="rotate(45.001 33.751 31.042) scale(1 1.2072)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".254" stop-color="#ffda4e"></stop>
-              <stop offset=".699" stop-color="#ff7900"></stop>
-              <stop offset=".975" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".254" stopColor="#ffda4e"></stop>
+              <stop offset=".699" stopColor="#ff7900"></stop>
+              <stop offset=".975" stopColor="#e51f25"></stop>
             </radialGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWf_bY5t0noHcfXn_gr6)"
@@ -141,10 +141,10 @@ function RightSide() {
               gradientTransform="rotate(46.717 23.591 27.646)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".404" stop-color="#ffda4e"></stop>
-              <stop offset=".699" stop-color="#ff7900"></stop>
-              <stop offset=".975" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".404" stopColor="#ffda4e"></stop>
+              <stop offset=".699" stopColor="#ff7900"></stop>
+              <stop offset=".975" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWg_bY5t0noHcfXn_gr7)"
@@ -159,10 +159,10 @@ function RightSide() {
               gradientTransform="matrix(.7174 .6967 -.8119 .836 29.893 -13.915)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".254" stop-color="#ffda4e"></stop>
-              <stop offset=".594" stop-color="#ff7900"></stop>
-              <stop offset=".975" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".254" stopColor="#ffda4e"></stop>
+              <stop offset=".594" stopColor="#ff7900"></stop>
+              <stop offset=".975" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWh_bY5t0noHcfXn_gr8)"
@@ -177,10 +177,10 @@ function RightSide() {
               gradientTransform="matrix(.969 .9374 -.9598 .9921 29.654 -25.434)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".28" stop-color="#ffda4e"></stop>
-              <stop offset=".834" stop-color="#ff7900"></stop>
-              <stop offset=".943" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".28" stopColor="#ffda4e"></stop>
+              <stop offset=".834" stopColor="#ff7900"></stop>
+              <stop offset=".943" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWi_bY5t0noHcfXn_gr9)"
@@ -195,10 +195,10 @@ function RightSide() {
               gradientTransform="matrix(.7656 1.1098 -1.1363 .7838 42.552 -20.313)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".28" stop-color="#ffda4e"></stop>
-              <stop offset=".536" stop-color="#ff7900"></stop>
-              <stop offset=".943" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".28" stopColor="#ffda4e"></stop>
+              <stop offset=".536" stopColor="#ff7900"></stop>
+              <stop offset=".943" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWj_bY5t0noHcfXn_gr10)"
@@ -213,10 +213,10 @@ function RightSide() {
               gradientTransform="matrix(-.9692 -1.2218 -1.0815 .8578 80.487 30.673)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".28" stop-color="#ffda4e"></stop>
-              <stop offset=".491" stop-color="#ff7900"></stop>
-              <stop offset=".943" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".28" stopColor="#ffda4e"></stop>
+              <stop offset=".491" stopColor="#ff7900"></stop>
+              <stop offset=".943" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWk_bY5t0noHcfXn_gr11)"
@@ -231,10 +231,10 @@ function RightSide() {
               gradientTransform="matrix(-1.0373 -.8612 -.8818 1.0621 76.835 16.854)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".37" stop-color="#ffda4e"></stop>
-              <stop offset=".834" stop-color="#ff7900"></stop>
-              <stop offset=".943" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".37" stopColor="#ffda4e"></stop>
+              <stop offset=".834" stopColor="#ff7900"></stop>
+              <stop offset=".943" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWl_bY5t0noHcfXn_gr12)"
@@ -249,10 +249,10 @@ function RightSide() {
               gradientTransform="matrix(-.6743 -.7385 -.933 .8519 65.127 17.391)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff"></stop>
-              <stop offset=".254" stop-color="#ffda4e"></stop>
-              <stop offset=".602" stop-color="#ff7900"></stop>
-              <stop offset=".975" stop-color="#e51f25"></stop>
+              <stop offset="0" stopColor="#fff"></stop>
+              <stop offset=".254" stopColor="#ffda4e"></stop>
+              <stop offset=".602" stopColor="#ff7900"></stop>
+              <stop offset=".975" stopColor="#e51f25"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWm_bY5t0noHcfXn_gr13)"
@@ -267,8 +267,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#264774"></stop>
-              <stop offset="1" stop-color="#264774"></stop>
+              <stop offset="0" stopColor="#264774"></stop>
+              <stop offset="1" stopColor="#264774"></stop>
             </linearGradient>
             <polygon
               fill="url(#0fNVDNBGs8zFiB7cDozbWn_bY5t0noHcfXn_gr14)"
@@ -291,9 +291,9 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#f68381"></stop>
-              <stop offset=".547" stop-color="#e62228"></stop>
-              <stop offset=".903" stop-color="#8e2809"></stop>
+              <stop offset="0" stopColor="#f68381"></stop>
+              <stop offset=".547" stopColor="#e62228"></stop>
+              <stop offset=".903" stopColor="#8e2809"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWo_bY5t0noHcfXn_gr15)"
@@ -308,8 +308,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff" stop-opacity=".8"></stop>
-              <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stop-opacity=".8"></stop>
+              <stop offset="1" stopColor="#fff" stop-opacity="0"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWp_bY5t0noHcfXn_gr16)"
@@ -324,8 +324,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset=".293" stop-color="#cbcbcb"></stop>
-              <stop offset="1" stop-color="#666"></stop>
+              <stop offset=".293" stopColor="#cbcbcb"></stop>
+              <stop offset="1" stopColor="#666"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWq_bY5t0noHcfXn_gr17)"
@@ -340,8 +340,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff" stop-opacity=".8"></stop>
-              <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stop-opacity=".8"></stop>
+              <stop offset="1" stopColor="#fff" stop-opacity="0"></stop>
             </linearGradient>
             <polygon
               fill="url(#0fNVDNBGs8zFiB7cDozbWr_bY5t0noHcfXn_gr18)"
@@ -356,8 +356,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset=".293" stop-color="#cbcbcb"></stop>
-              <stop offset="1" stop-color="#666"></stop>
+              <stop offset=".293" stopColor="#cbcbcb"></stop>
+              <stop offset="1" stopColor="#666"></stop>
             </linearGradient>
             <polygon
               fill="url(#0fNVDNBGs8zFiB7cDozbWs_bY5t0noHcfXn_gr19)"
@@ -374,45 +374,45 @@ function RightSide() {
               <stop offset="0" stop-opacity=".8"></stop>
               <stop
                 offset=".384"
-                stop-color="#020202"
+                stopColor="#020202"
                 stop-opacity=".491"
               ></stop>
               <stop
                 offset=".53"
-                stop-color="#090909"
+                stopColor="#090909"
                 stop-opacity=".373"
               ></stop>
               <stop
                 offset=".636"
-                stop-color="#151515"
+                stopColor="#151515"
                 stop-opacity=".288"
               ></stop>
               <stop
                 offset=".722"
-                stop-color="#262626"
+                stopColor="#262626"
                 stop-opacity=".218"
               ></stop>
               <stop
                 offset=".797"
-                stop-color="#3c3c3c"
+                stopColor="#3c3c3c"
                 stop-opacity=".158"
               ></stop>
               <stop
                 offset=".863"
-                stop-color="#585858"
+                stopColor="#585858"
                 stop-opacity=".105"
               ></stop>
               <stop
                 offset=".923"
-                stop-color="#797979"
+                stopColor="#797979"
                 stop-opacity=".057"
               ></stop>
               <stop
                 offset=".976"
-                stop-color="#9e9e9e"
+                stopColor="#9e9e9e"
                 stop-opacity=".014"
               ></stop>
-              <stop offset=".993" stop-color="#ababab" stop-opacity="0"></stop>
+              <stop offset=".993" stopColor="#ababab" stop-opacity="0"></stop>
             </radialGradient>
             <circle
               cx="30.069"
@@ -429,8 +429,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#e7e7e7"></stop>
-              <stop offset="1" stop-color="#999"></stop>
+              <stop offset="0" stopColor="#e7e7e7"></stop>
+              <stop offset="1" stopColor="#999"></stop>
             </linearGradient>
             <circle
               cx="29.659"
@@ -447,8 +447,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#c8c8c8"></stop>
-              <stop offset="1" stop-color="#aaa"></stop>
+              <stop offset="0" stopColor="#c8c8c8"></stop>
+              <stop offset="1" stopColor="#aaa"></stop>
             </linearGradient>
             <circle
               cx="29.659"
@@ -465,8 +465,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#78d9f4"></stop>
-              <stop offset=".846" stop-color="#0b71d9"></stop>
+              <stop offset="0" stopColor="#78d9f4"></stop>
+              <stop offset=".846" stopColor="#0b71d9"></stop>
             </linearGradient>
             <circle
               cx="29.659"
@@ -482,9 +482,9 @@ function RightSide() {
               gradientTransform="rotate(-44.998 61.71 39.148) scale(1.4829 .283)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff" stop-opacity=".5"></stop>
-              <stop offset=".141" stop-color="#fff" stop-opacity=".429"></stop>
-              <stop offset=".999" stop-color="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stop-opacity=".5"></stop>
+              <stop offset=".141" stopColor="#fff" stop-opacity=".429"></stop>
+              <stop offset=".999" stopColor="#fff" stop-opacity="0"></stop>
             </radialGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWx_bY5t0noHcfXn_gr24)"
@@ -499,8 +499,8 @@ function RightSide() {
               gradientTransform="translate(-.15 -.062)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#fff" stop-opacity=".8"></stop>
-              <stop offset=".794" stop-color="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stop-opacity=".8"></stop>
+              <stop offset=".794" stopColor="#fff" stop-opacity="0"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWy_bY5t0noHcfXn_gr25)"
@@ -535,8 +535,8 @@ function RightSide() {
               y2="41.841"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#33bef0"></stop>
-              <stop offset="1" stop-color="#0a85d9"></stop>
+              <stop offset="0" stopColor="#33bef0"></stop>
+              <stop offset="1" stopColor="#0a85d9"></stop>
             </linearGradient>
             <path
               fill="url(#VPOdc88HXLi8UTIsE~~tLa_YSdQbX213JrZ_gr1)"

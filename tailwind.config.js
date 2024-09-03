@@ -47,6 +47,7 @@ export default {
         primaryColor: "#1868db",
         secondaryColor: "#116699",
         accentColor: "#1868db",
+        IconBg: "#e2e8f0"
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

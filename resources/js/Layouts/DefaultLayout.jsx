@@ -13,7 +13,9 @@ export default function DefaultLayout({ children }) {
         <div className="relative flex  flex-1 flex-col overflow-y-auto overflow-x-hidden ">
           {/* <!-- ===== Main Content Start ===== --> */}
           <div>
-            <div className="mx-auto p-4 md:p-6 ml-72 2xl:p-10 overscroll-contain overflow-y-auto">
+ 
+            <div className="mx-auto p-1 md:p-1 ml-72.5 2xl:p-10 overscroll-contain overflow-y-auto">
+ 
               {children}
             </div>
           </div>

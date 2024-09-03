@@ -116,14 +116,18 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        // dd($request);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
         ]);
+
         $task->update([
             'name' => $validated['name'],
+            'assigned' => $validated['assigned'],
             'status' => $validated['status'],
             'priority' => $validated['priority'],
             'due_date' => $validated['due_date'],
@@ -136,9 +140,7 @@ class TaskController extends Controller
             'user_id' => Auth::id(),
             'activity' => ' Update Task called ' . $request->name,
         ]);
-
-
-        return redirect()->route('task.index')->with('success', 'Task updated successfully.');
+        // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
 
     /**
@@ -156,3 +158,4 @@ class TaskController extends Controller
         return redirect()->route('task.index')->with('success', 'Task deleted successfully.');
     }
 }
+// ","
