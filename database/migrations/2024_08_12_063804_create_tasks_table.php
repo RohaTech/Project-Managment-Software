@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string("status")->nullable()->default("pending")->nullable();
             $table->string("priority")->nullable();
             $table->string("due_date")->nullable();
+            $table->json('additional_column')->nullable();
             $table->timestamps();
         });
     }

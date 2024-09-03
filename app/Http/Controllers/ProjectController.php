@@ -15,11 +15,17 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = Project::query();
+
+        if ($request->has('name')) {
+            $query->where('name', "like", "%" . $request->input('name') . "%");
+        }
+
         $userId = Auth::id();
 
-        $projects = Project::whereHas('members', function ($query) use ($userId) {
+        $projects = $query->whereHas('members', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })->with(['creator', 'updateBy']) // Load the creator relationship
             ->latest()
@@ -27,7 +33,7 @@ class ProjectController extends Controller
 
         return Inertia::render('Project/ProjectIndex', [
             'projects' => $projects,
-            'user' => auth()->user(),
+            'queryParams' => $request->query() ?: null
         ]);
     }
 
@@ -76,11 +82,13 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $tasks = Task::where('project_id', $project->id)->get();
-        return Inertia::render('Project/ProjectShow', [
-            "project" => $project,
-             "tasks" => $tasks,
-             'user' => auth()->user(),]);
+ 
+
+        $tasks = $project->tasks()->get();
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(),]);
+ 
+        
+ 
     }
 
     /**
@@ -88,8 +96,9 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render('Project/ProjectEdit', ["project_id" => $id, 'user' => auth()->user(),]);
+        return Inertia::render('Project/ProjectEdit', ["project_id" => $id,]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -119,5 +128,81 @@ class ProjectController extends Controller
     {
 
         Project::findOrFail($id)->delete();
+    }
+
+
+
+
+
+    public function showAdditionalColumn(Project $project)
+
+    {
+        $additional_column = json_decode($project->additional_column, true) ?? [];
+
+        return Inertia::render('AdditionalColumn', ["project" => $project, "additional_column" => $additional_column]);
+    }
+
+
+
+    public function createAdditionalColumn(Request $request, string $project_id)
+    {
+        $validate = $request->validate([
+            'title' => ['required ', 'max:255'],
+            'type' => ['required'],
+        ]);
+
+        $project = Project::find($project_id);
+
+        $additionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        if (array_search($validate['title'], array_column($additionalColumn, 'title')) !== false) {
+            return back()->withErrors(['title' => 'A title with the same name already exists.']);
+        }
+
+        $newAdditionalColumn = array_merge($additionalColumn, [
+            [
+                'title' => $validate['title'],
+                'type' => $validate['type'],
+            ],
+        ]);
+
+        $project->update([
+            'additional_column' => json_encode($newAdditionalColumn),
+        ]);
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => auth()->user()->name . ' created a new column called ' . $request->title,
+        ]);
+    }
+
+
+
+    public function editAdditionalColumn(Project $project)
+    {
+        $additional_column = json_decode($project->additional_column, true) ?? [];
+
+        return Inertia::render('AdditionalColumnUpdate', ["project" => $project, "additional_column" => $additional_column]);
+    }
+
+
+
+    public function updateAdditionalColumn(Request $request, Project $project)
+    {
+        $additional_column = $request->input('additional_column');
+        $titles = array_map('strtolower', array_column($additional_column, 'title'));
+        if (count($titles) !== count(array_unique($titles))) {
+            return back()->withErrors(['title' => 'A title with the same name already exists.']);
+        }
+
+        $project->update([
+            'additional_column' => json_encode($additional_column),
+        ]);
+
+        // Create an activity log
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => auth()->user()->name . ' updated the additional column ',
+        ]);
     }
 }

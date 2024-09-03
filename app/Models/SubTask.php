@@ -19,7 +19,7 @@ class SubTask extends Model
         'task_id',
         'start_date',
         'user_id',
-        'column_id',
+
     ];
     protected $casts = [
         'created_at' => 'datetime',
@@ -36,8 +36,8 @@ class SubTask extends Model
     {
         return $this->belongsTo(Task::class);
     }
-    public function column()
+    public function message()
     {
-        return $this->hasMany(Column::class);
+        return $this->hasMany(Message::class);
     }
 }
