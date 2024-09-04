@@ -9,19 +9,12 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from "@inertiajs/react";
 
 export default function ProjectShow({ project, tasks, users, members }) {
-    // const { data, setData, patch, errors } = useForm({
-        // name: task.name || '',
-        // project_id: task.project_id || '',
-        // status: task.status || '',
-        // priority: task.priority || '',
-        // due_date: task.due_date || '',
-    // });
 
-    console.log(members);
     const statusOptions = [
         { value: 'Not Started', label: 'Not Started' },
         { value: 'In Progress', label: 'In Progress' },
         { value: 'Completed', label: 'Completed' },
+        { value: 'Pending', label: 'Pending' },
     ];
 
     const priorityOptions = [
@@ -30,105 +23,15 @@ export default function ProjectShow({ project, tasks, users, members }) {
         { value: 'High', label: 'High' },
     ];
 
-    // Assume `assignedOptions` is an array of user objects, e.g., [{id: 1, name: 'John Doe'}, ...]
-    const assignedOptions =members.map(member => ({ value: member.id, label: member.name }));
-
     let [isOpen, setIsOpen] = useState(false);
     let [openEdit, setOpenEdit] = useState(false);
 
-    const { data, setData, patch, errors } = useForm({
-        name: '',
-        assigned: '',
-        status: '',
-        priority: '',
-        due_date: ''
-    });
-
-    const [editableTask, setEditableTask] = useState(tasks.reduce((acc, task) => {
-        acc[task.id] = task.name;
-        return acc;
-    }, {}));
-
-    const [editableAssigned, setEditableAssigned] = useState(tasks.reduce((acc, task) => {
-        acc[task.id] = task.assigned;
-        return acc;
-    }, {}));
-
-    const [editableStatus, setEditableStatus] = useState(tasks.reduce((acc, task) => {
-        acc[task.id] = task.status;
-        return acc;
-    }, {}));
-
-    const [editablePriority, setEditablePriority] = useState(tasks.reduce((acc, task) => {
-        acc[task.id] = task.priority;
-        return acc;
-    }, {}));
-
-    const [editableDueDate, setEditableDueDate] = useState(tasks.reduce((acc, task) => {
-        acc[task.id] = task.due_date;
-        return acc;
-    }, {}));
-
-
-
-
-    const handleInputChange = (e, taskId) => {
-        const updatedContent = {
-            ...editableTask,
-            [taskId]: e.target.value
-        };
-        setEditableTask(updatedContent);
-        setData('name', e.target.value);
-    };
-const handleStatusChange = (e, taskId) => {
-    const updatedStatus = {
-        ...editableStatus,
-        [taskId]: e.target.value
-    };
-    setEditableStatus(updatedStatus);
-    setData('status', e.target.value);
-    handleSubmit(e, taskId, 'status', e.target.value);
-};
-
-const handleAssignedChange = (e, taskId) => {
-    const updatedAssigned = {
-        ...editableAssigned,
-        [taskId]: e.target.value
-    };
-    setEditableAssigned(updatedAssigned);
-    setData('assigned', e.target.value);
-    handleSubmit(e, taskId, 'assigned', e.target.value);
-};
-
-const handlePriorityChange = (e, taskId) => {
-    const updatedPriority = {
-        ...editablePriority,
-        [taskId]: e.target.value
-    };
-    setEditablePriority(updatedPriority);
-    setData('priority', e.target.value);
-    handleSubmit(e, taskId, 'priority', e.target.value);
-
-};
-
-    const handleDueDateChange = (e, taskId) => {
-        const updatedContent = {
-            ...editableDueDate,
-            [taskId]: e.target.value
-        };
-        setEditableDueDate(updatedContent);
-        setData('due_date', e.target.value);
-
-
-
-    };
-
-
-    const handleSubmit = (e, taskId, field, value) => {
-        e.preventDefault();
-        patch(route('task.update', { id: taskId }), {
-            [field]: value,
-        });
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
     const handleEditClick = (e) => {
@@ -234,97 +137,86 @@ const handlePriorityChange = (e, taskId) => {
                 <div>
                 <div class="p-2 pr-4">
                 <table className="w-full">
-                    <thead>
-                        <tr>
-                            <th className="w-[390px] px-4 py-2 border border-l-0 text-left border-slate-300">Task Name</th>
-                            <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Assigned</th>
-                            <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Status</th>
-                            <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">Priority</th>
-                            <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Due Date</th>
+            <thead>
+                <tr>
+                    <th className="w-[390px] px-4 py-2 border border-l-0 text-left border-slate-300">Task Name</th>
+                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Assigned</th>
+                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Status</th>
+                    <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">Priority</th>
+                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {tasks.map(task => {
+                    const { data, setData, patch, errors } = useForm({
+                        name: task.name,
+                        assigned: task.assigned,
+                        status: task.status,
+                        priority: task.priority,
+                        due_date: task.due_date
+                    });
+
+                    const handleSubmit = (e) => {
+                        e.preventDefault();
+                        patch(`/task/${task.id}`);
+                    };
+
+                    return (
+                        <tr key={task.id}>
+                            <td className="px-4 py-2 border border-l-0 border-slate-300 flex items-center">
+                                <form onSubmit={handleSubmit}>
+                                    <TextInput
+                                        value={data.name}
+                                        id="name"
+                                        onChange={(e) => setData('name', e.target.value)}
+                                        onBlur={handleSubmit}
+                                        className="border-0 w-full focus:ring-0 focus:border-slate-300"
+                                    />
+                                </form>
+                                <span className="ml-auto cursor-pointer p-[5px] rounded-lg hover:bg-slate-200 transition duration-300 ease-in-out">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={15}>
+                                        <path fill="#64748b" d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9l.3-.5z"/>
+                                    </svg>
+                                </span>
+                            </td>
+                            <td className="px-4 py-2 border border-slate-300">
+                                <select className="border-0" onChange={(e)=> setData('assigned', e.target.value)} onBlur={handleSubmit}>
+                                    {members.map((member, index) => (
+                                        <option key={index} value={member.id} selected={member.id === task.assigned}>{member.name}</option>
+                                    ))}
+                                </select>
+                            </td>
+                            <td className="px-4 py-2 border border-slate-300">
+                                <select className="border-0"  onChange={(e)=> setData('status', e.target.value)} onBlur={handleSubmit}>
+                                    {statusOptions.map((status, index) => (
+                                        <option key={index} value={status.value} selected={status.value === task.status}>{status.label}</option>
+                                    ))}
+                                 </select>
+                            </td>
+                            <td className="px-4 py-2 border border-r-0 border-slate-300">
+                                <select className="border-0" onChange={(e)=> setData('priority', e.target.value)} onBlur={handleSubmit}>
+                                    {priorityOptions.map((priority, index)=> (
+                                        <option key={index} value={priority.value} selected={priority.value === task.priority}>{priority.label}</option>
+                                    ))}
+                                </select>
+                            </td>
+                            <td className="px-4 py-2 border border-slate-300">
+                                <input
+                                    type="date"
+                                    value={task.due_date ? formatDate(task.due_date) : ''}
+                                    onChange={(e) => setData('due_date', e.target.value)}
+                                    onBlur={handleSubmit}
+                                />
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-
-    {tasks.map((task) => (
-        <tr key={task.id}>
-            <td className="px-4 py-2 border border-l-0 border-slate-300">
-                <input
-                    type="text"
-                    value={editableTask[task.id]}
-                    onChange={(e) => handleInputChange(e, task.id)}
-                    onBlur={(e) => handleSubmit(e, task.id, 'name', e.target.value)}
-                    className="w-full bg-white border-none focus:outline-none"
-                />
-            </td>
-            <td className="px-4 py-2 border border-slate-300">
-                <select
-                    value={editableAssigned[task.id]}
-                    onChange={(e) => handleAssignedChange(e, task.id)}
-                    onBlur={(e) => handleSubmit(e, task.id, 'assigned', e.target.value)}
-                    className="w-full bg-white border-none focus:outline-none"
-                >
-                    {assignedOptions.map(option => (
-                        <option key={option.value} selected = {task.assigned === option.label} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-            </td>
-            <td className="px-4 py-2 border border-slate-300">
-                <select
-                    value={editableStatus[task.id]}
-                    onChange={(e) => handleSubmit(e, task.id, 'status', e.target.value)}
-                    // onBlur={(e) => handleSubmit(e, task.id, 'status', e.target.value)}
-                    className="w-full bg-white border-none focus:outline-none"
-                >
-                    {statusOptions.map(option => (
-                        <option key={option.value} selected = {task.status === option.label} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-            </td>
-
-            <td className="px-4 py-2 border border-slate-300">
-                <select
-                    value={editablePriority[task.id]}
-                    onChange={(e) => handlePriorityChange(e, task.id)}
-                    onBlur={(e) => handleSubmit(e, task.id, 'priority', e.target.value)}
-                    className="w-full bg-white border-none focus:outline-none"
-                >
-                    {priorityOptions.map(option => (
-                        <option key={option.value} selected = {task.priority === option.label} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-            </td>
-            <td className="px-4 py-2 border border-slate-300">
-                <input
-                    type="text"
-                    value={editableDueDate[task.id]}
-                    onChange={(e) => handleDueDateChange(e, task.id)}
-                    onBlur={(e) => handleSubmit(e, task.id, 'due_date', e.target.value)}
-                    className="w-full bg-white border-none focus:outline-none"
-                />
-            </td>
-        </tr>
-    ))}
-</tbody>
-
-                </table>
+                    );
+                })}
+            </tbody>
+        </table>
             </div>
         </div>
     </div>
 </AuthenticatedLayout>
     );
- 
+
 }
-
-{/* <span className="ml-auto cursor-pointer p-[5px] rounded-lg hover:bg-slate-200 transition duration-300 ease-in-out">
-                    <svg className="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={15}><path fill="#64748b" d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9l.3-.5z"/></svg>
-                </span> */}
-
-
-                /*
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-6 mx-auto cursor-pointer"><path fill="#64748b" d="M406.5 399.6C387.4 352.9 341.5 320 288 320l-64 0c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3l64 0c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z"/></svg>*/
