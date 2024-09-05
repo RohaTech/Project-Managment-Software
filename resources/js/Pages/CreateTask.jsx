@@ -12,7 +12,9 @@ export default function CreateTask({ projects, user }) {
   });
 
   const handleSubmit = (e) => {
-    e.preventDefault();  };
+        e.preventDefault();
+        post('/task');
+    };
 
   return (
     <AuthenticatedLayout
