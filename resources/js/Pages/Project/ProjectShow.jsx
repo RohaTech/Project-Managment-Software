@@ -25,6 +25,17 @@ export default function ProjectShow({ project, tasks, users, members }) {
 
     let [isOpen, setIsOpen] = useState(false);
     let [openEdit, setOpenEdit] = useState(false);
+    const [openSubTasks, setOpenSubTasks] = useState(tasks.map(() => false));
+
+    const handleOpenSubtask = (index) => {
+        setOpenSubTasks(prevState => {
+            const newState = [...prevState];
+            newState[index] = !newState[index];
+            return newState;
+        });
+    };
+
+        console.log(tasks);
 
       const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -136,10 +147,10 @@ export default function ProjectShow({ project, tasks, users, members }) {
                     </div>
                 <div>
                 <div class="p-2 pr-4">
-                <table className="w-full">
+                <table className="w-full border-collapse">
             <thead>
                 <tr>
-                    <th className="w-[390px] px-4 py-2 border border-l-0 text-left border-slate-300">Task Name</th>
+                    <th className="w-[390px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300">Task Name</th>
                     <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Assigned</th>
                     <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Status</th>
                     <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">Priority</th>
@@ -147,7 +158,7 @@ export default function ProjectShow({ project, tasks, users, members }) {
                 </tr>
             </thead>
             <tbody>
-                {tasks.map(task => {
+                {tasks.map((task, index) => {
                     const { data, setData, patch, errors } = useForm({
                         name: task.name,
                         assigned: task.assigned,
@@ -162,15 +173,27 @@ export default function ProjectShow({ project, tasks, users, members }) {
                     };
 
                     return (
-                        <tr key={task.id}>
-                            <td className="px-4 py-2 border border-l-0 border-slate-300 flex items-center">
+                        <React.Fragment key={task.id}>
+                        <tr key={task.id} className="border-collapse">
+                            <td className="px-4 py-2 border border-l-4 border-l-sky-500 border-slate-300 flex items-center border-collapse">
+                            <span className="cursor-pointer" onClick={() => handleOpenSubtask(index)}>
+                                {!openSubTasks[index] ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 25 25">
+                                        <path d="M17.85,12.85l-10,10a.48.48,0,0,1-.7,0,.48.48,0,0,1,0-.7l9.64-9.65L7.15,2.85a.49.49,0,0,1,.7-.7l10,10A.48.48,0,0,1,17.85,12.85Z"></path>
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 30 30">
+                                        <path d="M3,12v-2c0-0.386,0.223-0.738,0.572-0.904s0.762-0.115,1.062,0.13L15,17.708l10.367-8.482 c0.299-0.245,0.712-0.295,1.062-0.13C26.779,9.261,27,9.614,27,10v2c0,0.3-0.135,0.584-0.367,0.774l-11,9 c-0.369,0.301-0.898,0.301-1.267,0l-11-9C3.135,12.584,3,12.3,3,12z"></path>
+                                    </svg>
+                                )}
+                            </span>
                                 <form onSubmit={handleSubmit}>
                                     <TextInput
                                         value={data.name}
                                         id="name"
                                         onChange={(e) => setData('name', e.target.value)}
                                         onBlur={handleSubmit}
-                                        className="border-0 w-full focus:ring-0 focus:border-slate-300"
+                                        className="border-0 w-full focus:ring-1 focus:border-slate-300 "
                                     />
                                 </form>
                                 <span className="ml-auto cursor-pointer p-[5px] rounded-lg hover:bg-slate-200 transition duration-300 ease-in-out">
@@ -209,6 +232,35 @@ export default function ProjectShow({ project, tasks, users, members }) {
                                 />
                             </td>
                         </tr>
+                {openSubTasks[index] && (
+                      <tr>
+                      <td colSpan="6" className="pl-4 pt-2 pb-4">
+                          <table className="w-full">
+                              <thead>
+                                  <tr>
+                                      <th className="w-[390px] px-4 border border-l-0 text-left border-slate-300 font-medium">Subtask Name</th>
+                                      <th className="w-7/50 px-4 border text-left border-slate-300 font-medium">Assigned</th>
+                                      <th className="w-7/50 px-4 border text-left border-slate-300 font-medium">Status</th>
+                                      <th className="w-7/50 px-4 border border-r-0 text-left border-slate-300 font-medium">Priority</th>
+                                      <th className="w-7/50 px-4 border text-left border-slate-300 font-medium">Due Date</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {task.subtask.map(subs => (
+                                      <tr key={subs.id} className="bg-gray-100">
+                                          <td className="px-4 py-1 border border-l-0 border-slate-300">{subs.name}</td>
+                                          <td className="px-4 py-1 border border-slate-300">{subs.assigned}</td>
+                                          <td className="px-4 py-1 border border-slate-300">{subs.status}</td>
+                                          <td className="px-4 py-1 border border-slate-300">{subs.priority}</td>
+                                          <td className="px-4 py-1 border border-slate-300">{formatDate(subs.due_date)}</td>
+                                      </tr>
+                                  ))}
+                              </tbody>
+                          </table>
+                      </td>
+                  </tr>
+                    )}
+            </React.Fragment>
                     );
                 })}
             </tbody>
@@ -218,5 +270,4 @@ export default function ProjectShow({ project, tasks, users, members }) {
     </div>
 </AuthenticatedLayout>
     );
-
 }
