@@ -194,10 +194,10 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                             <strong>Assigned To:</strong> {task.assigned}
                         </div>
                         <div className="mb-4">
-                            <strong>Assigned To:</strong> {task.due_date}
+                            <strong>Due Date:</strong> {task.due_date}
                         </div>
                         <div className="mb-4">
-                            <strong>Assigned To:</strong> {task.status}
+                            <strong>Status:</strong> {task.status}
                         </div>
                         <div className="mb-6">
                             <h2 className="text-xl font-bold">Messages</h2>
@@ -398,7 +398,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                                                                                             />
                                                                                             {
                                                                                                 !message.content && (
-                                                                                                    <span className="text-sm text-gray-600 ml-8 ml-2 mt-3 font-light rounded-xl  ">
+                                                                                                    <span className="text-sm text-gray-600  ml-2 mt-3 font-light rounded-xl  ">
                                                                                                         {format(
                                                                                                             new Date(
                                                                                                                 message.created_at

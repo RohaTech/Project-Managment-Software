@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectInvitation extends Model
 {
     use HasFactory;
+    protected $table = 'projectinvitations';
     protected $fillable = [
         'email',
         'token',
