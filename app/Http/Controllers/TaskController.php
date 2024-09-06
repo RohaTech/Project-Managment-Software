@@ -63,6 +63,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
+        $project = Project::find($request->project_id);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
@@ -75,9 +78,22 @@ class TaskController extends Controller
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 
+        $validated['additional_column'] = [];
+        $ProjectAdditionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        // dd($ProjectAdditionalColumn);
+
+        foreach ($ProjectAdditionalColumn as $column) {
+            $validated['additional_column'][] = [
+                "title" => $column['title'],
+                "value" => "  "
+            ];
+        }
+
+
         // dd($validated);
+
         Task::create($validated);
-        $project = Project::find($request->project_id);
 
         $project->activities()->create([
             'user_id' => Auth::id(),
@@ -123,8 +139,10 @@ class TaskController extends Controller
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
+            'additional_column' => 'nullable',
         ]);
         // dd("Helloss");
+
 
         $task->update([
             'name' => $validated['name'],
@@ -132,6 +150,7 @@ class TaskController extends Controller
             'status' => $validated['status'] ?? $task->status,
             'priority' => $validated['priority'] ?? $task->priority,
             'due_date' => $validated['due_date'] ?? $task->due_date,
+            'additional_column' => $validated['additional_column'] ?? $task->additional_column,
             'updated_by' => auth()->id(),
         ]);
 

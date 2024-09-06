@@ -20,12 +20,13 @@ class Task extends Model
         'updated_by',
         'created_by',
         'assigned',
-        'column_id',
+        'additional_column',
     ];
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'due_date' => 'datetime',
+        'additional_column' => 'array'
     ];
     public function creator()
     {
