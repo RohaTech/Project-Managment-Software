@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 
-const TaskDetail = ({ task, messages, user_id, user }) => {
+const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     const [messageList, setMessageList] = useState(messages || []);
     const [editingMessageId, setEditingMessageId] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState({});
@@ -16,6 +16,8 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
         task_id: task.id,
         content: "",
     });
+
+    const userAssigned = assigned[0];
 
     // Ed
     const {
@@ -143,8 +145,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
         const trimmedName = name.trim().toUpperCase();
         return trimmedName.slice(0, 2);
     };
-
-    return (
+        return (
         <AuthenticatedLayout>
             <div className=" mx-auto h-screen overflow-hidden">
                 <div className="flex justify-between sticky top-0 z-50 bg-gray-400 w-[100%] h-[50px] mb-0 ">
@@ -191,7 +192,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                     <div className="  p-4 rounded-md overflow-y-auto overflow-x-hidden">
                         <div className="mb-4"></div>
                         <div className="mb-4">
-                            <strong>Assigned To:</strong> {task.assigned}
+                            <strong>Assigned To:</strong> {userAssigned.name}
                         </div>
                         <div className="mb-4">
                             <strong>Due Date:</strong> {task.due_date}
@@ -385,19 +386,19 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                                                                                         {serverUrl +
                                                                                         attachment.file_path.match(
                                                                                             /\.(jpeg|jpg|gif|png)$/
-                                                                                        ) ? ( <div className="flex flex-col  items-end">
-                                                                                            <img
-                                                                                                src={
-                                                                                                    serverUrl +
-                                                                                                    attachment.file_path
-                                                                                                }
-                                                                                                alt={
-                                                                                                    attachment.file_name
-                                                                                                }
-                                                                                                className="w-50 h-40 object-cover rounded"
-                                                                                            />
-                                                                                            {
-                                                                                                !message.content && (
+                                                                                        ) ? (
+                                                                                            <div className="flex flex-col  items-end">
+                                                                                                <img
+                                                                                                    src={
+                                                                                                        serverUrl +
+                                                                                                        attachment.file_path
+                                                                                                    }
+                                                                                                    alt={
+                                                                                                        attachment.file_name
+                                                                                                    }
+                                                                                                    className="w-50 h-40 object-cover rounded"
+                                                                                                />
+                                                                                                {!message.content && (
                                                                                                     <span className="text-sm text-gray-600  ml-2 mt-3 font-light rounded-xl  ">
                                                                                                         {format(
                                                                                                             new Date(
@@ -407,7 +408,7 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                                                                                                         )}
                                                                                                     </span>
                                                                                                 )}
-                                                                                                </div>
+                                                                                            </div>
                                                                                         ) : (
                                                                                             <div className="text-sm  text-blue-500 underline flex flex-col gap-0">
                                                                                                 <img
@@ -421,7 +422,6 @@ const TaskDetail = ({ task, messages, user_id, user }) => {
                                                                                                     attachment.file_name
                                                                                                 }
                                                                                             </div>
-
                                                                                         )}
                                                                                     </a>
                                                                                 </div>

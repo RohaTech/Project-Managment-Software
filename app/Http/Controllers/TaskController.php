@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Project;
+use App\Models\User;
+
 use App\Models\ProjectMember;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -107,14 +109,15 @@ class TaskController extends Controller
      * Display the specified resource.
      */
     public function show(Task $task)
-    {
+    {   $assigned = User::where('id',$task->assigned)->get();
         $messages = Message::where('task_id', $task->id)->with('user', 'attachments')->get();
         $task->load('project');
         return Inertia::render('Task/TaskDetail', [
             'task' => $task,
             'messages' => $messages,
             'user' => auth()->user(),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
+            'assigned' => $assigned,
 
         ]);
     }
