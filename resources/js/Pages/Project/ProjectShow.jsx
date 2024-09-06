@@ -35,12 +35,6 @@ export default function ProjectShow({ project, tasks, users, members }) {
     setData("additional_column", newAdditionalColumn);
   };
 
-  const handleTaskTitleChange = (index, value) => {
-    const newAdditionalColumn = [...data.additional_column];
-    newAdditionalColumn[index].value = value;
-    setData("additional_column", newAdditionalColumn);
-  };
-
   const statusOptions = [
     { value: "Not Started", label: "Not Started" },
     { value: "In Progress", label: "In Progress" },
@@ -365,11 +359,17 @@ export default function ProjectShow({ project, tasks, users, members }) {
                   status: task.status,
                   priority: task.priority,
                   due_date: task.due_date,
+                  additional_column: task.additional_column,
                 });
 
                 const handleSubmit = (e) => {
                   e.preventDefault();
                   patch(`/task/${task.id}`);
+                };
+                const handleTaskTitleChange = (index, value) => {
+                  const newAdditionalColumn = [...data.additional_column];
+                  newAdditionalColumn[index].value = value;
+                  setData("additional_column", newAdditionalColumn);
                 };
 
                 return (
