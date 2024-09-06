@@ -20,7 +20,7 @@ class Project extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
-        'additional_columns' => 'array'
+        'additional_column' => 'array'
     ];
     public function creator()
     {

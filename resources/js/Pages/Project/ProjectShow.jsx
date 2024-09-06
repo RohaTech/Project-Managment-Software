@@ -7,9 +7,42 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from "@inertiajs/react";
+import SecondaryButton from "@/Components/SecondaryButton";
+import ProjectAddField from "./ProjectAddField";
 import axios from "axios";
+ 
+
+
+
+
+ 
+
 
 export default function ProjectShow({ project, tasks, users, members }) {
+  
+  
+  const additional_column = JSON.parse(project.additional_column);
+ let [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
+  const { data, setData, patch, processing, errors, reset } = useForm({
+    additional_column:
+      additional_column &&
+      additional_column.map((item) => ({
+        title: item.title,
+        type: item.type,
+      })),
+  });
+  const handleProjectSubmit = (e) => {
+    e.preventDefault();
+    patch(route("project.additional-column.update", [project]), {
+      " additional_column": data.additional_column,
+    });
+  };
+  const handleProjectTitleChange = (index, value) => {
+    const newAdditionalColumn = [...data.additional_column];
+    newAdditionalColumn[index].title = value;
+    setData("additional_column", newAdditionalColumn);
+  };
+  
     const statusOptions = [
         { value: "Not Started", label: "Not Started" },
         { value: "In Progress", label: "In Progress" },
@@ -298,6 +331,35 @@ export default function ProjectShow({ project, tasks, users, members }) {
                     <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Status</th>
                     <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">Priority</th>
                     <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Due Date</th>
+{data.additional_column &&
+                    data.additional_column.map((item, index) => (
+                      <th
+                        key={index}
+                        className="w-[120px] px-4 py-2 border text-left border-slate-300"
+                      >
+                        <input
+                          type="text"
+                          className="w-[120px] px-4 py-2  border-none text-left  "
+                          value={item.title}
+                          onChange={(e) =>
+                            handleProjectTitleChange(index, e.target.value)
+                          }
+                          onBlur={handleProjectSubmit}
+                          errors={errors.additional_column}
+                        />
+                      </th>
+                    ))}
+                  <th
+                    onClick={() => setIsAddFieldOpen(true)}
+                    className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
+                  >
+                    +
+                  </th>
+                  <ProjectAddField
+                    setIsAddFieldOpen={setIsAddFieldOpen}
+                    isAddFieldOpen={isAddFieldOpen}
+                    project={project}
+                  />
                 </tr>
             </thead>
             <tbody>
@@ -376,6 +438,18 @@ export default function ProjectShow({ project, tasks, users, members }) {
                                     onBlur={handleSubmit}
                                 />
                             </td>
+                              {data.additional_column &&
+                        data.additional_column.map((item, key) => (
+                          <td className="px-4 py-2 border border-slate-300">
+                            <input
+                              value={item.value}
+                              onChange={(e) =>
+                                handleTaskTitleChange(key, e.target.value)
+                              }
+                              onBlur={handleSubmit}
+                            />
+                          </td>
+                        ))}
                         </tr>
                 {openSubTasks[index] && (
                       <tr>
@@ -414,4 +488,5 @@ export default function ProjectShow({ project, tasks, users, members }) {
             </div>
         </AuthenticatedLayout>
     );
+ 
 }
