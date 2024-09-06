@@ -82,24 +82,14 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
- 
         $members = $project->members;
         $allNames = collect();
         foreach ($members as $member) {
             $names = $member->creator()->get();
             $allNames = $allNames->merge($names);
         }
-          $tasks = $project->tasks()->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks,  "members" => $allNames]);
- 
- 
-
-       
-         
- 
-        
- 
- 
+        $tasks = $project->tasks()->with('subtask')->get();
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $allNames]);
     }
 
     /**
@@ -107,9 +97,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
- 
+
         return Inertia::render('Project/PopEditProject', ["project" => $project]);
- 
+
     }
 
 
@@ -150,7 +140,6 @@ class ProjectController extends Controller
 
 
     public function showAdditionalColumn(Project $project)
-
     {
         $additional_column = json_decode($project->additional_column, true) ?? [];
 
