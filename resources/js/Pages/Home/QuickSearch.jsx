@@ -3,24 +3,24 @@ import { Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 
 export const QuickSearch = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [fetchedData, setFetchedData] = useState();
-    const [searchQuery, setSearchQuery] = useState("");
-    useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await fetch(
-                    `http://localhost:8001/home/all-search?query=${searchQuery}`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                if (!response.ok) {
-                    console.log("Network Error");
-                }
+  const [isOpen, setIsOpen] = useState(false);
+  const [fetchedData, setFetchedData] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/home/all-search?query=${searchQuery}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          console.log("Network Error");
+        }
 
                 const data = await response.json();
 
