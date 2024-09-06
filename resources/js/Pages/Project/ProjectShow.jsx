@@ -35,6 +35,12 @@ export default function ProjectShow({ project, tasks, users, members }) {
     setData("additional_column", newAdditionalColumn);
   };
 
+  const handleTaskTitleChange = (index, value) => {
+    const newAdditionalColumn = [...data.additional_column];
+    newAdditionalColumn[index].value = value;
+    setData("additional_column", newAdditionalColumn);
+  };
+
   const statusOptions = [
     { value: "Not Started", label: "Not Started" },
     { value: "In Progress", label: "In Progress" },
