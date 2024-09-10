@@ -4,14 +4,21 @@ import InputLabel from "@/Components/InputLabel";
 import SecondaryButton from "@/Components/SecondaryButton";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { useEffect } from "react";
 
 export default function Register() {
+  const { search } = window.location; // Access the query parameters from the URL
+  const params = new URLSearchParams(search);
+  const invitationToken = params.get("invitation_token");
+  const emailFromInvitation = params.get("email");
+
   const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
-    email: "",
+    email: emailFromInvitation || "", // Prefill email from invitation if available
     password: "",
     password_confirmation: "",
+    invitation_token: invitationToken || "", // Store the token in form data
   });
 
   const submit = (e) => {
@@ -25,7 +32,7 @@ export default function Register() {
   return (
     <GuestLayout>
       <Head title="Register" />
-      <div className=" flex flex-col sm:justify-center items-center mt-24 pt-6 sm:pt-0">
+      <div className="flex flex-col sm:justify-center items-center mt-24 pt-6 sm:pt-0">
         <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
           <form onSubmit={submit}>
             <div>
@@ -104,6 +111,13 @@ export default function Register() {
               />
             </div>
 
+            {/* Hidden field for invitation_token */}
+            <input
+              type="hidden"
+              name="invitation_token"
+              value={data.invitation_token}
+            />
+
             <div className="flex items-center justify-end mt-4">
               <Link
                 href={route("login")}
@@ -112,7 +126,7 @@ export default function Register() {
                 Already registered?
               </Link>
 
-              <PrimaryButton className="ms-4 bg-primary " disabled={processing}>
+              <PrimaryButton className="ms-4 bg-primary" disabled={processing}>
                 Register
               </PrimaryButton>
             </div>

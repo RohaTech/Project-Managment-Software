@@ -45,8 +45,7 @@ class ProjectInvitationMail extends Mailable
             view: 'emails.project_invitation',
             with: [
                 'projectName' => $this->project->name,
-                'invitationLink' => url('/accept-invitation/' . $this->invitation->token)
-            ]
+                'invitationLink' => url('/api/accept-invitation/' . $this->invitation->token)            ]
         );
     }
 
