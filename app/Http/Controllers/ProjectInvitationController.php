@@ -72,7 +72,6 @@ class ProjectInvitationController extends Controller
         $user = User::where('email', $invitation->email)->first();
     
         if ($user) {
-            // The user already exists, add them to the project
             if (!$invitation->project->members()->where('user_id', $user->id)->exists()) {
                 ProjectMember::create([
                     'project_id' => $invitation->project_id,
@@ -81,13 +80,11 @@ class ProjectInvitationController extends Controller
                 ]);
             }
     
-            // Update the invitation status
             $invitation->status = 'accepted';
             $invitation->save();
     
             return redirect()->route('login')->with('message', 'You have been added to the project. Please login.');
         } else {
-            // Redirect the user to the registration form with the token
             return redirect()->route('register', ['invitation_token' => $token, 'email' => $invitation->email]);
         }
     }

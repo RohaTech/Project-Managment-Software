@@ -8,17 +8,17 @@ import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 
 export default function Register() {
-  const { search } = window.location; // Access the query parameters from the URL
+  const { search } = window.location; 
   const params = new URLSearchParams(search);
   const invitationToken = params.get("invitation_token");
   const emailFromInvitation = params.get("email");
 
   const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
-    email: emailFromInvitation || "", // Prefill email from invitation if available
+    email: emailFromInvitation || "", 
     password: "",
     password_confirmation: "",
-    invitation_token: invitationToken || "", // Store the token in form data
+    invitation_token: invitationToken || "", 
   });
 
   const submit = (e) => {
@@ -111,7 +111,6 @@ export default function Register() {
               />
             </div>
 
-            {/* Hidden field for invitation_token */}
             <input
               type="hidden"
               name="invitation_token"
