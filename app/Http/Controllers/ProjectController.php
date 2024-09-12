@@ -99,7 +99,6 @@ class ProjectController extends Controller
     {
 
         return Inertia::render('Project/PopEditProject', ["project" => $project]);
-
     }
 
 
@@ -156,8 +155,11 @@ class ProjectController extends Controller
         ]);
 
         $project = Project::find($project_id);
-
+        $tasks = $project->tasks()->get();
+        // dd($tasks);
         $additionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        $taskAdditionalColumn = json_decode($project->additional_column, true) ?? [];
 
         if (array_search($validate['title'], array_column($additionalColumn, 'title')) !== false) {
             return back()->withErrors(['title' => 'A title with the same name already exists.']);
@@ -174,10 +176,17 @@ class ProjectController extends Controller
             'additional_column' => json_encode($newAdditionalColumn),
         ]);
 
+        foreach ($tasks as $task) {
+            $task->additional_column = [...$task->additional_column, ['title' => $validate['title'], 'value' => " "]];
+            $task->save();
+        }
+
+
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => auth()->user()->name . ' created a new column called ' . $request->title,
         ]);
+        return redirect()->back()->with('success', 'Additional column created successfully.');
     }
 
 
