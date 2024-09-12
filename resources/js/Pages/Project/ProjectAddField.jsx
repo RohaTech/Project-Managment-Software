@@ -18,6 +18,8 @@ export default function ProjectAddField({
     patch(route("project.additional-column.create", [project]), {
       onSuccess: () => {
         reset();
+        close();
+        window.location.reload();
       },
     });
   };
@@ -64,10 +66,13 @@ export default function ProjectAddField({
 
               <form
                 onSubmit={handleSubmit}
-                class="px-6  mt-4 flex justify-around items-end"
+                className="px-6  mt-4 flex justify-around items-end"
               >
-                <div class="mt-5">
-                  <label for="title" class="block mb-2 text-sm font-medium  ">
+                <div className="mt-5">
+                  <label
+                    htmlFor="title"
+                    className="block mb-2 text-sm font-medium  "
+                  >
                     Field title
                   </label>
                   <input
@@ -77,7 +82,7 @@ export default function ProjectAddField({
                     onChange={(e) => {
                       setData("title", e.target.value);
                     }}
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary focus:border-primary block w-[250px] p-2.5 "
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary focus:border-primary block w-[250px] p-2.5 "
                     placeholder=""
                     required
                   />
@@ -89,8 +94,8 @@ export default function ProjectAddField({
                 </div>
                 <div className="">
                   <label
-                    for="type"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    htmlFor="type"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Select Type
                   </label>
@@ -98,13 +103,12 @@ export default function ProjectAddField({
                     id="type"
                     value={data.type}
                     onChange={(e) => setData("type", e.target.value)}
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 "
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 "
                   >
-                    <option selected>Choose Field Type</option>
+                    <option defaultValue>Choose Field Type</option>
                     <option value="text">Text</option>
                     <option value="number">Number</option>
-                    <option value="char">Char</option>
-                    <option value="boolean">Boolean</option>
+                    <option value="date">Date</option>
                   </select>
                   {errors.type && (
                     <div className="text-red-500 text-xs mt-1">
