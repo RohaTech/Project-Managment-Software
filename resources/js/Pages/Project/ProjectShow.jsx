@@ -11,30 +11,10 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import ProjectAddField from "./ProjectAddField";
 import axios from "axios";
 import { Link } from "@inertiajs/react";
+import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
 
 export default function ProjectShow({ project, tasks, users, members }) {
-  const additional_column = JSON.parse(project.additional_column);
   let [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
-
-  const { data, setData, patch, processing, errors, reset } = useForm({
-    additional_column:
-      additional_column &&
-      additional_column.map((item) => ({
-        title: item.title,
-        type: item.type,
-      })),
-  });
-  const handleProjectSubmit = (e) => {
-    e.preventDefault();
-    patch(route("project.additional-column.update", [project]), {
-      " additional_column": data.additional_column,
-    });
-  };
-  const handleProjectTitleChange = (index, value) => {
-    const newAdditionalColumn = [...data.additional_column];
-    newAdditionalColumn[index].title = value;
-    setData("additional_column", newAdditionalColumn);
-  };
 
   const statusOptions = [
     { value: "Not Started", label: "Not Started" },
@@ -60,8 +40,6 @@ export default function ProjectShow({ project, tasks, users, members }) {
       return newState;
     });
   };
-
-  console.log(tasks);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -334,24 +312,9 @@ export default function ProjectShow({ project, tasks, users, members }) {
                 <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                   Due Date
                 </th>
-                {data.additional_column &&
-                  data.additional_column.map((item, index) => (
-                    <th
-                      key={index}
-                      className="w-[120px] px-4 py-2 border text-left border-slate-300"
-                    >
-                      <input
-                        type="text"
-                        className="w-[120px] px-4 py-2  border-none text-left  "
-                        value={item.title}
-                        onChange={(e) =>
-                          handleProjectTitleChange(index, e.target.value)
-                        }
-                        onBlur={handleProjectSubmit}
-                        errors={errors.additional_column}
-                      />
-                    </th>
-                  ))}
+
+                <ProjectAdditionalColumn project={project} />
+
                 <th
                   onClick={() => setIsAddFieldOpen(true)}
                   className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
@@ -503,12 +466,13 @@ export default function ProjectShow({ project, tasks, users, members }) {
                         />
                       </td>
                       {data.additional_column &&
-                        data.additional_column.map((item, key) => (
+                        data.additional_column.map((item, index) => (
                           <td className="px-4 py-2 border border-slate-300">
                             <input
                               value={item.value}
+                              type={item.type}
                               onChange={(e) =>
-                                handleTaskTitleChange(key, e.target.value)
+                                handleTaskTitleChange(index, e.target.value)
                               }
                               onBlur={handleSubmit}
                             />
