@@ -9,7 +9,11 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState({});
   const [attachmentPreview, setAttachmentPreview] = useState(null);
-  const serverUrl = " http://127.0.0.1:8001/storage/";
+
+  const serverUrl = " http://localhost:8001/storage/";
+
+//   const serverUrl = " http://127.0.0.1:8001/storage/";
+
 
   //Se0
   const { data, setData, post, processing, reset } = useForm({
