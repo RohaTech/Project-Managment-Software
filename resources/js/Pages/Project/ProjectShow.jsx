@@ -11,30 +11,10 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import ProjectAddField from "./ProjectAddField";
 import axios from "axios";
 import { Link } from "@inertiajs/react";
+import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
 
 export default function ProjectShow({ project, tasks, users, members }) {
-  const additional_column = JSON.parse(project.additional_column);
   let [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
-
-  const { data, setData, patch, processing, errors, reset } = useForm({
-    additional_column:
-      additional_column &&
-      additional_column.map((item) => ({
-        title: item.title,
-        type: item.type,
-      })),
-  });
-  const handleProjectSubmit = (e) => {
-    e.preventDefault();
-    patch(route("project.additional-column.update", [project]), {
-      " additional_column": data.additional_column,
-    });
-  };
-  const handleProjectTitleChange = (index, value) => {
-    const newAdditionalColumn = [...data.additional_column];
-    newAdditionalColumn[index].title = value;
-    setData("additional_column", newAdditionalColumn);
-  };
 
   const statusOptions = [
     { value: "Not Started", label: "Not Started" },
@@ -61,8 +41,6 @@ export default function ProjectShow({ project, tasks, users, members }) {
     });
   };
 
-  console.log(tasks);
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -77,23 +55,26 @@ export default function ProjectShow({ project, tasks, users, members }) {
   };
 
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleInvite = (e) => {
     e.preventDefault();
-    setMessage("Sending invitation...");
+    setSuccessMessage("Sending invitation...");
     axios
-      .post("http://localhost:8001/api/invite-member", {
+      .post("http://127.0.0.1:8001/api/invite-member", {
         email,
         project: project.id,
       })
       .then((response) => {
-        setMessage(response.data.message || "Invitation sent successfully!");
+        setSuccessMessage(
+          response.data.message || "Invitation sent successfully!"
+        );
         setEmail("");
       })
       .catch((error) => {
         console.error("Error sending invitation:", error);
-        setMessage(
+        setErrorMessage(
           error.response?.data?.message ||
             "There was an error sending the invitation. Please try again."
         );
@@ -224,8 +205,16 @@ export default function ProjectShow({ project, tasks, users, members }) {
                       Invite
                     </PrimaryButton>
                   </form>
-                  {message && (
-                    <p className="mt-4 text-center text-red-500">{message}</p>
+
+                  {errorMessage && (
+                    <p className="mt-4 text-center text-red-500">
+                      {errorMessage}
+                    </p>
+                  )}
+                  {successMessage && (
+                    <p className="mt-4 text-center text-green-500">
+                      {successMessage}
+                    </p>
                   )}
                 </Dialog.Panel>
               </div>
@@ -237,19 +226,21 @@ export default function ProjectShow({ project, tasks, users, members }) {
       <div className="pl-4 mt-2 pb-1">
         <div className="flex items-center gap-x-2">
           {/* <p>List of tasks</p> */}
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[10px] px-3 py-[5px] rounded-md shadow-md transition duration-300 ease-in-out capitalize flex gap-x-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
-              width={12}
-            >
-              <path
-                fill="#ffffff"
-                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"
-              />
-            </svg>
-            Add Tasks
-          </button>
+          <Link href={route("task.create")}>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[10px] px-3 py-[5px] rounded-md shadow-md transition duration-300 ease-in-out capitalize flex gap-x-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                width={12}
+              >
+                <path
+                  fill="#ffffff"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"
+                />
+              </svg>
+              Add Tasks
+            </button>
+          </Link>
           <form className="max-w-[120px]">
             <label
               htmlFor="default-search"
@@ -321,24 +312,9 @@ export default function ProjectShow({ project, tasks, users, members }) {
                 <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                   Due Date
                 </th>
-                {data.additional_column &&
-                  data.additional_column.map((item, index) => (
-                    <th
-                      key={index}
-                      className="w-[120px] px-4 py-2 border text-left border-slate-300"
-                    >
-                      <input
-                        type="text"
-                        className="w-[120px] px-4 py-2  border-none text-left  "
-                        value={item.title}
-                        onChange={(e) =>
-                          handleProjectTitleChange(index, e.target.value)
-                        }
-                        onBlur={handleProjectSubmit}
-                        errors={errors.additional_column}
-                      />
-                    </th>
-                  ))}
+
+                <ProjectAdditionalColumn project={project} />
+
                 <th
                   onClick={() => setIsAddFieldOpen(true)}
                   className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
@@ -412,7 +388,7 @@ export default function ProjectShow({ project, tasks, users, members }) {
                             id="name"
                             onChange={(e) => setData("name", e.target.value)}
                             onBlur={handleSubmit}
-                            className="border-0 w-full focus:ring-1 focus:border-slate-300 "
+                            className="border-0 w-[300px] shadow-none focus:ring-1 focus:border-slate-300 "
                           />
                         </form>
                         <Link href={route("task.show", [task.id])}>
@@ -490,12 +466,13 @@ export default function ProjectShow({ project, tasks, users, members }) {
                         />
                       </td>
                       {data.additional_column &&
-                        data.additional_column.map((item, key) => (
+                        data.additional_column.map((item, index) => (
                           <td className="px-4 py-2 border border-slate-300">
                             <input
                               value={item.value}
+                              type={item.type}
                               onChange={(e) =>
-                                handleTaskTitleChange(key, e.target.value)
+                                handleTaskTitleChange(index, e.target.value)
                               }
                               onBlur={handleSubmit}
                             />

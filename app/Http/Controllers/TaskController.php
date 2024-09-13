@@ -102,14 +102,15 @@ class TaskController extends Controller
             'activity' => ' created Task called ' . $request->name,
         ]);
 
-        // return redirect()->route('task.index')->with('success', 'Task created successfully.');
+        return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
     public function show(Task $task)
-    {   $assigned = User::where('id',$task->assigned)->get();
+    {
+        $assigned = User::where('id', $task->assigned)->get();
         $messages = Message::where('task_id', $task->id)->with('user', 'attachments')->get();
         $task->load('project');
         return Inertia::render('Task/TaskDetail', [
