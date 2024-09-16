@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Mail\ProjectInvitationMail;
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\ProjectMember;
+
 use App\Models\ProjectInvitation;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -58,29 +60,34 @@ class ProjectInvitationController extends Controller
     public function acceptInvitation($token)
     {
         $invitation = ProjectInvitation::where('token', $token)->first();
-
+    
         if (!$invitation) {
             return response()->json(['message' => 'Invalid invitation token.'], 400);
         }
-
+    
         if ($invitation->status !== 'pending') {
             return response()->json(['message' => 'This invitation has already been processed.'], 400);
         }
-
+    
         $user = User::where('email', $invitation->email)->first();
-
-        if (!$user) {
-            $user = User::create([
-                'email' => $invitation->email,
-                'password' => bcrypt(Str::random(16)), // You may want to create a more secure way for the user to set their password
-            ]);
+    
+        if ($user) {
+            if (!$invitation->project->members()->where('user_id', $user->id)->exists()) {
+                ProjectMember::create([
+                    'project_id' => $invitation->project_id,
+                    'user_id' => $user->id,
+                    'role' => 'member',
+                ]);
+            }
+    
+            $invitation->status = 'accepted';
+            $invitation->save();
+    
+            return redirect()->route('login')->with('message', 'You have been added to the project. Please login.');
+        } else {
+            return redirect()->route('register', ['invitation_token' => $token, 'email' => $invitation->email]);
         }
-
-        $invitation->project->members()->attach($user->id);
-
-        $invitation->status = 'accepted';
-        $invitation->save();
-
-        return response()->json(['message' => 'Invitation accepted successfully. You are now a member of the project.']);
     }
+    
+    
 }
