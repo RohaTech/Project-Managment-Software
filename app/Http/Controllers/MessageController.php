@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\Project;
+
 use Illuminate\Http\Request;
 use App\Models\Attachment;
 
@@ -17,13 +19,21 @@ class MessageController extends Controller
         $Messages = Message::where('task_id', $taskId)->with('user')->get();
         return response()->json($Messages);
     }
-    public function show($taskId)
+    public function show(Project $project)
     {
-    $messages = Message::with('attachments')
-        ->where('task_id', $taskId)
-        ->get();
+        $messages = Message::where('task_id', $project->id)->with('user', 'attachments')->get();
+        return Inertia::render('Message/Message', [
+        
+            'messages' => $messages,
+            'user' => auth()->user(),
+            'user_id' => Auth::id(),
 
-    return response()->json(['data' => $messages]);
+        ]);
+    // $messages = Message::with('attachments')
+    //     ->where('task_id', $taskId)
+    //     ->get();
+
+    // return response()->json(['data' => $messages]);
     }
 
 

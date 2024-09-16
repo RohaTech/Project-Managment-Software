@@ -90,6 +90,26 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
       content: editData.content,
     });
     window.location.reload();
+    // .then((response) => {
+    //     console.log("it is in updating mood");
+
+    //     const updatedMessageList = messageList.map((message) =>
+    //         message?.id === editingMessageId ? response.data : message
+    //     );
+    //     setMessageList(updatedMessageList);
+    //     console.log("it is in updating mood");
+
+    //     setEditingMessageId(null);
+
+    //     resetEditData();
+    //     window.location.reload();
+    // })
+    // .catch((error) => {
+    //     console.error(
+    //         "There was an error updating the message:",
+    //         error
+    //     );
+    // });
   };
 
   const handleDeleteMessage = (messageId) => {
