@@ -6,15 +6,32 @@ import PopEditProject from "./PopEditProject";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import SecondaryButton from "@/Components/SecondaryButton";
 import ProjectAddField from "./ProjectAddField";
 import axios from "axios";
 import { Link } from "@inertiajs/react";
 import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
+import ApproveButton from "./ApproveButton";
 
-export default function ProjectShow({ project, tasks, users, members }) {
-  let [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
+export default function ProjectShow({
+  project,
+  tasks,
+  users,
+  members,
+  membersRole,
+}) {
+  const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
+  const { auth } = usePage().props;
+  const [role, setRole] = useState("");
+  useEffect(() => {
+    const roleIndex = membersRole.findIndex(
+      (member) => member.user_id === auth.user.id
+    );
+    if (roleIndex !== -1) {
+      setRole(membersRole[roleIndex].role);
+    }
+  }, []);
 
   const statusOptions = [
     { value: "Not Started", label: "Not Started" },
@@ -334,6 +351,7 @@ export default function ProjectShow({ project, tasks, users, members }) {
                   name: task.name,
                   assigned: task.assigned,
                   status: task.status,
+                  approved: task.approved,
                   priority: task.priority,
                   due_date: task.due_date,
                   additional_column: task.additional_column,
@@ -341,8 +359,10 @@ export default function ProjectShow({ project, tasks, users, members }) {
 
                 const handleSubmit = (e) => {
                   e.preventDefault();
+                  console.log(data);
                   patch(`/task/${task.id}`);
                 };
+
                 const handleTaskTitleChange = (index, value) => {
                   const newAdditionalColumn = [...data.additional_column];
                   newAdditionalColumn[index].value = value;
@@ -426,7 +446,13 @@ export default function ProjectShow({ project, tasks, users, members }) {
                       <td className="px-4 py-2 border border-slate-300">
                         <select
                           className="border-0"
-                          onChange={(e) => setData("status", e.target.value)}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              status: e.target.value,
+                              approved: role !== "member" ? 1 : 0,
+                            });
+                          }}
                           onBlur={handleSubmit}
                         >
                           {statusOptions.map((status, index) => (
@@ -439,6 +465,19 @@ export default function ProjectShow({ project, tasks, users, members }) {
                             </option>
                           ))}
                         </select>
+                        {role === "member" ? (
+                          <h6
+                            className={`text-sm p-1 text-primary ${
+                              data.approved || data.status === "Not Started"
+                                ? "hidden"
+                                : ""
+                            }`}
+                          >
+                            Not Approved
+                          </h6>
+                        ) : (
+                          <ApproveButton ApproveData={data} task={task} />
+                        )}
                       </td>
                       <td className="px-4 py-2 border border-r-0 border-slate-300">
                         <select
