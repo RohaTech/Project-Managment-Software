@@ -230,9 +230,9 @@ export default function Home({ user, projects, activities }) {
                     </div>
                   )}
                 </div>
-                <li className="flex gap-x-1 items-center font-bold text-[#323338] py-2">
+                <li className={`flex gap-x-1 items-center font-bold text-[#323338] py-2 ${!isUpdateFeed ? 'pb-40': ''}`}>
                   <span
-                    className="cursor-pointer transition duration-300 ease-in-out"
+                    className="cursor-pointer transition duration-300 ease-in-out "
                     onClick={handleUpdateFeed}
                   >
                     {!isUpdateFeed ? (
@@ -262,7 +262,7 @@ export default function Home({ user, projects, activities }) {
                   </span>
                 </li>
                 {isUpdateFeed && (
-                  <div className="">
+                  <div className="h-[400px] overflow-scroll">
                     {activities.map((activity, index) => (
                       <div
                         key={index}

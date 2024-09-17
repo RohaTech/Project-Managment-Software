@@ -80,7 +80,7 @@ export default function Project_Index({ projects, queryParams = null }) {
           {projects.map((project, key) => (
             <Link
               key={project.id}
-              href={route("project.additional-column.edit", project)}
+              href={route("project.show", project)}
               className="block"
             >
               <div

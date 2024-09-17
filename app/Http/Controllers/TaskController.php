@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Project;
+use App\Models\User;
+
+use App\Models\ProjectMember;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,18 +17,41 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     /*
+    //     $tasks = Task::all();
+    //     */
+
+
+    //     $tasks = Task::where('created_by', auth()->id())->get();
+    //     return Inertia::render('Task/Task', [
+    //         'user' => auth()->user(),
+    //         'tasks' => $tasks
+    //     ]);
+    // }
+
+
     public function index()
     {
-        /*
-        $tasks = Task::all();
-        */
+        // Get the current user's ID
+        $userId = auth()->id();
 
-        $tasks = Task::where('created_by', auth()->id())->get();
-        return Inertia::render('Task', [
+        // Get the project IDs that the user is a member of
+        $projectIds = ProjectMember::where('user_id', $userId)
+            ->pluck('project_id');
+
+        // Get the tasks that belong to the projects where the user is a member
+        $tasks = Task::whereIn('project_id', $projectIds)->get();
+
+        return Inertia::render('Task/Task', [
             'user' => auth()->user(),
             'tasks' => $tasks
         ]);
     }
+
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -39,6 +65,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
+        $project = Project::find($request->project_id);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
@@ -51,16 +80,29 @@ class TaskController extends Controller
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 
+        $validated['additional_column'] = [];
+        $ProjectAdditionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        // dd($ProjectAdditionalColumn);
+
+        foreach ($ProjectAdditionalColumn as $column) {
+            $validated['additional_column'][] = [
+                "title" => $column['title'],
+                "value" => "  "
+            ];
+        }
+
+
         // dd($validated);
+
         Task::create($validated);
-        $project = Project::find($request->project_id);
 
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => ' created Task called ' . $request->name,
         ]);
 
-        // return redirect()->route('task.index')->with('success', 'Task created successfully.');
+        return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
     }
 
     /**
@@ -68,13 +110,15 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $messages = Message::where('task_id', $task->id)->get();
+        $assigned = User::where('id', $task->assigned)->get();
+        $messages = Message::where('task_id', $task->id)->with('user', 'attachments')->get();
         $task->load('project');
-        return Inertia::render('ShowTask', [
+        return Inertia::render('Task/TaskDetail', [
             'task' => $task,
             'messages' => $messages,
             'user' => auth()->user(),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
+            'assigned' => $assigned,
 
         ]);
     }
@@ -92,30 +136,49 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        // dd($request);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
+            'approved' => 'nullable',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
+            'additional_column' => 'nullable',
         ]);
+
+        // dd($validated);
+
+
         $task->update([
             'name' => $validated['name'],
-            'status' => $validated['status'],
-            'priority' => $validated['priority'],
-            'due_date' => $validated['due_date'],
-            'updated_by' => auth()->id(), // Set the updated_by field
+            'assigned' => $validated['assigned'] ?? $task->assigned,
+            'status' => $validated['status'] ?? $task->status,
+            'approved' => $validated['approved'],
+            'priority' => $validated['priority'] ?? $task->priority,
+            'due_date' => $validated['due_date'] ?? $task->due_date,
+            'additional_column' => $validated['additional_column'] ?? $task->additional_column,
+            'updated_by' => auth()->id(),
         ]);
+
+        // dd('Hello2');
 
         $project = Project::find($task->project_id);
 
         $project->activities()->create([
-            'user_id' => Auth::id(),
-            'activity' => ' Update Task called ' . $request->name,
+            'user_id' => auth()->id(),
+            'activity' => 'Update Task called ' . $request->name,
         ]);
-
-
-        return redirect()->route('task.index')->with('success', 'Task updated successfully.');
+        // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
+
+    public function approve(Request $request, Task $task)
+    {
+        // dd($task);
+        $task->update(['approved' => 1]);
+        return redirect()->back()->with('success', 'Task updated successfully.');
+    }
+
 
     /**
      * Remove the specified resource from storage.

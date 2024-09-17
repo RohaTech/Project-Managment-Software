@@ -82,17 +82,23 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
-        $tasks = $project->tasks()->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, 'user' => auth()->user(),]);
+        $members = $project->members;
+        $allNames = collect();
+        foreach ($members as $member) {
+            $names = $member->creator()->get();
+            $allNames = $allNames->merge($names);
+        }
+        $tasks = $project->tasks()->with('subtask')->get();
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $allNames, "membersRole" => $members]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        return Inertia::render('Project/ProjectEdit', ["project_id" => $id,]);
+
+        return Inertia::render('Project/PopEditProject', ["project" => $project]);
     }
 
 
@@ -114,7 +120,9 @@ class ProjectController extends Controller
             'user_id' => Auth::id(),
             'activity' => ' updated project called ' . $request->name,
         ]);
-        return back();
+        return redirect()->route('project.show', $id)->with('success', 'Project updated successfully.');
+
+        // return back();
     }
 
     /**
@@ -131,7 +139,6 @@ class ProjectController extends Controller
 
 
     public function showAdditionalColumn(Project $project)
-
     {
         $additional_column = json_decode($project->additional_column, true) ?? [];
 
@@ -148,8 +155,10 @@ class ProjectController extends Controller
         ]);
 
         $project = Project::find($project_id);
-
+        $tasks = $project->tasks()->get();
+        // dd($tasks);
         $additionalColumn = json_decode($project->additional_column, true) ?? [];
+
 
         if (array_search($validate['title'], array_column($additionalColumn, 'title')) !== false) {
             return back()->withErrors(['title' => 'A title with the same name already exists.']);
@@ -166,25 +175,67 @@ class ProjectController extends Controller
             'additional_column' => json_encode($newAdditionalColumn),
         ]);
 
+        foreach ($tasks as $task) {
+            $task->additional_column = [...$task->additional_column, ["title" => $validate['title'], "value" => " ", "type" => $validate['type']]];
+            $task->save();
+        }
+
+
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => auth()->user()->name . ' created a new column called ' . $request->title,
         ]);
+        return redirect()->back()->with('success', 'Additional column created successfully.');
     }
 
 
-
-    public function editAdditionalColumn(Project $project)
+    public function deleteAdditionalColumn(Request $request, Project $project)
     {
-        $additional_column = json_decode($project->additional_column, true) ?? [];
+        $title = $request->input('title');
 
-        return Inertia::render('AdditionalColumnUpdate', ["project" => $project, "additional_column" => $additional_column]);
+        $additionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        $newAdditionalColumn = array_filter($additionalColumn, function ($item) use ($title) {
+            return $item['title'] !== $title;
+        });
+
+        // dd($newAdditionalColumn);
+
+
+        $tasks = $project->tasks;
+        foreach ($tasks as $task) {
+            $taskAdditionalColumn = $task->additional_column;
+            // dd($taskAdditionalColumn);
+            $newTaskAdditionalColumn = array_filter($taskAdditionalColumn, function ($item) use ($title) {
+                return $item['title'] !== $title;
+            });
+
+
+            $task->update([
+                'additional_column' => $newTaskAdditionalColumn,
+            ]);
+        }
+
+        $project->update([
+            'additional_column' => json_encode($newAdditionalColumn),
+        ]);
+
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => auth()->user()->name . ' deleted the additional column ' . $title,
+        ]);
+
+
+        return redirect()->back()->with('success', 'Additional column deleted successfully.');
     }
+
 
 
 
     public function updateAdditionalColumn(Request $request, Project $project)
     {
+
         $additional_column = $request->input('additional_column');
         $titles = array_map('strtolower', array_column($additional_column, 'title'));
         if (count($titles) !== count(array_unique($titles))) {

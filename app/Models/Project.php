@@ -20,7 +20,7 @@ class Project extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
-        'additional_columns' => 'array'
+        'additional_column' => 'array'
     ];
     public function creator()
     {
@@ -42,5 +42,10 @@ class Project extends Model
     public function members()
     {
         return $this->hasMany(ProjectMember::class);
+    }
+
+    public function invitation()
+    {
+        return $this->hasMany(ProjectInvitation::class);
     }
 }

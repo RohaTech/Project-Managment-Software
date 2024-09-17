@@ -18,4 +18,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/project/{project}/additional-column-update', [ProjectController::class, 'editAdditionalColumn'])->name('project.additional-column.edit');
     Route::patch('/project/{project}/additional-column-update', [ProjectController::class, 'updateAdditionalColumn'])->name('project.additional-column.update');
+    Route::patch('/project/{project}/additional-column-delete', [ProjectController::class, 'deleteAdditionalColumn'])->name('project.additional-column.delete');
 });

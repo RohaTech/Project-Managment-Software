@@ -12,14 +12,14 @@ export default function AuthenticatedLayout({ header, children, projects }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
-  let asideProjects;
+  let asideProjects; 
   if (projects) {
     asideProjects = projects;
     console.log(asideProjects);
   }
 
   return (
-    <div className="h-screen  relative">
+    <div className="h-screen  relative overflow-x-hidden overflow-y-hidden ">
       <header className="w-full mb-0.5 sticky top-0 left-0 z-[10000] bg-white">
         <nav className="bg-white border-gray-200 py-4 shadow-md ">
           <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
