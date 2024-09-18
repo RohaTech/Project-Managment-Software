@@ -61,6 +61,7 @@ export default function ProjectStatus({ project, role }) {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2"
             onChange={(e) => {
               setData("status", e.target.value);
+              setProjectStatus(e.target.value);
             }}
             onBlur={handleSubmit}
           >
