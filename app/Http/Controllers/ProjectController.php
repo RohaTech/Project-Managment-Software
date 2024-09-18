@@ -89,7 +89,7 @@ class ProjectController extends Controller
             $allNames = $allNames->merge($names);
         }
         $tasks = $project->tasks()->with('subtask')->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $allNames]);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $allNames, "membersRole" => $members]);
     }
 
     /**

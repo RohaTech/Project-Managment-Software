@@ -21,12 +21,14 @@ class Task extends Model
         'created_by',
         'assigned',
         'additional_column',
+        "approved"
     ];
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'due_date' => 'datetime',
-        'additional_column' => 'array'
+        'additional_column' => 'array',
+        'approved' => 'boolean',
     ];
     public function creator()
     {

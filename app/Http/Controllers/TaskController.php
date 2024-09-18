@@ -141,17 +141,20 @@ class TaskController extends Controller
             'name' => 'required|string|max:255',
             'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
+            'approved' => 'nullable',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
             'additional_column' => 'nullable',
         ]);
-        // dd("Helloss");
+
+        // dd($validated);
 
 
         $task->update([
             'name' => $validated['name'],
             'assigned' => $validated['assigned'] ?? $task->assigned,
             'status' => $validated['status'] ?? $task->status,
+            'approved' => $validated['approved'],
             'priority' => $validated['priority'] ?? $task->priority,
             'due_date' => $validated['due_date'] ?? $task->due_date,
             'additional_column' => $validated['additional_column'] ?? $task->additional_column,
@@ -167,6 +170,13 @@ class TaskController extends Controller
             'activity' => 'Update Task called ' . $request->name,
         ]);
         // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
+    }
+
+    public function approve(Request $request, Task $task)
+    {
+        // dd($task);
+        $task->update(['approved' => 1]);
+        return redirect()->back()->with('success', 'Task updated successfully.');
     }
 
 
