@@ -63,6 +63,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        // dd(vars: $request);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
@@ -70,13 +71,17 @@ class TaskController extends Controller
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
+            'description' => 'nullable|string', // add this
+            'parent_task_id' => 'nullable|exists:tasks,id', // a
         ]);
+
+        // dd("Hello");
 
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 
         // dd($validated);
-        Task::create($validated);
+        Task::create(attributes: $validated);
         $project = Project::find($request->project_id);
 
         $project->activities()->create([
@@ -84,6 +89,7 @@ class TaskController extends Controller
             'activity' => ' created Task called ' . $request->name,
         ]);
 
+        // return redirect()->back()->with('success', 'Task created successfully.');
         // return redirect()->route('task.index')->with('success', 'Task created successfully.');
     }
 
@@ -99,7 +105,6 @@ class TaskController extends Controller
             'messages' => $messages,
             'user' => auth()->user(),
             'user_id' => Auth::id()
-
         ]);
     }
 
@@ -123,6 +128,8 @@ class TaskController extends Controller
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
+            'description' => 'nullable|string', // add this
+            'parent_task_id' => 'nullable|exists:tasks,id', // add this
         ]);
         // dd("Helloss");
 
@@ -133,6 +140,9 @@ class TaskController extends Controller
             'priority' => $validated['priority'] ?? $task->priority,
             'due_date' => $validated['due_date'] ?? $task->due_date,
             'updated_by' => auth()->id(),
+            'description' => $validated['description'] ?? $task->description, // add this
+            'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
+            // 'parent_task_id' => 'nullable|exists:tasks,id', // add this
         ]);
 
         // dd('Hello2');

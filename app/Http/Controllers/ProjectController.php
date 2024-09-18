@@ -88,8 +88,20 @@ class ProjectController extends Controller
             $names = $member->creator()->get();
             $allNames = $allNames->merge($names);
         }
-        $tasks = $project->tasks()->with('subtask')->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $allNames]);
+        $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
+        $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
+        // dd($tasksWithSubtasks);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $allNames]);
+    }
+
+    private function getTasksWithSubtasks($tasks)
+    {
+        $tasksWithSubtasks = collect();
+        foreach ($tasks as $task) {
+            $task->subtasks = $this->getTasksWithSubtasks($task->subtasks);
+            $tasksWithSubtasks->push($task);
+        }
+        return $tasksWithSubtasks;
     }
 
     /**
@@ -99,7 +111,6 @@ class ProjectController extends Controller
     {
 
         return Inertia::render('Project/PopEditProject', ["project" => $project]);
-
     }
 
 
@@ -126,7 +137,7 @@ class ProjectController extends Controller
         // return back();
     }
 
-    /**
+    /**name
      * Remove the specified resource from storage.
      */
     public function delete($id)

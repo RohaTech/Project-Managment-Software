@@ -7,37 +7,27 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from "@inertiajs/react";
+import SingleTask from "./SingleTask";
+import { router } from '@inertiajs/react'
+import AddTask from "./AddTask";
+import AddSubTask from "./AddSubTask";
+import SingleSubTask from "./SingleSubTask";
 
 export default function ProjectShow({ project, tasks, users, members }) {
-
-    const statusOptions = [
-        { value: 'Not Started', label: 'Not Started' },
-        { value: 'In Progress', label: 'In Progress' },
-        { value: 'Completed', label: 'Completed' },
-        { value: 'Pending', label: 'Pending' },
-    ];
-
-    const priorityOptions = [
-        { value: 'Low', label: 'Low' },
-        { value: 'Medium', label: 'Medium' },
-        { value: 'High', label: 'High' },
-    ];
-
     let [isOpen, setIsOpen] = useState(false);
     let [openEdit, setOpenEdit] = useState(false);
     const [openSubTasks, setOpenSubTasks] = useState(tasks.map(() => false));
+    const [openTasks, setOpenTasks] = useState({}); // Single state object
+    const [taskList, setTaskList] = useState(tasks);
 
-    const handleOpenSubtask = (index) => {
-        setOpenSubTasks(prevState => {
-            const newState = [...prevState];
-            newState[index] = !newState[index];
-            return newState;
-        });
+    const handleToggle = (taskId) => {
+        setOpenTasks(prevState => ({
+            ...prevState,
+            [taskId]: !prevState[taskId]
+        }));
     };
 
-        console.log(tasks);
-
-      const formatDate = (dateString) => {
+    const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -48,6 +38,40 @@ export default function ProjectShow({ project, tasks, users, members }) {
     const handleEditClick = (e) => {
         e.preventDefault(); // Prevent default link behavior
         setOpenEdit(true);  // Open the edit modal
+    };
+
+    const {data: editData, setData: setEditData, patch: editPatch, reset: editReset} = useForm({
+
+    });
+
+
+    const renderSubtasks = (subtasks, level = 0) => {
+        return (
+            <>
+                {subtasks.map((subtask) => {
+                    return (
+                        <React.Fragment key={subtask.id}>
+                          <SingleSubTask subtask = {subtask} handleToggle={handleToggle} openTasks = {openTasks} members = {members} level = {level}/>
+                            {openTasks[subtask.id] && subtask.subtasks && subtask.subtasks.length > 0 && (
+                                <tr>
+                                    <td colSpan="5" className="pl-4 pt-2 pb-4">
+                                        <table className="w-full border-collapse">
+                                            <tbody>
+                                                {renderSubtasks(subtask.subtasks, level + 1)}
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            )}
+                             {openTasks[subtask.id] && (subtask.subtasks.length === 0) && (
+                                              <tr><AddSubTask parentTaskId = {subtask.id} setTaskList= {setTaskList} projectId = {project.id}/></tr>
+                                )}
+                        </React.Fragment>
+                    );
+                })}
+                <tr><AddSubTask parentTaskId = {subtasks[0]?.parent_task_id || null} setTaskList= {setTaskList} projectId = {project.id}/></tr>
+            </>
+        );
     };
 
     return (
@@ -100,9 +124,10 @@ export default function ProjectShow({ project, tasks, users, members }) {
 
             <div className="pl-4 mt-2 pb-1" >
                 <div className="flex items-center gap-x-2">
-                    {/* <p>List of tasks</p> */}
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[10px] px-3 py-[5px] rounded-md shadow-md transition duration-300 ease-in-out capitalize flex gap-x-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={12}><path fill="#ffffff" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>Add Tasks</button>
-                    <form className="max-w-[120px]">
+                    <div className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[15px] px-3 py-[1px] rounded-md shadow-md transition duration-300 ease-in-out capitalize flex gap-x-1">
+                        <AddTask setTaskList={setTaskList} projectId={project.id} />
+                    </div>
+        <form className="max-w-[120px]">
               <label
                 htmlFor="default-search"
                 className="mb-2  text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -146,8 +171,8 @@ export default function ProjectShow({ project, tasks, users, members }) {
                 </div>
                     </div>
                 <div>
-                <div class="p-2 pr-4">
-                <table className="w-full border-collapse">
+                <div className="p-2 pr-4">
+                <table className="w-full border-collapse mb-40">
             <thead>
                 <tr>
                     <th className="w-[390px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300">Task Name</th>
@@ -158,111 +183,40 @@ export default function ProjectShow({ project, tasks, users, members }) {
                 </tr>
             </thead>
             <tbody>
-                {tasks.map((task, index) => {
-                    const { data, setData, patch, errors } = useForm({
-                        name: task.name,
-                        assigned: task.assigned,
-                        status: task.status,
-                        priority: task.priority,
-                        due_date: task.due_date
-                    });
-
-                    const handleSubmit = (e) => {
-                        e.preventDefault();
-                        patch(`/task/${task.id}`);
-                    };
-
-                    return (
-                        <React.Fragment key={task.id}>
-                        <tr key={task.id} className="border-collapse">
-                            <td className="px-4 py-2 border border-l-4 border-l-sky-500 border-slate-300 flex items-center border-collapse">
-                            <span className="cursor-pointer" onClick={() => handleOpenSubtask(index)}>
-                                {!openSubTasks[index] ? (
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 25 25">
-                                        <path d="M17.85,12.85l-10,10a.48.48,0,0,1-.7,0,.48.48,0,0,1,0-.7l9.64-9.65L7.15,2.85a.49.49,0,0,1,.7-.7l10,10A.48.48,0,0,1,17.85,12.85Z"></path>
-                                    </svg>
-                                ) : (
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 30 30">
-                                        <path d="M3,12v-2c0-0.386,0.223-0.738,0.572-0.904s0.762-0.115,1.062,0.13L15,17.708l10.367-8.482 c0.299-0.245,0.712-0.295,1.062-0.13C26.779,9.261,27,9.614,27,10v2c0,0.3-0.135,0.584-0.367,0.774l-11,9 c-0.369,0.301-0.898,0.301-1.267,0l-11-9C3.135,12.584,3,12.3,3,12z"></path>
-                                    </svg>
-                                )}
-                            </span>
-                                <form onSubmit={handleSubmit}>
-                                    <TextInput
-                                        value={data.name}
-                                        id="name"
-                                        onChange={(e) => setData('name', e.target.value)}
-                                        onBlur={handleSubmit}
-                                        className="border-0 w-full focus:ring-1 focus:border-slate-300 "
-                                    />
-                                </form>
-                                <span className="ml-auto cursor-pointer p-[5px] rounded-lg hover:bg-slate-200 transition duration-300 ease-in-out">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={15}>
-                                        <path fill="#64748b" d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9l.3-.5z"/>
-                                    </svg>
-                                </span>
-                            </td>
-                            <td className="px-4 py-2 border border-slate-300">
-                                <select className="border-0" onChange={(e)=> setData('assigned', e.target.value)} onBlur={handleSubmit}>
-                                    {members.map((member, index) => (
-                                        <option key={index} value={member.id} selected={member.id === task.assigned}>{member.name}</option>
-                                    ))}
-                                </select>
-                            </td>
-                            <td className="px-4 py-2 border border-slate-300">
-                                <select className="border-0"  onChange={(e)=> setData('status', e.target.value)} onBlur={handleSubmit}>
-                                    {statusOptions.map((status, index) => (
-                                        <option key={index} value={status.value} selected={status.value === task.status}>{status.label}</option>
-                                    ))}
-                                 </select>
-                            </td>
-                            <td className="px-4 py-2 border border-r-0 border-slate-300">
-                                <select className="border-0" onChange={(e)=> setData('priority', e.target.value)} onBlur={handleSubmit}>
-                                    {priorityOptions.map((priority, index)=> (
-                                        <option key={index} value={priority.value} selected={priority.value === task.priority}>{priority.label}</option>
-                                    ))}
-                                </select>
-                            </td>
-                            <td className="px-4 py-2 border border-slate-300">
-                                <input
-                                    type="date"
-                                    value={task.due_date ? formatDate(task.due_date) : ''}
-                                    onChange={(e) => setData('due_date', e.target.value)}
-                                    onBlur={handleSubmit}
-                                />
-                            </td>
-                        </tr>
-                {openSubTasks[index] && (
-                      <tr>
-                      <td colSpan="6" className="pl-4 pt-2 pb-4">
-                          <table className="w-full">
-                              <thead>
-                                  <tr>
-                                      <th className="w-[390px] px-4 border border-l-0 text-left border-slate-300 font-medium">Subtask Name</th>
-                                      <th className="w-7/50 px-4 border text-left border-slate-300 font-medium">Assigned</th>
-                                      <th className="w-7/50 px-4 border text-left border-slate-300 font-medium">Status</th>
-                                      <th className="w-7/50 px-4 border border-r-0 text-left border-slate-300 font-medium">Priority</th>
-                                      <th className="w-7/50 px-4 border text-left border-slate-300 font-medium">Due Date</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  {task.subtask.map(subs => (
-                                      <tr key={subs.id} className="bg-gray-100">
-                                          <td className="px-4 py-1 border border-l-0 border-slate-300">{subs.name}</td>
-                                          <td className="px-4 py-1 border border-slate-300">{subs.assigned}</td>
-                                          <td className="px-4 py-1 border border-slate-300">{subs.status}</td>
-                                          <td className="px-4 py-1 border border-slate-300">{subs.priority}</td>
-                                          <td className="px-4 py-1 border border-slate-300">{formatDate(subs.due_date)}</td>
-                                      </tr>
-                                  ))}
-                              </tbody>
-                          </table>
-                      </td>
-                  </tr>
-                    )}
-            </React.Fragment>
-                    );
-                })}
+            {taskList.map((task, index) => {
+                                    return (
+                                        <React.Fragment key={task.id}>
+                                            <SingleTask task = {task} handleToggle = {handleToggle} openTasks = {openTasks} members = {members}/>
+                                            {openTasks[task.id] && task.subtasks && task.subtasks.length > 0 && (
+                                                <tr>
+                                                    <td colSpan="6">
+                                                        <table className="w-full">
+                                                            <tbody>
+                                                                {renderSubtasks(task.subtasks, 1)}
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                            {openTasks[task.id] && (task.subtasks.length === 0) && (
+                                              <tr>
+                                                <AddSubTask parentTaskId = {task.id} setTaskList= {setTaskList} projectId = {project.id}/>
+                                              {/* <td colSpan="5" className="px-4 py-2 border border-slate-300 cursor-pointer pl-10 border-l-0" onClick={() => handleAddNewTask(task.id)}>
+                                                  + Add Subtask
+                                              </td> */}
+                                          </tr>
+                                            )}
+                                        </React.Fragment>
+                                    );
+                                })}
+                                <tr className="">
+                                    <td colSpan="5" className="border border-gray-300 text-gray-400 pl-2 border-x-0">
+                                    <div className="hover:bg-gray-200 w-fit">
+                                    <AddTask setTaskList={setTaskList} projectId={project.id} />
+                                    </div>
+                                    </td>
+                                </tr>
+            {/* {renderSubtasks(tasks)} */}
             </tbody>
         </table>
             </div>

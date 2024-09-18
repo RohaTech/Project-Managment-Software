@@ -12,6 +12,7 @@ class Task extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
+        'description',
         'priority',
         'status',
         'due_date',
@@ -21,6 +22,7 @@ class Task extends Model
         'created_by',
         'assigned',
         'column_id',
+        'parent_task_id',
     ];
     protected $casts = [
         'created_at' => 'datetime',
@@ -39,9 +41,14 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'assigned');
     }
-    public function subTask()
+    public function parentTask()
     {
-        return $this->hasMany(SubTask::class);
+        return $this->belongsTo(Task::class, 'parent_task_id');
+    }
+    // A task can have many subtasks (recursive relationship)
+    public function subtasks()
+    {
+        return $this->hasMany(Task::class, 'parent_task_id');
     }
     public function message()
     {
