@@ -230,7 +230,7 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Additional column deleted successfully.');
     }
 
-
+    // validate on all functions
 
 
     public function updateAdditionalColumn(Request $request, Project $project)
@@ -250,6 +250,42 @@ class ProjectController extends Controller
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => auth()->user()->name . ' updated the additional column ',
+        ]);
+    }
+
+    public function updateProjectStatus(Request $request, Project $project)
+    {
+
+        $tasks = $project->tasks()->get();
+
+
+        // $members = $project->members()->get();
+        // $owner = $members->where('role', 'owner')->first();
+
+
+        // if (auth()->user()->id !== $owner->user_id) {
+        //     return back()->withErrors(['status' => 'Only Owner Can Update The Status']);
+        // }
+
+
+
+        $validated = $request->validate([
+            'status' => ['required ', 'in:Pending,In Progress,Completed'],
+        ]);
+
+
+
+        if ($validated["status"] === 'Completed') {
+            $allTasksCompleted = $tasks->every(function ($task) {
+                return $task->status === 'Completed';
+            });
+
+            if (!$allTasksCompleted) {
+                return back()->withErrors(['status' => 'Cannot set status to completed , complete all tasks.']);
+            }
+        }
+        $project->update([
+            'status' => $validated['status']
         ]);
     }
 }

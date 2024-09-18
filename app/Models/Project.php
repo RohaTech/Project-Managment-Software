@@ -15,7 +15,8 @@ class Project extends Model
         'description',
         'created_by',
         'updated_by',
-        "additional_column"
+        "additional_column",
+        "status"
     ];
 
     protected $casts = [
