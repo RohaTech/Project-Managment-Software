@@ -176,7 +176,6 @@ class TaskController extends Controller
     {
         // dd($task);
         $task->update(['approved' => 1]);
-        return redirect()->back()->with('success', 'Task updated successfully.');
     }
 
 
