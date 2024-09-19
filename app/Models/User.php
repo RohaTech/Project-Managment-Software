@@ -33,7 +33,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class, 'created_by');
     }
-    public function projectmembers()
+    public function members()
     {
         return $this->belongsToMany(ProjectMember::class, 'project_members');
     }
@@ -41,7 +41,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class);
     }
- 
+
     public function activitylog()
     {
         return $this->hasMany(ActivityLog::class);
