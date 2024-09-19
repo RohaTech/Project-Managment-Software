@@ -92,14 +92,13 @@ class ProjectController extends Controller
                 'role' => $member->role,
             ]);
         }
- 
- 
+
+
         $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
         $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, members" => $membersInfo, "membersRole" => $members]);
- 
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $membersInfo, "membersRole" => $members]);
     }
-  
+
 
     private function getTasksWithSubtasks($tasks)
     {
@@ -111,7 +110,7 @@ class ProjectController extends Controller
         return $tasksWithSubtasks;
     }
 
-   
+
     public function edit(Project $project)
     {
 

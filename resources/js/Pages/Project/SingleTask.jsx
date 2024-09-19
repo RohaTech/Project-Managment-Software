@@ -3,7 +3,7 @@ import { useForm } from "@inertiajs/react";
 import React from "react";
 import ApproveButton from "./ApproveButton";
 
-function SingleTask({ task, handleToggle, openTasks, members }) {
+function SingleTask({ task, handleToggle, openTasks, members, role }) {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -44,9 +44,7 @@ function SingleTask({ task, handleToggle, openTasks, members }) {
     newAdditionalColumn[index].value = value;
     setData("additional_column", newAdditionalColumn);
   };
-
   return (
-    // <div>{task.name}</div>
     <tr key={task.id} className="border-l-2 border-l-blue-500">
       <td className="px-4 py-2 border border-l-0 border-slate-300 flex items-center group">
         <span className="cursor-pointer" onClick={() => handleToggle(task.id)}>
@@ -133,7 +131,11 @@ function SingleTask({ task, handleToggle, openTasks, members }) {
         {role === "member" ? (
           <h6
             className={`text-sm p-1 text-primary ${
-              data.approved || data.status === "Not Started" ? "hidden" : ""
+              data.approved ||
+              data.status === "Not Started" ||
+              data.status === null
+                ? "hidden"
+                : ""
             }`}
           >
             Not Approved
@@ -167,6 +169,18 @@ function SingleTask({ task, handleToggle, openTasks, members }) {
           onBlur={handleSubmit}
         />
       </td>
+
+      {data.additional_column &&
+        data.additional_column.map((item, index) => (
+          <td className="px-4 py-2 border border-slate-300">
+            <input
+              value={item.value}
+              type={item.type}
+              onChange={(e) => handleTaskTitleChange(index, e.target.value)}
+              onBlur={handleSubmit}
+            />
+          </td>
+        ))}
     </tr>
   );
 }
