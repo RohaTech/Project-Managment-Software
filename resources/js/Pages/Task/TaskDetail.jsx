@@ -60,7 +60,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     }
 
     if (formData.has("content") || formData.has("attachment")) {
-      post(route("messages.store"), {
+      post(route("taskMessages.store",task.id), {
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",

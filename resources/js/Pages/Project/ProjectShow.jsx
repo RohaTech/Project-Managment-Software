@@ -40,7 +40,6 @@ export default function ProjectShow({ project, tasks, users, members }) {
             return newState;
         });
     };
-
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
@@ -301,7 +300,7 @@ export default function ProjectShow({ project, tasks, users, members }) {
                     </div>
                     <div>
                         <Link
-                            href={route("task.show", [''])}
+                            href={route("projectMessages.show", project.id)}
                             className="flex flex-row gap-1 justify-center items-center hover:border-b"
                         >
                             <img

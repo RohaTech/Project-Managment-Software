@@ -22,6 +22,10 @@ class Project extends Model
         'created_at' => 'datetime',
         'additional_column' => 'array'
     ];
+    public function message()
+    {
+        return $this->hasMany(Message::class);
+    }
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
