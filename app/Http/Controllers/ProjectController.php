@@ -92,14 +92,26 @@ class ProjectController extends Controller
                 'role' => $member->role,
             ]);
         }
-        // dd($membersInfo);
-        $tasks = $project->tasks()->with('subtask')->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $membersInfo, "membersRole" => $members]);
+ 
+ 
+        $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
+        $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, members" => $membersInfo, "membersRole" => $members]);
+ 
+    }
+  
+
+    private function getTasksWithSubtasks($tasks)
+    {
+        $tasksWithSubtasks = collect();
+        foreach ($tasks as $task) {
+            $task->subtasks = $this->getTasksWithSubtasks($task->subtasks);
+            $tasksWithSubtasks->push($task);
+        }
+        return $tasksWithSubtasks;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
     public function edit(Project $project)
     {
 
@@ -130,7 +142,7 @@ class ProjectController extends Controller
         // return back();
     }
 
-    /**
+    /**name
      * Remove the specified resource from storage.
      */
     public function delete($id)
