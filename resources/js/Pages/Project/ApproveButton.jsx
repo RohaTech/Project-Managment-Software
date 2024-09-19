@@ -12,6 +12,8 @@ export default function ApproveButton({ ApproveData, task }) {
     setData("approve", 1);
     patch(route("task.approve", [task]), {});
   };
+  console.log(ApproveData);
+
   return (
     <>
       <button
@@ -20,7 +22,11 @@ export default function ApproveButton({ ApproveData, task }) {
           approve(e);
         }}
         class={`${
-          approved || ApproveData.status === "Not Started" ? "hidden" : ""
+          approved ||
+          ApproveData.status === "Not Started" ||
+          ApproveData.status === null
+            ? "hidden"
+            : ""
         }`}
       >
         Approve

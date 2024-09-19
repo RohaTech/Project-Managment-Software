@@ -1,14 +1,12 @@
 import React from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
-function PopOvers({ members, membersRole }) {
-  console.log(membersRole);
+function PopOvers({ members }) {
   return (
     <Popover className="relative ">
       <PopoverButton>
         <div className="flex items-center space-x-[-10px]">
           {" "}
-          {/* Adjust the space-x value to control the overlap */}
           {members.slice(0, 3).map((member, index) => (
             <div
               key={index}

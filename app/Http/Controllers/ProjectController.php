@@ -96,7 +96,7 @@ class ProjectController extends Controller
 
         $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
         $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, " members" => $membersInfo, "membersRole" => $members]);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $membersInfo, "membersRole" => $members]);
     }
 
 
