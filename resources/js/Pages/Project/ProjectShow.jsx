@@ -13,6 +13,7 @@ import axios from "axios";
 import { Link } from "@inertiajs/react";
 import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
 import ApproveButton from "./ApproveButton";
+import ProjectStatus from "./ProjectStatus";
 
 export default function ProjectShow({
   project,
@@ -175,68 +176,70 @@ export default function ProjectShow({
             )}
           </div>
         </div>
-        <div className="flex items-center mr-4 gap-x-4">
-          <PopOvers members={members} />
-          <button
-            onClick={() => setIsOpen(true)}
-            className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              x="0px"
-              y="0px"
-              width="15"
-              height="15"
-              viewBox="0 0 30 30"
+        <div className="flex gap-x-8 items-center">
+          <ProjectStatus project={project} role={role} />
+          <div className="flex  items-center mr-4 gap-x-4">
+            <PopOvers members={members} />
+            <button
+              onClick={() => setIsOpen(true)}
+              className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"
             >
-              <path
-                fill="#ffffff"
-                d="M 23 3 A 4 4 0 0 0 19 7 A 4 4 0 0 0 19.09375 7.8359375 L 10.011719 12.376953 A 4 4 0 0 0 7 11 A 4 4 0 0 0 3 15 A 4 4 0 0 0 7 19 A 4 4 0 0 0 10.013672 17.625 L 19.089844 22.164062 A 4 4 0 0 0 19 23 A 4 4 0 0 0 23 27 A 4 4 0 0 0 27 23 A 4 4 0 0 0 23 19 A 4 4 0 0 0 19.986328 20.375 L 10.910156 15.835938 A 4 4 0 0 0 11 15 A 4 4 0 0 0 10.90625 14.166016 L 19.988281 9.625 A 4 4 0 0 0 23 11 A 4 4 0 0 0 27 7 A 4 4 0 0 0 23 3 z"
-              ></path>
-            </svg>
-            Invite
-          </button>
-          {isOpen && (
-            <Dialog
-              open={isOpen}
-              onClose={() => setIsOpen(false)}
-              className="relative z-50"
-            >
-              <div className="fixed inset-0 flex items-center justify-center p-4 ">
-                <Dialog.Panel className="bg-slate-200 rounded-lg p-6 max-w-sm w-[500px]">
-                  <DialogTitle>Invite Team Members</DialogTitle>
-                  <form className="flex gap-x-2" onSubmit={handleInvite}>
-                    <TextInput
-                      id="email"
-                      name="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 bg-slate-200 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="Enter the email to invite"
-                      isFocused={true}
-                    />
-                    <PrimaryButton
-                      type="submit"
-                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded-md shadow-md transition duration-300 ease-in-out"
-                    >
-                      Invite
-                    </PrimaryButton>
-                  </form>
-
-                  {errorMessage && (
-                    <p className="mt-4 text-center text-red-500">
-                      {errorMessage}
-                    </p>
-                  )}
-                  {successMessage && (
-                    <p className="mt-4 text-center text-green-500">
-                      {successMessage}
-                    </p>
-                  )}
-                </Dialog.Panel>
-              </div>
-            </Dialog>
-          )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                x="0px"
+                y="0px"
+                width="15"
+                height="15"
+                viewBox="0 0 30 30"
+              >
+                <path
+                  fill="#ffffff"
+                  d="M 23 3 A 4 4 0 0 0 19 7 A 4 4 0 0 0 19.09375 7.8359375 L 10.011719 12.376953 A 4 4 0 0 0 7 11 A 4 4 0 0 0 3 15 A 4 4 0 0 0 7 19 A 4 4 0 0 0 10.013672 17.625 L 19.089844 22.164062 A 4 4 0 0 0 19 23 A 4 4 0 0 0 23 27 A 4 4 0 0 0 27 23 A 4 4 0 0 0 23 19 A 4 4 0 0 0 19.986328 20.375 L 10.910156 15.835938 A 4 4 0 0 0 11 15 A 4 4 0 0 0 10.90625 14.166016 L 19.988281 9.625 A 4 4 0 0 0 23 11 A 4 4 0 0 0 27 7 A 4 4 0 0 0 23 3 z"
+                ></path>
+              </svg>
+              Invite
+            </button>
+            {isOpen && (
+              <Dialog
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                className="relative z-50"
+              >
+                <div className="fixed inset-0 flex items-center justify-center p-4 ">
+                  <Dialog.Panel className="bg-slate-200 rounded-lg p-6 max-w-sm w-[500px]">
+                    <DialogTitle>Invite Team Members</DialogTitle>
+                    <form className="flex gap-x-2" onSubmit={handleInvite}>
+                      <TextInput
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full rounded-md border-gray-300 bg-slate-200 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        placeholder="Enter the email to invite"
+                        isFocused={true}
+                      />
+                      <PrimaryButton
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded-md shadow-md transition duration-300 ease-in-out"
+                      >
+                        Invite
+                      </PrimaryButton>
+                    </form>
+                    {errorMessage && (
+                      <p className="mt-4 text-center text-red-500">
+                        {errorMessage}
+                      </p>
+                    )}
+                    {successMessage && (
+                      <p className="mt-4 text-center text-green-500">
+                        {successMessage}
+                      </p>
+                    )}
+                  </Dialog.Panel>
+                </div>
+              </Dialog>
+            )}
+          </div>
         </div>
       </div>
 
@@ -359,7 +362,6 @@ export default function ProjectShow({
 
                 const handleSubmit = (e) => {
                   e.preventDefault();
-                  console.log(data);
                   patch(`/task/${task.id}`);
                 };
 

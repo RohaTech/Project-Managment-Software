@@ -308,8 +308,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stopColor="#fff" stop-opacity=".8"></stop>
-              <stop offset="1" stopColor="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stopOpacity=".8"></stop>
+              <stop offset="1" stopColor="#fff" stopOpacity="0"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWp_bY5t0noHcfXn_gr16)"
@@ -340,8 +340,8 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stopColor="#fff" stop-opacity=".8"></stop>
-              <stop offset="1" stopColor="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stopOpacity=".8"></stop>
+              <stop offset="1" stopColor="#fff" stopOpacity="0"></stop>
             </linearGradient>
             <polygon
               fill="url(#0fNVDNBGs8zFiB7cDozbWr_bY5t0noHcfXn_gr18)"
@@ -371,48 +371,16 @@ function RightSide() {
               gradientTransform="rotate(45.001 24 27.003)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-opacity=".8"></stop>
-              <stop
-                offset=".384"
-                stopColor="#020202"
-                stop-opacity=".491"
-              ></stop>
-              <stop
-                offset=".53"
-                stopColor="#090909"
-                stop-opacity=".373"
-              ></stop>
-              <stop
-                offset=".636"
-                stopColor="#151515"
-                stop-opacity=".288"
-              ></stop>
-              <stop
-                offset=".722"
-                stopColor="#262626"
-                stop-opacity=".218"
-              ></stop>
-              <stop
-                offset=".797"
-                stopColor="#3c3c3c"
-                stop-opacity=".158"
-              ></stop>
-              <stop
-                offset=".863"
-                stopColor="#585858"
-                stop-opacity=".105"
-              ></stop>
-              <stop
-                offset=".923"
-                stopColor="#797979"
-                stop-opacity=".057"
-              ></stop>
-              <stop
-                offset=".976"
-                stopColor="#9e9e9e"
-                stop-opacity=".014"
-              ></stop>
-              <stop offset=".993" stopColor="#ababab" stop-opacity="0"></stop>
+              <stop offset="0" stopOpacity=".8"></stop>
+              <stop offset=".384" stopColor="#020202" stopOpacity=".491"></stop>
+              <stop offset=".53" stopColor="#090909" stopOpacity=".373"></stop>
+              <stop offset=".636" stopColor="#151515" stopOpacity=".288"></stop>
+              <stop offset=".722" stopColor="#262626" stopOpacity=".218"></stop>
+              <stop offset=".797" stopColor="#3c3c3c" stopOpacity=".158"></stop>
+              <stop offset=".863" stopColor="#585858" stopOpacity=".105"></stop>
+              <stop offset=".923" stopColor="#797979" stopOpacity=".057"></stop>
+              <stop offset=".976" stopColor="#9e9e9e" stopOpacity=".014"></stop>
+              <stop offset=".993" stopColor="#ababab" stopOpacity="0"></stop>
             </radialGradient>
             <circle
               cx="30.069"
@@ -482,9 +450,9 @@ function RightSide() {
               gradientTransform="rotate(-44.998 61.71 39.148) scale(1.4829 .283)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stopColor="#fff" stop-opacity=".5"></stop>
-              <stop offset=".141" stopColor="#fff" stop-opacity=".429"></stop>
-              <stop offset=".999" stopColor="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stopOpacity=".5"></stop>
+              <stop offset=".141" stopColor="#fff" stopOpacity=".429"></stop>
+              <stop offset=".999" stopColor="#fff" stopOpacity="0"></stop>
             </radialGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWx_bY5t0noHcfXn_gr24)"
@@ -499,8 +467,8 @@ function RightSide() {
               gradientTransform="translate(-.15 -.062)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stopColor="#fff" stop-opacity=".8"></stop>
-              <stop offset=".794" stopColor="#fff" stop-opacity="0"></stop>
+              <stop offset="0" stopColor="#fff" stopOpacity=".8"></stop>
+              <stop offset=".794" stopColor="#fff" stopOpacity="0"></stop>
             </linearGradient>
             <path
               fill="url(#0fNVDNBGs8zFiB7cDozbWy_bY5t0noHcfXn_gr25)"

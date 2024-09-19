@@ -230,7 +230,11 @@ export default function Home({ user, projects, activities }) {
                     </div>
                   )}
                 </div>
-                <li className={`flex gap-x-1 items-center font-bold text-[#323338] py-2 ${!isUpdateFeed ? 'pb-40': ''}`}>
+                <li
+                  className={`flex gap-x-1 items-center font-bold text-[#323338] py-2 ${
+                    !isUpdateFeed ? "pb-40" : ""
+                  }`}
+                >
                   <span
                     className="cursor-pointer transition duration-300 ease-in-out "
                     onClick={handleUpdateFeed}
