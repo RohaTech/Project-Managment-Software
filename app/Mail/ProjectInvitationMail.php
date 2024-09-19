@@ -3,25 +3,22 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
 use App\Models\Project;
 use App\Models\ProjectInvitation;
-
 class ProjectInvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+
     public $project;
     public $invitation;
-
     /**
      * Create a new message instance.
-     *
-     * @param Project $project
-     * @param ProjectInvitation $invitation
-     * @return void
      */
     public function __construct(Project $project, ProjectInvitation $invitation)
     {
@@ -30,17 +27,35 @@ class ProjectInvitationMail extends Mailable
     }
 
     /**
-     * Build the message.
-     *
-     * @return $this
+     * Get the message envelope.
      */
-    public function build()
+    public function envelope(): Envelope
     {
-        return $this->view('emails.project_invitation')
-                    ->subject('You are invited to join a project')
-                    ->with([
-                        'projectName' => $this->project->name,
-                        'invitationLink' => url('/accept-invitation/' . $this->invitation->token)
-                    ]);
+        return new Envelope(
+            subject: 'Lets join Our Project',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.project_invitation',
+            with: [
+                'projectName' => $this->project->name,
+                'invitationLink' => url('/api/accept-invitation/' . $this->invitation->token)            ]
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

@@ -15,12 +15,13 @@ class Project extends Model
         'description',
         'created_by',
         'updated_by',
-        "additional_column"
+        "additional_column",
+        "status"
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
-        'additional_columns' => 'array'
+        'additional_column' => 'array'
     ];
     public function creator()
     {

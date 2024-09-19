@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import PopOvers from "@/Components/ProjectComponent/PopOvers";
 import PopEditProject from "./PopEditProject";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
+ 
 import { useForm } from "@inertiajs/react";
 import SingleTask from "./SingleTask";
 import { router } from '@inertiajs/react'
@@ -34,12 +35,14 @@ export default function ProjectShow({ project, tasks, users, members }) {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+ 
+ 
 
-    const handleEditClick = (e) => {
-        e.preventDefault(); // Prevent default link behavior
-        setOpenEdit(true);  // Open the edit modal
-    };
+  const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
+ 
     const {data: editData, setData: setEditData, patch: editPatch, reset: editReset} = useForm({
 
     });
@@ -118,10 +121,78 @@ export default function ProjectShow({ project, tasks, users, members }) {
                             </Dialog.Panel>
                         </div>
                     </Dialog>
+ 
             )}
+          </div>
+        </div>
+        <div className="flex gap-x-8 items-center">
+          <ProjectStatus project={project} role={role} />
+          <div className="flex  items-center mr-4 gap-x-4">
+            <PopOvers members={members} />
+            <button
+              onClick={() => setIsOpen(true)}
+              className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                x="0px"
+                y="0px"
+                width="15"
+                height="15"
+                viewBox="0 0 30 30"
+              >
+                <path
+                  fill="#ffffff"
+                  d="M 23 3 A 4 4 0 0 0 19 7 A 4 4 0 0 0 19.09375 7.8359375 L 10.011719 12.376953 A 4 4 0 0 0 7 11 A 4 4 0 0 0 3 15 A 4 4 0 0 0 7 19 A 4 4 0 0 0 10.013672 17.625 L 19.089844 22.164062 A 4 4 0 0 0 19 23 A 4 4 0 0 0 23 27 A 4 4 0 0 0 27 23 A 4 4 0 0 0 23 19 A 4 4 0 0 0 19.986328 20.375 L 10.910156 15.835938 A 4 4 0 0 0 11 15 A 4 4 0 0 0 10.90625 14.166016 L 19.988281 9.625 A 4 4 0 0 0 23 11 A 4 4 0 0 0 27 7 A 4 4 0 0 0 23 3 z"
+                ></path>
+              </svg>
+              Invite
+            </button>
+            {isOpen && (
+              <Dialog
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                className="relative z-50"
+              >
+                <div className="fixed inset-0 flex items-center justify-center p-4 ">
+                  <Dialog.Panel className="bg-slate-200 rounded-lg p-6 max-w-sm w-[500px]">
+                    <DialogTitle>Invite Team Members</DialogTitle>
+                    <form className="flex gap-x-2" onSubmit={handleInvite}>
+                      <TextInput
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full rounded-md border-gray-300 bg-slate-200 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        placeholder="Enter the email to invite"
+                        isFocused={true}
+                      />
+                      <PrimaryButton
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded-md shadow-md transition duration-300 ease-in-out"
+                      >
+                        Invite
+                      </PrimaryButton>
+                    </form>
+                    {errorMessage && (
+                      <p className="mt-4 text-center text-red-500">
+                        {errorMessage}
+                      </p>
+                    )}
+                    {successMessage && (
+                      <p className="mt-4 text-center text-green-500">
+                        {successMessage}
+                      </p>
+                    )}
+                  </Dialog.Panel>
                 </div>
-            </div>
+              </Dialog>
+            )}
+          </div>
+        </div>
+      </div>
 
+ 
             <div className="pl-4 mt-2 pb-1" >
                 <div className="flex items-center gap-x-2">
                     <div className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[15px] px-3 py-[1px] rounded-md shadow-md transition duration-300 ease-in-out capitalize flex gap-x-1">
@@ -131,22 +202,45 @@ export default function ProjectShow({ project, tasks, users, members }) {
               <label
                 htmlFor="default-search"
                 className="mb-2  text-sm font-medium text-gray-900 sr-only dark:text-white"
+ 
+     
               >
-                Search
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center  pointer-events-none"></div>
-                <input
-                  type="search"
-                  id="default-search"
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 px-3 py-1"
-                  placeholder="Search"
-                  required
+                <path
+                  fill="#ffffff"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"
                 />
-                <button
-                  type="submit"
-                  className="text-white absolute end-2.5 bottom-[6px]  backdrop:focus:ring-4  font-medium rounded-lg text-sm px-2"
+              </svg>
+              Add Tasks
+            </button>
+          </Link>
+          <form className="max-w-[120px]">
+            <label
+              htmlFor="default-search"
+              className="mb-2  text-sm font-medium text-gray-900 sr-only dark:text-white"
+            >
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center  pointer-events-none"></div>
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 px-3 py-1"
+                placeholder="Search"
+                required
+              />
+              <button
+                type="submit"
+                className="text-white absolute end-2.5 bottom-[6px]  backdrop:focus:ring-4  font-medium rounded-lg text-sm px-2"
+              >
+                <svg
+                  className="w-4 h-4 text-primary"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
                 >
+ 
                   <svg
                     className="w-4 h-4 text-primary"
                     aria-hidden="true"
@@ -173,16 +267,42 @@ export default function ProjectShow({ project, tasks, users, members }) {
                 <div>
                 <div className="p-2 pr-4">
                 <table className="w-full border-collapse mb-40">
+                  
             <thead>
-                <tr>
-                    <th className="w-[390px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300">Task Name</th>
-                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Assigned</th>
-                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Status</th>
-                    <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">Priority</th>
-                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">Due Date</th>
-                </tr>
+              <tr>
+                <th className="w-[390px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300">
+                  Task Name
+                </th>
+                <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
+                  Assigned
+                </th>
+                <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
+                  Status
+                </th>
+                <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">
+                  Priority
+                </th>
+                <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
+                  Due Date
+                </th>
+
+                <ProjectAdditionalColumn project={project} />
+
+                <th
+                  onClick={() => setIsAddFieldOpen(true)}
+                  className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
+                >
+                  +
+                </th>
+                <ProjectAddField
+                  setIsAddFieldOpen={setIsAddFieldOpen}
+                  isAddFieldOpen={isAddFieldOpen}
+                  project={project}
+                />
+              </tr>
             </thead>
             <tbody>
+ 
             {taskList.map((task, index) => {
                                     return (
                                         <React.Fragment key={task.id}>
@@ -217,11 +337,12 @@ export default function ProjectShow({ project, tasks, users, members }) {
                                     </td>
                                 </tr>
             {/* {renderSubtasks(tasks)} */}
+ 
+               
             </tbody>
-        </table>
-            </div>
+          </table>
         </div>
-    </div>
-</AuthenticatedLayout>
-    );
+      </div>
+    </AuthenticatedLayout>
+  );
 }

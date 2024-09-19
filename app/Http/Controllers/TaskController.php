@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Project;
+use App\Models\User;
+
 use App\Models\ProjectMember;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -63,7 +65,10 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(vars: $request);
+ 
+ 
+
+ 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
@@ -80,17 +85,35 @@ class TaskController extends Controller
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 
-        // dd($validated);
-        Task::create(attributes: $validated);
+        $validated['additional_column'] = [];
+        $ProjectAdditionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        // dd($ProjectAdditionalColumn);
+
+        foreach ($ProjectAdditionalColumn as $column) {
+            $validated['additional_column'][] = [
+                "title" => $column['title'],
+                "value" => "  "
+            ];
+        }
+
+
+  
+ 
         $project = Project::find($request->project_id);
+ 
+
+        Task::create($validated);
+ 
 
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => ' created Task called ' . $request->name,
         ]);
 
-        // return redirect()->back()->with('success', 'Task created successfully.');
-        // return redirect()->route('task.index')->with('success', 'Task created successfully.');
+ 
+//         return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
+ 
     }
 
     /**
@@ -98,13 +121,15 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $assigned = User::where('id', $task->assigned)->get();
         $messages = Message::where('task_id', $task->id)->with('user', 'attachments')->get();
         $task->load('project');
         return Inertia::render('Task/TaskDetail', [
             'task' => $task,
             'messages' => $messages,
             'user' => auth()->user(),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
+            'assigned' => $assigned,
         ]);
     }
 
@@ -121,28 +146,35 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        // dd($request);
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
+            'approved' => 'nullable',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
             'description' => 'nullable|string', // add this
             'parent_task_id' => 'nullable|exists:tasks,id', // add this
+            'additional_column' => 'nullable',
+ 
         ]);
-        // dd("Helloss");
+
+     
+
 
         $task->update([
             'name' => $validated['name'],
             'assigned' => $validated['assigned'] ?? $task->assigned,
             'status' => $validated['status'] ?? $task->status,
+            'approved' => $validated['approved'],
             'priority' => $validated['priority'] ?? $task->priority,
             'due_date' => $validated['due_date'] ?? $task->due_date,
+            'additional_column' => $validated['additional_column'] ?? $task->additional_column,
             'updated_by' => auth()->id(),
             'description' => $validated['description'] ?? $task->description, // add this
             'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
-            // 'parent_task_id' => 'nullable|exists:tasks,id', // add this
+     
         ]);
 
         // dd('Hello2');
@@ -154,6 +186,12 @@ class TaskController extends Controller
             'activity' => 'Update Task called ' . $request->name,
         ]);
         // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
+    }
+
+    public function approve(Request $request, Task $task)
+    {
+        // dd($task);
+        $task->update(['approved' => 1]);
     }
 
 

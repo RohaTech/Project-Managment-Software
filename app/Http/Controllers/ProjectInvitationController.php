@@ -1,80 +1,93 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Mail\ProjectInvitationMail;
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\ProjectMember;
+
 use App\Models\ProjectInvitation;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ProjectInvitationMail;
+use Illuminate\Support\Facades\Log;
+
 
 class ProjectInvitationController extends Controller
-{
-    // Method to send invitation
-    public function sendInvitation(Request $request, $projectId)
-    {
+{  
+    public function inviteMember(Request $request)
+    {   
         $request->validate([
             'email' => 'required|email'
         ]);
-
-        $project = Project::findOrFail($projectId);
+        $reproject=$request->input('project');
+        $project = Project::findOrFail($reproject);
         $email = $request->input('email');
-
-        // Check if the email already exists in the project members
+        
         $existingUser = User::where('email', $email)->first();
         if ($existingUser && $project->members()->where('user_id', $existingUser->id)->exists()) {
             return response()->json(['message' => 'User is already a member of the project.'], 400);
         }
 
-        // Generate a unique token
-        $token = Str::random(32);
 
-        // Create the invitation record in the database
-        $invitation = ProjectInvitation::create([
-            'project_id' => $project->id,
-            'email' => $email,
-            'token' => $token,
-        ]);
+        try {
+            $token = Str::random(32);
 
-        // Send an email with the invitation link
-        Mail::to($email)->send(new ProjectInvitationMail($project, $invitation));
+            $invitation = ProjectInvitation::create([
+                'project_id' => $project->id,
+                'email' => $email,
+                'token' => $token,
+            ]);
 
-        return response()->json(['message' => 'Invitation sent successfully.']);
+            Log::info("Invitation created for email: $email with token: $token");
+            
+
+            Mail::to($email)->send(new ProjectInvitationMail($project, $invitation));
+
+            Log::info("Invitation email sent to: $email");
+
+            return response()->json(['message' => 'Invitation sent successfully.']);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send project invitation: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+        
+            return response()->json(['message' => 'Failed to send the invitation. Please try again.',$e->getMessage()], 500);
+        }
+        
+     
     }
 
-    // Method to accept invitation
     public function acceptInvitation($token)
     {
         $invitation = ProjectInvitation::where('token', $token)->first();
-
+    
         if (!$invitation) {
             return response()->json(['message' => 'Invalid invitation token.'], 400);
         }
-
+    
         if ($invitation->status !== 'pending') {
             return response()->json(['message' => 'This invitation has already been processed.'], 400);
         }
-
-        // Check if user exists or create a new user based on the invitation email
+    
         $user = User::where('email', $invitation->email)->first();
-
-        if (!$user) {
-            // Redirect to a registration page or create a new user (You may customize this part as needed)
-            $user = User::create([
-                'email' => $invitation->email,
-                'password' => bcrypt(Str::random(16)), // You may want to create a more secure way for the user to set their password
-                // Add other fields if necessary
-            ]);
+    
+        if ($user) {
+            if (!$invitation->project->members()->where('user_id', $user->id)->exists()) {
+                ProjectMember::create([
+                    'project_id' => $invitation->project_id,
+                    'user_id' => $user->id,
+                    'role' => 'member',
+                ]);
+            }
+    
+            $invitation->status = 'accepted';
+            $invitation->save();
+    
+            return redirect()->route('login')->with('message', 'You have been added to the project. Please login.');
+        } else {
+            return redirect()->route('register', ['invitation_token' => $token, 'email' => $invitation->email]);
         }
-
-        // Add the user to the project as a member
-        $invitation->project->members()->attach($user->id);
-
-        // Update the invitation status to accepted
-        $invitation->status = 'accepted';
-        $invitation->save();
-
-        return response()->json(['message' => 'Invitation accepted successfully. You are now a member of the project.']);
     }
+    
+    
 }

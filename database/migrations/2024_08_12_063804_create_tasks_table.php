@@ -19,9 +19,13 @@ return new class extends Migration
             $table->foreignId("updated_by")->constrained('users')->onDelete("cascade");
             $table->foreignId("assigned")->nullable()->constrained('users')->onDelete("cascade");
             $table->string("status")->nullable()->default("pending")->nullable();
+            $table->boolean('approved')->default(false)->after('status');
             $table->string("priority")->nullable();
             $table->string("due_date")->nullable();
             $table->json('additional_column')->nullable();
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('parent_task_id')->nullable(); // Self-referencing foreign key
+            $table->foreign('parent_task_id')->references('id')->on('tasks')->onDelete('cascade');
             $table->timestamps();
         });
     }

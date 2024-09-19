@@ -88,11 +88,12 @@ class ProjectController extends Controller
             $names = $member->creator()->get();
             $allNames = $allNames->merge($names);
         }
+ 
         $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
         $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
-        // dd($tasksWithSubtasks);
         return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $allNames]);
     }
+  
 
     private function getTasksWithSubtasks($tasks)
     {
@@ -104,9 +105,7 @@ class ProjectController extends Controller
         return $tasksWithSubtasks;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
     public function edit(Project $project)
     {
 
@@ -167,8 +166,10 @@ class ProjectController extends Controller
         ]);
 
         $project = Project::find($project_id);
-
+        $tasks = $project->tasks()->get();
+        // dd($tasks);
         $additionalColumn = json_decode($project->additional_column, true) ?? [];
+
 
         if (array_search($validate['title'], array_column($additionalColumn, 'title')) !== false) {
             return back()->withErrors(['title' => 'A title with the same name already exists.']);
@@ -185,25 +186,67 @@ class ProjectController extends Controller
             'additional_column' => json_encode($newAdditionalColumn),
         ]);
 
+        foreach ($tasks as $task) {
+            $task->additional_column = [...$task->additional_column, ["title" => $validate['title'], "value" => " ", "type" => $validate['type']]];
+            $task->save();
+        }
+
+
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => auth()->user()->name . ' created a new column called ' . $request->title,
         ]);
+        return redirect()->back()->with('success', 'Additional column created successfully.');
     }
 
 
-
-    public function editAdditionalColumn(Project $project)
+    public function deleteAdditionalColumn(Request $request, Project $project)
     {
-        $additional_column = json_decode($project->additional_column, true) ?? [];
+        $title = $request->input('title');
 
-        return Inertia::render('AdditionalColumnUpdate', ["project" => $project, "additional_column" => $additional_column]);
+        $additionalColumn = json_decode($project->additional_column, true) ?? [];
+
+        $newAdditionalColumn = array_filter($additionalColumn, function ($item) use ($title) {
+            return $item['title'] !== $title;
+        });
+
+        // dd($newAdditionalColumn);
+
+
+        $tasks = $project->tasks;
+        foreach ($tasks as $task) {
+            $taskAdditionalColumn = $task->additional_column;
+            // dd($taskAdditionalColumn);
+            $newTaskAdditionalColumn = array_filter($taskAdditionalColumn, function ($item) use ($title) {
+                return $item['title'] !== $title;
+            });
+
+
+            $task->update([
+                'additional_column' => $newTaskAdditionalColumn,
+            ]);
+        }
+
+        $project->update([
+            'additional_column' => json_encode($newAdditionalColumn),
+        ]);
+
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => auth()->user()->name . ' deleted the additional column ' . $title,
+        ]);
+
+
+        return redirect()->back()->with('success', 'Additional column deleted successfully.');
     }
 
+    // validate on all functions
 
 
     public function updateAdditionalColumn(Request $request, Project $project)
     {
+
         $additional_column = $request->input('additional_column');
         $titles = array_map('strtolower', array_column($additional_column, 'title'));
         if (count($titles) !== count(array_unique($titles))) {
@@ -218,6 +261,42 @@ class ProjectController extends Controller
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => auth()->user()->name . ' updated the additional column ',
+        ]);
+    }
+
+    public function updateProjectStatus(Request $request, Project $project)
+    {
+
+        $tasks = $project->tasks()->get();
+
+
+        // $members = $project->members()->get();
+        // $owner = $members->where('role', 'owner')->first();
+
+
+        // if (auth()->user()->id !== $owner->user_id) {
+        //     return back()->withErrors(['status' => 'Only Owner Can Update The Status']);
+        // }
+
+
+
+        $validated = $request->validate([
+            'status' => ['required ', 'in:Pending,In Progress,Completed'],
+        ]);
+
+
+
+        if ($validated["status"] === 'Completed') {
+            $allTasksCompleted = $tasks->every(function ($task) {
+                return $task->status === 'Completed';
+            });
+
+            if (!$allTasksCompleted) {
+                return back()->withErrors(['status' => 'Cannot set status to completed , complete all tasks.']);
+            }
+        }
+        $project->update([
+            'status' => $validated['status']
         ]);
     }
 }

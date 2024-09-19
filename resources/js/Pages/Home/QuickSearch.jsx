@@ -35,10 +35,6 @@ export const QuickSearch = () => {
     }
   }, [searchQuery]);
 
-  useEffect(() => {
-    console.log(fetchedData);
-  }, [fetchedData]);
-
   function open() {
     setIsOpen(true);
   }

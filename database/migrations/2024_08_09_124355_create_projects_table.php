@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("description")->nullable();
+            $table->string('status')->default("pending");
             $table->foreignId("created_by")->constrained('users')->onDelete("cascade");
             $table->foreignId("updated_by")->constrained('users')->onDelete("cascade");
             $table->json('additional_column')->nullable();

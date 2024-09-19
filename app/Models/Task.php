@@ -23,11 +23,16 @@ class Task extends Model
         'assigned',
         'column_id',
         'parent_task_id',
+        'additional_column',
+        "approved"
+ 
     ];
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'due_date' => 'datetime',
+        'additional_column' => 'array',
+        'approved' => 'boolean',
     ];
     public function creator()
     {
