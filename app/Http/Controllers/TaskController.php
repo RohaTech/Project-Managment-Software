@@ -14,23 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     /*
-    //     $tasks = Task::all();
-    //     */
-
-
-    //     $tasks = Task::where('created_by', auth()->id())->get();
-    //     return Inertia::render('Task/Task', [
-    //         'user' => auth()->user(),
-    //         'tasks' => $tasks
-    //     ]);
-    // }
-
 
     public function index()
     {
@@ -66,7 +49,8 @@ class TaskController extends Controller
     public function store(Request $request)
     {
 
-        $project = Project::find($request->project_id);
+
+
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -75,10 +59,16 @@ class TaskController extends Controller
             'status' => 'nullable|string',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
+            'description' => 'nullable|string', // add this
+            'parent_task_id' => 'nullable|exists:tasks,id', // a
         ]);
+
+        // dd("Hello");
 
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
+
+        $project = Project::find($request->project_id);
 
         $validated['additional_column'] = [];
         $ProjectAdditionalColumn = json_decode($project->additional_column, true) ?? [];
@@ -93,16 +83,22 @@ class TaskController extends Controller
         }
 
 
-        // dd($validated);
+
+
+        $project = Project::find($request->project_id);
+
 
         Task::create($validated);
+
 
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => ' created Task called ' . $request->name,
         ]);
 
-        return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
+
+        //         return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
+
     }
 
     /**
@@ -119,7 +115,6 @@ class TaskController extends Controller
             'user' => auth()->user(),
             'user_id' => Auth::id(),
             'assigned' => $assigned,
-
         ]);
     }
 
@@ -136,26 +131,35 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        // dd($request);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'assigned' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
+            'approved' => 'nullable',
             'priority' => 'nullable|string',
             'due_date' => 'nullable|date',
+            'description' => 'nullable|string', // add this
+            'parent_task_id' => 'nullable|exists:tasks,id', // add this
             'additional_column' => 'nullable',
+
         ]);
-        // dd("Helloss");
+
+
 
 
         $task->update([
             'name' => $validated['name'],
             'assigned' => $validated['assigned'] ?? $task->assigned,
             'status' => $validated['status'] ?? $task->status,
+            'approved' => $validated['approved'],
             'priority' => $validated['priority'] ?? $task->priority,
             'due_date' => $validated['due_date'] ?? $task->due_date,
             'additional_column' => $validated['additional_column'] ?? $task->additional_column,
             'updated_by' => auth()->id(),
+            'description' => $validated['description'] ?? $task->description, // add this
+            'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
+
         ]);
 
         // dd('Hello2');
@@ -167,6 +171,12 @@ class TaskController extends Controller
             'activity' => 'Update Task called ' . $request->name,
         ]);
         // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
+    }
+
+    public function approve(Request $request, Task $task)
+    {
+        // dd($task);
+        $task->update(['approved' => 1]);
     }
 
 

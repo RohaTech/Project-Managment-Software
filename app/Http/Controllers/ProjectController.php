@@ -83,18 +83,34 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $members = $project->members;
-        $allNames = collect();
+        $membersInfo = collect();
         foreach ($members as $member) {
-            $names = $member->creator()->get();
-            $allNames = $allNames->merge($names);
+            $membersInfo->push([
+                'id' => $member->creator->id,
+                'name' => $member->creator->name,
+                'email' => $member->creator->email,
+                'role' => $member->role,
+            ]);
         }
-        $tasks = $project->tasks()->with('subtask')->get();
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasks, "members" => $allNames]);
+
+
+        $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
+        $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $membersInfo, "membersRole" => $members]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
+    private function getTasksWithSubtasks($tasks)
+    {
+        $tasksWithSubtasks = collect();
+        foreach ($tasks as $task) {
+            $task->subtasks = $this->getTasksWithSubtasks($task->subtasks);
+            $tasksWithSubtasks->push($task);
+        }
+        return $tasksWithSubtasks;
+    }
+
+
     public function edit(Project $project)
     {
 
@@ -125,7 +141,7 @@ class ProjectController extends Controller
         // return back();
     }
 
-    /**
+    /**name
      * Remove the specified resource from storage.
      */
     public function delete($id)
@@ -230,7 +246,7 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Additional column deleted successfully.');
     }
 
-
+    // validate on all functions
 
 
     public function updateAdditionalColumn(Request $request, Project $project)
@@ -250,6 +266,42 @@ class ProjectController extends Controller
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => auth()->user()->name . ' updated the additional column ',
+        ]);
+    }
+
+    public function updateProjectStatus(Request $request, Project $project)
+    {
+
+        $tasks = $project->tasks()->get();
+
+
+        // $members = $project->members()->get();
+        // $owner = $members->where('role', 'owner')->first();
+
+
+        // if (auth()->user()->id !== $owner->user_id) {
+        //     return back()->withErrors(['status' => 'Only Owner Can Update The Status']);
+        // }
+
+
+
+        $validated = $request->validate([
+            'status' => ['required ', 'in:Pending,In Progress,Completed'],
+        ]);
+
+
+
+        if ($validated["status"] === 'Completed') {
+            $allTasksCompleted = $tasks->every(function ($task) {
+                return $task->status === 'Completed';
+            });
+
+            if (!$allTasksCompleted) {
+                return back()->withErrors(['status' => 'Cannot set status to completed , complete all tasks.']);
+            }
+        }
+        $project->update([
+            'status' => $validated['status']
         ]);
     }
 }
