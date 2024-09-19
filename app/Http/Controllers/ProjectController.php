@@ -83,15 +83,21 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $members = $project->members;
-        $allNames = collect();
+        $membersInfo = collect();
         foreach ($members as $member) {
-            $names = $member->creator()->get();
-            $allNames = $allNames->merge($names);
+            $membersInfo->push([
+                'id' => $member->creator->id,
+                'name' => $member->creator->name,
+                'email' => $member->creator->email,
+                'role' => $member->role,
+            ]);
         }
+ 
  
         $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
         $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $allNames]);
+        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, members" => $membersInfo, "membersRole" => $members]);
+ 
     }
   
 
