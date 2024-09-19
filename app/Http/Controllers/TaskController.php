@@ -14,23 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     /*
-    //     $tasks = Task::all();
-    //     */
-
-
-    //     $tasks = Task::where('created_by', auth()->id())->get();
-    //     return Inertia::render('Task/Task', [
-    //         'user' => auth()->user(),
-    //         'tasks' => $tasks
-    //     ]);
-    // }
-
 
     public function index()
     {
