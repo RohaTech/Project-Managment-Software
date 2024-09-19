@@ -67,6 +67,7 @@ class TaskController extends Controller
 
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
+        $validated['approved'] = 0;
 
         $project = Project::find($request->project_id);
 
