@@ -12,6 +12,8 @@ import { router } from "@inertiajs/react";
 import AddTask from "./AddTask";
 import AddSubTask from "./AddSubTask";
 import SingleSubTask from "./SingleSubTask";
+import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
+import ProjectAddField from "./ProjectAddField";
 
 export default function ProjectShow({ project, tasks, users, members }) {
   let [isOpen, setIsOpen] = useState(false);
@@ -19,6 +21,7 @@ export default function ProjectShow({ project, tasks, users, members }) {
   const [openSubTasks, setOpenSubTasks] = useState(tasks.map(() => false));
   const [openTasks, setOpenTasks] = useState({}); // Single state object
   const [taskList, setTaskList] = useState(tasks);
+  const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
 
   const handleToggle = (taskId) => {
     setOpenTasks((prevState) => ({
@@ -285,13 +288,25 @@ export default function ProjectShow({ project, tasks, users, members }) {
                   <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                     Status
                   </th>
-
                   <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">
                     Priority
                   </th>
                   <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                     Due Date
                   </th>
+                  <ProjectAdditionalColumn project={project} />
+                  <th
+                    onClick={() => setIsAddFieldOpen(true)}
+                    className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
+                  >
+                    +
+                  </th>
+                  <ProjectAddField
+                    setIsAddFieldOpen={setIsAddFieldOpen}
+                    isAddFieldOpen={isAddFieldOpen}
+                    project={project}
+                  />
+                  2{" "}
                 </tr>
               </thead>
               <tbody>
@@ -324,9 +339,6 @@ export default function ProjectShow({ project, tasks, users, members }) {
                             setTaskList={setTaskList}
                             projectId={project.id}
                           />
-                          {/* <td colSpan="5" className="px-4 py-2 border border-slate-300 cursor-pointer pl-10 border-l-0" onClick={() => handleAddNewTask(task.id)}>
-                                                  + Add Subtask
-                                              </td> */}
                         </tr>
                       )}
                     </React.Fragment>

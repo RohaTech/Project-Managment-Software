@@ -1,6 +1,7 @@
 import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
 import React from "react";
+import ApproveButton from "./ApproveButton";
 
 function SingleTask({ task, handleToggle, openTasks, members }) {
   const formatDate = (dateString) => {
@@ -28,13 +29,20 @@ function SingleTask({ task, handleToggle, openTasks, members }) {
     name: task.name,
     assigned: task.assigned,
     status: task.status,
+    approved: task.approved,
     priority: task.priority,
     due_date: task.due_date,
+    additional_column: task.additional_column,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     patch(`/task/${task.id}`);
+  };
+  const handleTaskTitleChange = (index, value) => {
+    const newAdditionalColumn = [...data.additional_column];
+    newAdditionalColumn[index].value = value;
+    setData("additional_column", newAdditionalColumn);
   };
 
   return (
@@ -103,7 +111,13 @@ function SingleTask({ task, handleToggle, openTasks, members }) {
       <td className="px-4 py-2 border border-slate-300">
         <select
           className="border-0"
-          onChange={(e) => setData("status", e.target.value)}
+          onChange={(e) => {
+            setData({
+              ...data,
+              status: e.target.value,
+              approved: role !== "member" ? 1 : 0,
+            });
+          }}
           onBlur={handleSubmit}
         >
           {statusOptions.map((status, index) => (
@@ -116,6 +130,17 @@ function SingleTask({ task, handleToggle, openTasks, members }) {
             </option>
           ))}
         </select>
+        {role === "member" ? (
+          <h6
+            className={`text-sm p-1 text-primary ${
+              data.approved || data.status === "Not Started" ? "hidden" : ""
+            }`}
+          >
+            Not Approved
+          </h6>
+        ) : (
+          <ApproveButton ApproveData={data} task={task} />
+        )}
       </td>
       <td className="px-4 py-2 border border-r-0 border-slate-300">
         <select
