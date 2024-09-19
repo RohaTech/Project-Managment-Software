@@ -65,10 +65,10 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
- 
- 
 
- 
+
+
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
@@ -85,6 +85,8 @@ class TaskController extends Controller
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 
+        $project = Project::find($request->project_id);
+
         $validated['additional_column'] = [];
         $ProjectAdditionalColumn = json_decode($project->additional_column, true) ?? [];
 
@@ -98,22 +100,22 @@ class TaskController extends Controller
         }
 
 
-  
- 
+
+
         $project = Project::find($request->project_id);
- 
+
 
         Task::create($validated);
- 
+
 
         $project->activities()->create([
             'user_id' => Auth::id(),
             'activity' => ' created Task called ' . $request->name,
         ]);
 
- 
-//         return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
- 
+
+        //         return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
+
     }
 
     /**
@@ -146,7 +148,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'assigned' => 'nullable|exists:users,id',
@@ -157,10 +159,10 @@ class TaskController extends Controller
             'description' => 'nullable|string', // add this
             'parent_task_id' => 'nullable|exists:tasks,id', // add this
             'additional_column' => 'nullable',
- 
+
         ]);
 
-     
+
 
 
         $task->update([
@@ -174,7 +176,7 @@ class TaskController extends Controller
             'updated_by' => auth()->id(),
             'description' => $validated['description'] ?? $task->description, // add this
             'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
-     
+
         ]);
 
         // dd('Hello2');
