@@ -9,7 +9,6 @@ const Message = ({ project, messages, user_id, user }) => {
     const [editingMessageId, setEditingMessageId] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState({});
     const [attachmentPreview, setAttachmentPreview] = useState(null);
-
     const serverUrl = " http://localhost:8001/storage/";
 
     //   const serverUrl = " http://127.0.0.1:8001/storage/";
@@ -33,7 +32,7 @@ const Message = ({ project, messages, user_id, user }) => {
         project_id: "",
         content: "",
     });
-
+    // const [messageContent, setMessageContent] = useState(date/)
     // De
     const { delete: destroy } = useForm();
 
@@ -59,25 +58,28 @@ const Message = ({ project, messages, user_id, user }) => {
         }
 
         if (formData.has("content") || formData.has("attachment")) {
-            post(route("projectMessages.store",{ projectId: data.project_id }), {
-                data: formData,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                onSuccess: (response) => {
-                    setMessageList((prevMessages) => [
-                        ...prevMessages,
-                        response.data,
-                    ]);
-                    reset();
-                },
-                onError: (error) => {
-                    console.error(
-                        "There was an error sending the message:",
-                        error
-                    );
-                },
-            });
+            post(
+                route("projectMessages.store", { projectId: data.project_id }),
+                {
+                    data: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    onSuccess: (response) => {
+                        setMessageList((prevMessages) => [
+                            ...prevMessages,
+                            response.data,
+                        ]);
+                        reset();
+                    },
+                    onError: (error) => {
+                        console.error(
+                            "There was an error sending the message:",
+                            error
+                        );
+                    },
+                }
+            );
         } else {
             console.error(
                 "Either a message or an attachment must be provided."
@@ -94,15 +96,23 @@ const Message = ({ project, messages, user_id, user }) => {
         e.preventDefault();
         patch(route("messages.update", editingMessageId), {
             content: editData.content,
+            // {
+            // onSuccess: (response) => {
+            // console.log(response);
+            // setMessageList(response.props.messages);
+            // setEditData("content", editData.content);
+            // console.log(response);
+            // }
+            // },
         });
-        window.location.reload();
+        setEditingMessageId(null);
     };
 
     const handleDeleteMessage = (messageId) => {
         if (confirm("Are you sure you want to delete this message?")) {
             destroy(route("messages.destroy", messageId), {
-                onSuccess: () => {
-                    window.location.reload();
+                onSuccess: (response) => {
+                    setMessageList(response.props.messages);
                 },
                 onError: (error) => {
                     console.error(
@@ -130,11 +140,49 @@ const Message = ({ project, messages, user_id, user }) => {
     return (
         <AuthenticatedLayout>
             <div className=" mx-auto h-screen overflow-hidden">
-                <div className="flex justify-between sticky top-0 z-50 bg-gray-400 w-[100%] h-[50px] mb-0 "> {project.name}</div>
+                <div className="flex justify-between sticky top-0 z-50 border-b w-[100%] h-[80px] mb-0 ">
+                    {" "}
+                    <div>
+                        <div className="flex flex-raw gap-1 justify-center content-center items-center">
+                            <img
+                                width="26"
+                                height="26"
+                                src="https://img.icons8.com/fluency/48/dashboard-layout.png"
+                                alt="dashboard-layout"
+                            />
+                            <p className=" text-gray-400 mb-2 mt-2 text-xl">
+                                {project.name}
+                            </p>
+                        </div>
+                        <p className="text-2xl">Board Discussion</p>
+                    </div>
+                    <PrimaryButton
+                        onClick={() => window.history.back()}
+                        className="bg-transparent"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            x="0px"
+                            y="0px"
+                            width="30"
+                            height="40"
+                            viewBox="0 0 128 128"
+                            className="hover:bg-gray-300 rounded-md text-black"
+                        >
+                            <path
+                                fill="#71c2ff"
+                                d="M97,124V4c0-1.7-1.3-3-3-3s-3,1.3-3,3v120c0,1.7,1.3,3,3,3S97,125.7,97,124z"
+                            ></path>
+                            <path
+                                fill="#444b54"
+                                d="M31.9,96.1c0.6,0.6,1.4,0.9,2.1,0.9s1.5-0.3,2.1-0.9l30-30c1.2-1.2,1.2-3.1,0-4.2l-30-30	c-1.2-1.2-3.1-1.2-4.2,0c-1.2,1.2-1.2,3.1,0,4.2L59.8,64L31.9,91.9C30.7,93.1,30.7,94.9,31.9,96.1z"
+                            ></path>
+                        </svg>
+                    </PrimaryButton>
+                </div>
                 <div className="container mx-auto my-auto  p-4 flex flex-col h-[calc(100vh-100px)]  ">
                     <div className="  p-4 rounded-md overflow-y-auto overflow-x-hidden">
                         <div className="mb-6">
-                            <h2 className="text-xl font-bold">Messages</h2>
                             <div className="">
                                 <div className="mb-4 mr-8">
                                     {messageList.length > 0 ? (
@@ -368,7 +416,26 @@ const Message = ({ project, messages, user_id, user }) => {
                                             </div>
                                         ))
                                     ) : (
-                                        <p>No messages yet.</p>
+                                        <div className="w-full flex flex-col justify-center items-center">
+                                            <img
+                                                width="260"
+                                                height="200"
+                                                src="https://cdn.monday.com/images/pulse-page-empty-state.svg"
+                                                alt="external-discussion-home-office-photo3ideastudio-gradient-photo3ideastudio"
+                                            />
+                                            <div className="w-full flex flex-col gap-2 items-center justify-center">
+                                                <p className="text-xl font-medium">
+                                                    No discussion on this board
+                                                    yet
+                                                </p>
+                                                <p className="font-normal w-[40%]  text-gray-500 text-center">
+                                                    Be the first one to start a
+                                                    discussion with all board
+                                                    members. all members'll this
+                                                    project be notified.
+                                                </p>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                             </div>

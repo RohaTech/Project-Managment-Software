@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained('users')->onDelete("cascade");
-            $table->foreignId("task_id")->constrained('task')->onDelete("cascade")->nullable();
-            $table->foreignId("subtask_id")->constrained('subtask')->onDelete("cascade")->nullable();
+            $table->foreignId("task_id")->nullable()->constrained('tasks')->onDelete("cascade");
+            $table->foreignId("project_id")->nullable()->constrained('projects')->onDelete("cascade");
             $table->longText("content")->nullable();
             $table->timestamps();
         });
