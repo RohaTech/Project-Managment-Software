@@ -184,7 +184,7 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
-    {
+    {   
         $project = Project::find($task->project_id);
 
         $project->activities()->create([
@@ -192,6 +192,6 @@ class TaskController extends Controller
             'activity' => ' Deleted Task called ' . $task->name,
         ]);
         $task->delete();
-        return redirect()->route('task.index')->with('success', 'Task deleted successfully.');
+        return redirect()->route('project.show',$project->id)->with('success', 'Task deleted successfully.');
     }
 }

@@ -37,6 +37,14 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     // De
     const { delete: destroy } = useForm();
 
+    //del.task
+    const handleDelete = (id) => {
+        if (confirm("Are you sure you want to delete this task?")) {
+            destroy(route("task.destroy", id), {
+                onSuccess: () => {},
+            });
+        }
+    };
     useEffect(() => {
         setMessageList(messages || []);
     }, [messages]);
@@ -151,18 +159,32 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                         alt="more"
                                     />
                                 </MenuButton>
-                                <MenuItems anchor="bottom">
-                                 
-                                    <MenuItem className="bg-whiten">
-                                    <div className="flex flex-row bg-white">
-                                      <img width="25" height="25" src="https://img.icons8.com/sf-ultralight/25/trash.png" alt="trash"/>
-                                          <a
-                                              className="block text-gray-500 data-[focus]:bg-blue-100"
-                                              href="/license"
-                                          >
-                                              delete
-                                          </a>
-                                    </div>
+                                <MenuItems
+                                    anchor="bottom"
+                                    className="  w-[100px] h-[100px] mt-4 shadow-6 rounded-lg z"
+                                >
+                                    <MenuItem className="bg-whiten  overflow-hidden p-2">
+                                        <div className="flex flex-row bg-white">
+                                            <button
+                                                className="bg-transparent"
+                                                onClick={() =>
+                                                    handleDelete(task.id)
+                                                }
+                                            >
+                                                {" "}
+                                                <div className="flex flex-raw g-2">
+                                                    <img
+                                                        width="25"
+                                                        height="25"
+                                                        src="https://img.icons8.com/sf-ultralight/25/trash.png"
+                                                        alt="trash"
+                                                    />
+                                                    <p className="text-black">
+                                                        Delete
+                                                    </p>
+                                                </div>
+                                            </button>
+                                        </div>
                                     </MenuItem>
                                 </MenuItems>
                             </Menu>
@@ -278,55 +300,69 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                                         {message?.user_id ===
                                                             user_id && (
                                                             <div className="relative flex mt-2">
-                                                                <button
-                                                                    onClick={() =>
-                                                                        toggleDropdown(
-                                                                            message?.id
-                                                                        )
-                                                                    }
-                                                                    className="text-blue-500 mr-2 hover:via-blue-300"
-                                                                >
-                                                                    <svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        x="0px"
-                                                                        y="0px"
-                                                                        width="20"
-                                                                        height="20"
-                                                                        viewBox="0 0 50 50"
-                                                                    >
-                                                                        <path
-                                                                            fill="#888888"
-                                                                            d="M9.781,18.278l3.188-3.188c0.781-0.781,2.047-0.781,2.828,0L25,24.292l9.202-9.202c0.781-0.781,2.047-0.781,2.828,0	l3.188,3.188c0.781,0.781,0.781,2.047,0,2.828L26.415,34.91c-0.781,0.781-2.047,0.781-2.828,0L9.782,21.107	C9,20.325,9,19.059,9.781,18.278z"
-                                                                        ></path>
-                                                                    </svg>
-                                                                </button>
                                                                 {dropdownVisible[
                                                                     message?.id
                                                                 ] && (
                                                                     <div className="absolute mt-10 ml-6 bg-white border rounded shadow-md p-4">
-                                                                        {message?.content && (
-                                                                            <button
+                                                                        <Menu>
+                                                                            hhh
+                                                                            <MenuButton
                                                                                 onClick={() =>
-                                                                                    handleEditMessage(
-                                                                                        message?.id,
-                                                                                        message?.content
+                                                                                    toggleDropdown(
+                                                                                        message?.id
                                                                                     )
                                                                                 }
-                                                                                className="block text-primary hover:text-blue-700 hover:bg-gray"
+                                                                                className="text-blue-500 mr-2 hover:via-blue-300"
                                                                             >
-                                                                                Edit
-                                                                            </button>
-                                                                        )}
-                                                                        <button
-                                                                            onClick={() =>
-                                                                                handleDeleteMessage(
-                                                                                    message?.id
-                                                                                )
-                                                                            }
-                                                                            className="block text-red-500 hover:text-red-700"
-                                                                        >
-                                                                            Delete
-                                                                        </button>
+                                                                                <svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    x="0px"
+                                                                                    y="0px"
+                                                                                    width="20"
+                                                                                    height="20"
+                                                                                    viewBox="0 0 50 50"
+                                                                                >
+                                                                                    <path
+                                                                                        fill="#888888"
+                                                                                        d="M9.781,18.278l3.188-3.188c0.781-0.781,2.047-0.781,2.828,0L25,24.292l9.202-9.202c0.781-0.781,2.047-0.781,2.828,0	l3.188,3.188c0.781,0.781,0.781,2.047,0,2.828L26.415,34.91c-0.781,0.781-2.047,0.781-2.828,0L9.782,21.107	C9,20.325,9,19.059,9.781,18.278z"
+                                                                                    ></path>
+                                                                                </svg>
+                                                                            </MenuButton>
+                                                                            <MenuItems
+                                                                                anchor="bottom"
+                                                                                className="  w-[100px] h-[100px] mt-4 shadow-6 rounded-lg z"
+                                                                            >
+                                                                                <MenuItem>
+                                                                                    {message?.content && (
+                                                                                        <button
+                                                                                            onClick={() =>
+                                                                                                handleEditMessage(
+                                                                                                    message?.id,
+                                                                                                    message?.content
+                                                                                                )
+                                                                                            }
+                                                                                            className="block text-primary hover:text-blue-700 hover:bg-gray"
+                                                                                        >
+                                                                                            Edit
+                                                                                        </button>
+                                                                                    )}
+                                                                                </MenuItem>
+                                                                                <MenuItem className="bg-whiten  overflow-hidden p-2">
+                                                                                    <div className="flex flex-row bg-white">
+                                                                                        <button
+                                                                                            onClick={() =>
+                                                                                                handleDeleteMessage(
+                                                                                                    message?.id
+                                                                                                )
+                                                                                            }
+                                                                                            className="block text-red-500 hover:text-red-700"
+                                                                                        >
+                                                                                            Delete
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </MenuItem>
+                                                                            </MenuItems>
+                                                                        </Menu>
                                                                     </div>
                                                                 )}
                                                             </div>
