@@ -10,6 +10,7 @@ export default function ProjectAdditionalColumnModal({
   project,
   deleteTitle,
   additional_column,
+  setIsDeleting,
 }) {
   const { data, setData, patch, processing, errors, reset } = useForm({
     title: deleteTitle || "",
@@ -17,16 +18,16 @@ export default function ProjectAdditionalColumnModal({
 
   const handlePatch = (e) => {
     e.preventDefault();
-    window.location.reload();
+    // window.location.reload();
 
     patch(
       route("project.additional-column.delete", [project], {
         onSuccess: () => {
-          console.log("sucesss");
           close();
         },
       })
     );
+    setIsDeleting((prevIsDeleting) => !prevIsDeleting);
   };
 
   function open() {
