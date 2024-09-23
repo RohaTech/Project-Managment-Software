@@ -3,26 +3,24 @@ import { Link, useForm } from "@inertiajs/react";
 import { format } from "date-fns";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
+import { Menu } from "@headlessui/react";
 
-const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
+const Message = ({ project, messages, user_id, user }) => {
     const [messageList, setMessageList] = useState(messages || []);
     const [editingMessageId, setEditingMessageId] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState({});
     const [attachmentPreview, setAttachmentPreview] = useState(null);
-
     const serverUrl = " http://localhost:8001/storage/";
 
     //   const serverUrl = " http://127.0.0.1:8001/storage/";
 
     //Se0
     const { data, setData, post, processing, reset } = useForm({
-        task_id: task.id,
+        project_id: project.id,
         content: "",
     });
 
-    const userAssigned = assigned[0];
+    // const userAssigned = assigned[0];
 
     // Ed
     const {
@@ -32,28 +30,20 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
         processing: editProcessing,
         reset: resetEditData,
     } = useForm({
+        project_id: "",
         content: "",
     });
-
+    // const [messageContent, setMessageContent] = useState(date/)
     // De
     const { delete: destroy } = useForm();
 
-    //del.task
-    const handleDelete = (id) => {
-        if (confirm("Are you sure you want to delete this task?")) {
-            destroy(route("task.destroy", id), {
-                onSuccess: () => {},
-            });
-        }
-    };
     useEffect(() => {
         setMessageList(messages || []);
     }, [messages]);
-
     const handleSendMessage = (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append("task_id", data.task_id);
+        formData.append("project_id", data.project_id);
 
         if (data.content.trim() !== "") {
             formData.append("content", data.content);
@@ -69,25 +59,28 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
         }
 
         if (formData.has("content") || formData.has("attachment")) {
-            post(route("taskMessages.store", task.id), {
-                data: formData,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                onSuccess: (response) => {
-                    setMessageList((prevMessages) => [
-                        ...prevMessages,
-                        response.data,
-                    ]);
-                    reset();
-                },
-                onError: (error) => {
-                    console.error(
-                        "There was an error sending the message:",
-                        error
-                    );
-                },
-            });
+            post(
+                route("projectMessages.store", { projectId: data.project_id }),
+                {
+                    data: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    onSuccess: (response) => {
+                        setMessageList((prevMessages) => [
+                            ...prevMessages,
+                            response.data,
+                        ]);
+                        reset();
+                    },
+                    onError: (error) => {
+                        console.error(
+                            "There was an error sending the message:",
+                            error
+                        );
+                    },
+                }
+            );
         } else {
             console.error(
                 "Either a message or an attachment must be provided."
@@ -100,11 +93,18 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
         setEditData("content", content);
         setDropdownVisible({});
     };
-
     const handleUpdateMessage = (e) => {
         e.preventDefault();
         patch(route("messages.update", editingMessageId), {
             content: editData.content,
+            // {
+            // onSuccess: (response) => {
+            // console.log(response);
+            // setMessageList(response.props.messages);
+            // setEditData("content", editData.content);
+            // console.log(response);
+            // }
+            // },
         });
         setEditingMessageId(null);
     };
@@ -141,97 +141,49 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     return (
         <AuthenticatedLayout>
             <div className=" mx-auto h-screen overflow-hidden">
-                <div className="flex justify-between sticky top-0 z-50 border-b w-[100%] shadow-slate-300 h-[50px] mb-0 ">
+                <div className="flex justify-between sticky top-0 z-50 border-b w-[100%] h-[80px] mb-0 ">
                     {" "}
                     <div>
-                        <p className=" text-gray-600 mt-2 text-xl">
-                            {task.name}
-                        </p>
-                    </div>
-                    <div className="flex flex-row gap-1 justify-center items-center">
-                        <div className="hover:cursor-pointer">
-                            <Menu>
-                                <MenuButton>
-                                    {" "}
-                                    <img
-                                        width="25"
-                                        height="25"
-                                        src="https://img.icons8.com/sf-ultralight/25/more.png"
-                                        alt="more"
-                                    />
-                                </MenuButton>
-                                <MenuItems
-                                    anchor="bottom"
-                                    className="  w-[100px] h-[100px] mt-4 shadow-6 rounded-lg z"
-                                >
-                                    <MenuItem className="bg-whiten  overflow-hidden p-2">
-                                        <div className="flex flex-row bg-white">
-                                            <button
-                                                className="bg-transparent"
-                                                onClick={() =>
-                                                    handleDelete(task.id)
-                                                }
-                                            >
-                                                {" "}
-                                                <div className="flex flex-raw g-2">
-                                                    <img
-                                                        width="25"
-                                                        height="25"
-                                                        src="https://img.icons8.com/sf-ultralight/25/trash.png"
-                                                        alt="trash"
-                                                    />
-                                                    <p className="text-black">
-                                                        Delete Task
-                                                    </p>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </MenuItem>
-                                </MenuItems>
-                            </Menu>
+                        <div className="flex flex-raw gap-1 justify-center content-center items-center">
+                            <img
+                                width="26"
+                                height="26"
+                                src="https://img.icons8.com/fluency/48/dashboard-layout.png"
+                                alt="dashboard-layout"
+                            />
+                            <p className=" text-gray-400 mb-2 mt-2 text-xl">
+                                {project.name}
+                            </p>
                         </div>
-                        <PrimaryButton
-                            onClick={() => window.history.back()}
-                            className="bg-transparent"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                x="0px"
-                                y="0px"
-                                width="30"
-                                height="40"
-                                viewBox="0 0 128 128"
-                                className="hover:bg-gray-300 rounded-md text-black"
-                            >
-                                <path
-                                    fill="#71c2ff"
-                                    d="M97,124V4c0-1.7-1.3-3-3-3s-3,1.3-3,3v120c0,1.7,1.3,3,3,3S97,125.7,97,124z"
-                                ></path>
-                                <path
-                                    fill="#444b54"
-                                    d="M31.9,96.1c0.6,0.6,1.4,0.9,2.1,0.9s1.5-0.3,2.1-0.9l30-30c1.2-1.2,1.2-3.1,0-4.2l-30-30	c-1.2-1.2-3.1-1.2-4.2,0c-1.2,1.2-1.2,3.1,0,4.2L59.8,64L31.9,91.9C30.7,93.1,30.7,94.9,31.9,96.1z"
-                                ></path>
-                            </svg>
-                        </PrimaryButton>
+                        <p className="text-2xl">Board Discussion</p>
                     </div>
+                    <PrimaryButton
+                        onClick={() => window.history.back()}
+                        className="bg-transparent"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            x="0px"
+                            y="0px"
+                            width="30"
+                            height="40"
+                            viewBox="0 0 128 128"
+                            className="hover:bg-gray-300 rounded-md text-black"
+                        >
+                            <path
+                                fill="#71c2ff"
+                                d="M97,124V4c0-1.7-1.3-3-3-3s-3,1.3-3,3v120c0,1.7,1.3,3,3,3S97,125.7,97,124z"
+                            ></path>
+                            <path
+                                fill="#444b54"
+                                d="M31.9,96.1c0.6,0.6,1.4,0.9,2.1,0.9s1.5-0.3,2.1-0.9l30-30c1.2-1.2,1.2-3.1,0-4.2l-30-30	c-1.2-1.2-3.1-1.2-4.2,0c-1.2,1.2-1.2,3.1,0,4.2L59.8,64L31.9,91.9C30.7,93.1,30.7,94.9,31.9,96.1z"
+                            ></path>
+                        </svg>
+                    </PrimaryButton>
                 </div>
                 <div className="container mx-auto my-auto  p-4 flex flex-col h-[calc(100vh-100px)]  ">
                     <div className="  p-4 rounded-md overflow-y-auto overflow-x-hidden">
-                        <div className="mb-4"></div>
-                        <div className="mb-4">
-                            <strong>Assigned To:</strong>{" "}
-                            {userAssigned && userAssigned.name}
-                        </div>
-                        <div className="mb-4">
-                            <strong>Due Date:</strong> {task.due_date}
-                        </div>
-                        <div className="mb-4">
-                            <strong>Status:</strong> {task.status}
-                        </div>
                         <div className="mb-6">
-                            <div className="border-b ">
-                                <h2 className="text-xl font-bold">Messages</h2>
-                            </div>
                             <div className="">
                                 <div className="mb-4 mr-8">
                                     {messageList.length > 0 ? (
@@ -300,7 +252,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                                     >
                                                         {message?.user_id ===
                                                             user_id && (
-                                                            <div className="relative flex mt-2 bg-red-600 mr-8 justify-center items-center mb-2">
+                                                                <div className="relative flex mt-2 bg-red-600 mr-8 justify-center items-center mb-2">
                                                                 {message?.id && (  
                                                                     <div className="absolute mt-10 ml-6 bg-transparent border-none border rounded  p-4">
                                                                         <Menu
@@ -390,7 +342,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
 
                                                                 {message?.content && (
                                                                     <div className="flex bg-blue-400  rounded-2xl p-2">
-                                                                        <p className="font-normal text-lg text-white">
+                                                                        <p className="font-bold">
                                                                             {message?.content ||
                                                                                 null}
                                                                         </p>
@@ -495,14 +447,14 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                             />
                                             <div className="w-full flex flex-col gap-2 items-center justify-center">
                                                 <p className="text-xl font-medium">
-                                                    No discussion on this task
+                                                    No discussion on this board
                                                     yet
                                                 </p>
                                                 <p className="font-normal w-[40%]  text-gray-500 text-center">
-                                                    Be free to comment and to
-                                                    give ideas for this task.
-                                                    all members'll see this
-                                                    comment.
+                                                    Be the first one to start a
+                                                    discussion with all board
+                                                    members. all members'll this
+                                                    project be notified.
                                                 </p>
                                             </div>
                                         </div>
@@ -624,4 +576,4 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     );
 };
 
-export default TaskDetail;
+export default Message;
