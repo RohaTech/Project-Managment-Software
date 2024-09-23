@@ -1,9 +1,12 @@
 import { React, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import MembersEditDialog from "./MembersEditDialog";
+import MembersDeleteDialog from "./MembersDeleteDialog";
 
 function PopOvers({ members, project }) {
   const [isMembersEditDialogOpen, setIsMembersEditDialogOpen] = useState(false);
+  const [isMembersDeleteDialogOpen, setIsMembersDeleteDialogOpen] =
+    useState(false);
   const [selectedMember, setSelectedMember] = useState();
 
   return (
@@ -79,7 +82,13 @@ function PopOvers({ members, project }) {
                       edit role
                     </p>
                   </div>
-                  <div className="group">
+                  <div
+                    className="group"
+                    onClick={() => {
+                      setIsMembersDeleteDialogOpen(true);
+                      setSelectedMember(member);
+                    }}
+                  >
                     <svg
                       className="size-5 fill-red-500"
                       xmlns="http://www.w3.org/2000/svg"
@@ -92,6 +101,12 @@ function PopOvers({ members, project }) {
                 <MembersEditDialog
                   isMembersEditDialogOpen={isMembersEditDialogOpen}
                   setIsMembersEditDialogOpen={setIsMembersEditDialogOpen}
+                  member={selectedMember}
+                  project={project}
+                />
+                <MembersDeleteDialog
+                  isMembersDeleteDialogOpen={isMembersDeleteDialogOpen}
+                  setIsMembersDeleteDialogOpen={setIsMembersDeleteDialogOpen}
                   member={selectedMember}
                   project={project}
                 />

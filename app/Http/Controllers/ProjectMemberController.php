@@ -77,13 +77,20 @@ class ProjectMemberController extends Controller
         ]);
     }
 
-    public function destroy(ProjectMember $projectMember)
+    public function destroy(Request $request, Project $project)
     {
-        $project = Project::find($projectMember->project_id);
+        $validated = $request->validate([
+            'user_id' => '|required|numeric'
+        ]);
+        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
+
+        $member = $projectMember->creator()->get();
+
+
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' Removed ' . $projectMember->name . ' from  the project ',
+            'activity' => ' Removed ' . $member[0]->name . ' from  the project ',
         ]);
         $projectMember->delete();
     }
