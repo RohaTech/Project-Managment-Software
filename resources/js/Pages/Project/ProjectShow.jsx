@@ -15,6 +15,7 @@ import SingleSubTask from "./SingleSubTask";
 import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
 import ProjectAddField from "./ProjectAddField";
 import ProjectStatus from "./ProjectStatus";
+import TaskSearch from "@/Components/ProjectComponent/TaskSearch";
 
 export default function ProjectShow({
   project,
@@ -248,44 +249,7 @@ export default function ProjectShow({
           <div className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[15px] px-3 py-[1px] rounded-md shadow-md transition duration-300 ease-in-out capitalize flex gap-x-1">
             <AddTask setTaskList={setTaskList} projectId={project.id} />
           </div>
-          <form className="max-w-[120px]">
-            <label
-              htmlFor="default-search"
-              className="mb-2  text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >
-              Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center  pointer-events-none"></div>
-              <input
-                type="search"
-                id="default-search"
-                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 px-3 py-1"
-                placeholder="Search"
-                required
-              />
-              <button
-                type="submit"
-                className="text-white absolute end-2.5 bottom-[6px]  backdrop:focus:ring-4  font-medium rounded-lg text-sm px-2"
-              >
-                <svg
-                  className="w-4 h-4 text-primary"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </form>
+          <TaskSearch project={project} />
           <div className="flex text-sm text-slate-400 gap-x-1 hover:bg-slate-200 transition duration-300 ease-in-out px-1 py-1 rounded-md cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"

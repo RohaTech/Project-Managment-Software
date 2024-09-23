@@ -80,6 +80,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/home/all-search', [ApiController::class, 'search'])->name('all.search');
     Route::get('/project-search', [ApiController::class, 'projectOnlySearch'])->name('project.search');
+    Route::get('/task-search', [ApiController::class, 'taskSearch'])->name('task.search');
 });
 
 Route::middleware('auth')->group(function () {

@@ -21,7 +21,7 @@ export default function ApproveButton({ ApproveData, task }) {
           setApproved(true);
           approve(e);
         }}
-        class={`${
+        className={`${
           approved ||
           ApproveData.status === "Not Started" ||
           ApproveData.status === null
