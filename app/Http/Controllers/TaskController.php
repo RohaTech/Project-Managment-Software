@@ -44,12 +44,14 @@ class TaskController extends Controller
      */
     public function create()
     {
+ 
         try {
             return Inertia::render('CreateTask', ['user' => auth()->user(),]);
         } catch (Exception $ex) {
             dd($ex);
         }
 
+ 
     }
 
     /**
@@ -118,6 +120,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+ 
         try {
             $assigned = User::where('id', $task->assigned)->get();
             $messages = Message::where('task_id', $task->id)->with('user', 'attachments')->get();
@@ -132,6 +135,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
+ 
     }
 
     /**
@@ -203,6 +207,7 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
+ 
     {
         try {
             $project = Project::find($task->project_id);
@@ -216,6 +221,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
+ 
     }
     public function updateOrder(Request $request)
     {

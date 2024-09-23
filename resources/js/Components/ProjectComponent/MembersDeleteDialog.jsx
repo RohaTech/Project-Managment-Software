@@ -1,49 +1,51 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { useForm } from "@inertiajs/react";
+import SecondaryButton from "@/Components/SecondaryButton";
 
-export default function ProjectAdditionalColumnModal({
-  setConfirmingUserDeletion,
-  confirmingUserDeletion,
+export default function MembersDeleteDialog({
+  setIsMembersDeleteDialogOpen,
+  isMembersDeleteDialogOpen,
   project,
-  deleteTitle,
-  additional_column,
-  setIsDeleting,
+  member,
 }) {
-  const { data, setData, patch, processing, errors, reset } = useForm({
-    title: deleteTitle || "",
+  const {
+    data,
+    setData,
+    delete: destroy,
+    processing,
+    errors,
+    reset,
+  } = useForm({
+    user_id: "",
   });
 
-  const handlePatch = (e) => {
-    e.preventDefault();
-    // window.location.reload();
+  console.log(member);
 
-    patch(
-      route("project.additional-column.delete", [project], {
-        onSuccess: () => {
-          close();
-        },
-      })
-    );
-    setIsDeleting((prevIsDeleting) => !prevIsDeleting);
+  const handleSubmit = (e) => {
+    console.log("object");
+    e.preventDefault();
+    setData("user_id", member?.id);
+    destroy(route("project-members.destroy", [project]), {
+      onSuccess: (response) => {
+        reset();
+        close();
+      },
+    });
   };
 
   function open() {
-    setConfirmingUserDeletion(true);
+    setIsMembersDeleteDialogOpen(true);
   }
 
   function close() {
-    setConfirmingUserDeletion(false);
+    setIsMembersDeleteDialogOpen(false);
   }
-  useEffect(() => {
-    setData("title", deleteTitle);
-  }, [deleteTitle]);
 
   return (
     <Dialog
-      open={confirmingUserDeletion}
+      open={isMembersDeleteDialogOpen}
       as="div"
       className="relative z-10 focus:outline-none  "
       onClose={close}
@@ -53,18 +55,22 @@ export default function ProjectAdditionalColumnModal({
         <div className="flex min-h-full  items-center justify-end p-4">
           <DialogPanel
             transition
-            className="w-[500px]   absolute top-40  right-50 mt-16 mr-16   rounded-xl  bg-white   border border-gray   py-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+            className="w-[500px]   absolute top-30  right-0 mt-16 mr-16   rounded-xl  bg-white   border border-gray   py-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
           >
             <DialogTitle
               as="h3"
               className="text-2xl flex items-center justify-between px-6 font-semibold py-3 text-center  text-primary"
             >
-              Delete Column
+              Confirm User Removal
             </DialogTitle>
             <div className="p-6">
               <h2 className="text-lg font-medium text-gray-900">
-                Are you sure you want to delete the column?
+                Are you sure you want to remove this user from the project
               </h2>
+              <h4 className="text-red-500 mt-4">
+                {" "}
+                This action cannot be reversed.
+              </h4>
 
               <div className="mt-6 flex ">
                 <SecondaryButton onClick={close}>Cancel</SecondaryButton>
@@ -72,11 +78,10 @@ export default function ProjectAdditionalColumnModal({
                 <PrimaryButton
                   className="ms-3 bg-red-500"
                   onClick={(e) => {
-                    setData("title", deleteTitle);
-                    handlePatch(e);
+                    handleSubmit(e);
                   }}
                 >
-                  Delete The column
+                  Remove The User
                 </PrimaryButton>
               </div>
             </div>

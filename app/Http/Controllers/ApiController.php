@@ -17,25 +17,45 @@ class ApiController extends Controller
 
     public function projectOnlySearch(Request $request)
     {
-        try {
+ 
+        $userId = Auth::id();
+        $query = $request->query('query');
 
 
-            $userId = Auth::id();
-            $query = $request->query('query');
+        $projects = Project::whereHas('members', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->when($query, function ($q) use ($query) {
+            $q->where('name', 'like', '%' . $query . '%');
+        })->with(['creator', 'updateBy'])
+            ->latest()
+            ->get();
 
-            $projects = Project::whereHas('members', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })->when($query, function ($q) use ($query) {
-                $q->where('name', 'like', '%' . $query . '%');
-            })->with(['creator', 'updateBy'])
-                ->latest()
-                ->get();
-
-            return response()->json(['projects' => $projects]);
-        } catch (Exception $ex) {
-            dd($ex);
-        }
+        return response()->json(['projects' => $projects]);
     }
+
+    public function taskSearch(Request $request)
+    {
+        $userId = Auth::id();
+        $query = $request->query('query');
+
+
+
+        $allProjects = Project::whereHas('members', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        });
+
+
+        $tasks = Task::whereIn('project_id', $allProjects->pluck('id'))
+            ->when($query, function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })->latest()
+            ->get();
+
+
+        return response()->json(['tasks' => $tasks]);
+    }
+
+     
     public function search(Request $request)
     {
         try {

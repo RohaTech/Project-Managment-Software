@@ -1,8 +1,9 @@
 import TextInput from "@/Components/TextInput";
-import { useForm } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
 import React from "react";
 import { useDrag, useDrop } from 'react-dnd';
 
+ 
 const ItemType = 'SUbTASK';
 
 function SingleSubTask({ subtask, handleToggle, openTasks, members, level, role, index, moveRow, parent_task_id }) {
@@ -38,20 +39,21 @@ const statusOptions = [
     { value: "Medium", label: "Medium" },
     { value: "High", label: "High" },
   ];
+ 
 
-  const { data, setData, patch, errors } = useForm({
-    name: subtask.name,
-    assigned: subtask.assigned,
-    status: subtask.status,
-    priority: subtask.priority,
-    due_date: subtask.due_date,
-  });
+    const { data, setData, patch, errors } = useForm({
+        name: subtask.name,
+        assigned: subtask.assigned,
+        status: subtask.status,
+        priority: subtask.priority,
+        due_date: subtask.due_date,
+    });
 
-  const handleSubtaskSubmit = (e) => {
-    e.preventDefault();
-    patch(`/task/${subtask.id}`);
-  };
-
+    const handleSubtaskSubmit = (e) => {
+        e.preventDefault();
+        patch(`/task/${subtask.id}`);
+    };
+ 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -174,6 +176,7 @@ const statusOptions = [
       </td>
     </tr>
   );
+
 }
 
 export default SingleSubTask;
