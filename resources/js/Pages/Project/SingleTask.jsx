@@ -2,15 +2,38 @@ import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
 import React from "react";
 import ApproveButton from "./ApproveButton";
+import { useDrag, useDrop } from 'react-dnd';
 
-function SingleTask({ task, handleToggle, openTasks, members, role }) {
-  const formatDate = (dateString) => {
+const ItemType = 'ROW';
+
+function SingleTask({ task, handleToggle, openTasks, members, role , index, moveRow}) {
+    // console.log(`Upper ${index}`);
+    const [, ref] = useDrop({
+        accept: ItemType,
+        hover: (draggedItem) => {
+            // console.log(draggedItem);
+          if (draggedItem.index !== index) {
+            moveRow(draggedItem.index, index);
+            draggedItem.index = index;
+          }
+        },
+      });
+
+      const [{ isDragging }, drag] = useDrag({
+        type: ItemType,
+        item: { index },
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      });
+
+    const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-  };
+      };
 
   const statusOptions = [
     { value: "Not Started", label: "Not Started" },
@@ -37,6 +60,7 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     patch(`/task/${task.id}`);
   };
   const handleTaskTitleChange = (index, value) => {
@@ -45,8 +69,16 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
     setData("additional_column", newAdditionalColumn);
   };
   return (
-    <tr key={task.id} className="border-l-2 border-l-blue-500">
-      <td className="px-4 py-2 border border-l-0 border-slate-300 flex items-center group">
+    <tr
+        key={task.id}
+        className="border-l-2 border-l-blue-500"
+        ref={(node) => drag(ref(node))}
+        style={{
+          opacity: isDragging ? 0.5 : 1,
+          cursor: 'move',
+        }}
+        >
+      <td className="px-4 border border-l-0 border-slate-300 flex items-center group w-[300px] sticky-column">
         <span className="cursor-pointer" onClick={() => handleToggle(task.id)}>
           {openTasks[task.id] ? (
             <svg
@@ -68,7 +100,7 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
             </svg>
           )}
         </span>
-        <form onSubmit={handleSubmit} className="flex-grow">
+        <form onSubmit={handleSubmit} className="flex-grow w-fit">
           <TextInput
             value={data.name}
             id="name"
@@ -89,7 +121,7 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
           <path d="M17.85,12.85l-10,10a.48.48,0,0,1-.7,0,.48.48,0,0,1,0-.7l9.64-9.65L7.15,2.85a.49.49,0,0,1,.7-.7l10,10A.48.48,0,0,1,17.85,12.85Z"></path>
         </svg>
       </td>
-      <td className="px-4 py-2 border border-slate-300">
+      <td className="px-4 border border-slate-300">
         <select
           className="border-0"
           onChange={(e) => setData("assigned", e.target.value)}
@@ -106,7 +138,7 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
           ))}
         </select>
       </td>
-      <td className="px-4 py-2 border border-slate-300">
+      <td className="px-4 border border-slate-300">
         <select
           className="border-0"
           onChange={(e) => {
@@ -144,7 +176,7 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
           <ApproveButton ApproveData={data} task={task} />
         )}
       </td>
-      <td className="px-4 py-2 border border-r-0 border-slate-300">
+      <td className="px-4 border border-r-0 border-slate-300">
         <select
           className="border-0"
           onChange={(e) => setData("priority", e.target.value)}
@@ -154,25 +186,24 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
             <option
               key={index}
               value={priority.value}
-              selected={priority.value === task.priority}
+              selected={priority.value === data.priority}
             >
               {priority.label}
             </option>
           ))}
         </select>
       </td>
-      <td className="px-4 py-2 border border-slate-300">
+      <td className="px-4 border border-slate-300">
         <input
           type="date"
-          value={task.due_date ? formatDate(task.due_date) : ""}
+          value={data.due_date ? formatDate(data.due_date) : ""}
           onChange={(e) => setData("due_date", e.target.value)}
           onBlur={handleSubmit}
         />
       </td>
-
       {data.additional_column &&
         data.additional_column.map((item, index) => (
-          <td className="px-4 py-2 border border-slate-300">
+          <td className="px-4 border border-slate-300">
             <input
               value={item.value}
               type={item.type}

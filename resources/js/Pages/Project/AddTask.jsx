@@ -31,7 +31,7 @@ function AddTask({setTaskList, projectId}) {
     className=" transition duration-300 ease-in-out rounded-lg flex items-center px-2 py-1 "
     onClick={() => handleAddNewTask()}
 >
-    <span className=" ">+</span> <span className="">Add New</span>
+    <span> +Add New</span>
 </button>
   )
 }

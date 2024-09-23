@@ -1,14 +1,37 @@
 import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
 import React from "react";
+import { useDrag, useDrop } from 'react-dnd';
 
-function SingleSubTask({ subtask, handleToggle, openTasks, members, level }) {
-  const statusOptions = [
+const ItemType = 'SUbTASK';
+
+function SingleSubTask({ subtask, handleToggle, openTasks, members, level, role, index, moveRow, parent_task_id }) {
+
+    const [, ref] = useDrop({
+        accept: ItemType,
+        hover: (draggedItem) => {
+          if (draggedItem.index !== index || draggedItem.parent_task_id !== parent_task_id) {
+            moveRow(draggedItem.index, index, parent_task_id);
+            draggedItem.index = index;
+            draggedItem.parent_task_id = parent_task_id;
+          }
+        },
+      });
+
+      const [{ isDragging }, drag] = useDrag({
+        type: ItemType,
+        item: { index },
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      });
+
+const statusOptions = [
     { value: "Not Started", label: "Not Started" },
     { value: "In Progress", label: "In Progress" },
     { value: "Completed", label: "Completed" },
     { value: "Pending", label: "Pending" },
-  ];
+];
   // console.log(tasks);
   const priorityOptions = [
     { value: "Low", label: "Low" },
@@ -37,7 +60,13 @@ function SingleSubTask({ subtask, handleToggle, openTasks, members, level }) {
     return `${year}-${month}-${day}`;
   };
   return (
-    <tr className={`bg-gray-${100 + level * 50}`}>
+    <tr className={`bg-gray-${100 + level * 50}`}
+        ref={(node) => drag(ref(node))}
+        style={{
+            opacity: isDragging ? 0.5 : 1,
+            cursor: 'move',
+        }}
+        >
       <td className="px-4 py-1 border border-l-0 border-slate-300 flex items-center group transition duration-600 ease-in-out">
         <span
           className="cursor-pointer"

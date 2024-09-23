@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Exception;
 
 class ActivityLogController extends Controller
 {
@@ -20,7 +21,11 @@ class ActivityLogController extends Controller
      */
     public function create()
     {
-        return  Inertia::render('ActivityLog/ActivityLogCreate');
+        try {
+            return Inertia::render('ActivityLog/ActivityLogCreate');
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
 
     /**
