@@ -71,7 +71,6 @@ export default function ProjectAdditionalColumnModal({
 
                 <PrimaryButton
                   className="ms-3 bg-red-500"
-                  disabled={processing}
                   onClick={(e) => {
                     setData("title", deleteTitle);
                     handlePatch(e);
