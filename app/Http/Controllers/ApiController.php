@@ -20,6 +20,7 @@ class ApiController extends Controller
         $userId = Auth::id();
         $query = $request->query('query');
 
+
         $projects = Project::whereHas('members', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })->when($query, function ($q) use ($query) {
@@ -30,6 +31,29 @@ class ApiController extends Controller
 
         return response()->json(['projects' => $projects]);
     }
+
+    public function taskSearch(Request $request)
+    {
+        $userId = Auth::id();
+        $query = $request->query('query');
+
+
+
+        $allProjects = Project::whereHas('members', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        });
+
+
+        $tasks = Task::whereIn('project_id', $allProjects->pluck('id'))
+            ->when($query, function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })->latest()
+            ->get();
+
+
+        return response()->json(['tasks' => $tasks]);
+    }
+
     public function search(Request $request)
     {
         if ($request->user()) {

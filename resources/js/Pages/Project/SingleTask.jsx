@@ -2,6 +2,7 @@ import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
 import React from "react";
 import ApproveButton from "./ApproveButton";
+import { useEffect } from "react";
 
 function SingleTask({ task, handleToggle, openTasks, members, role }) {
     const formatDate = (dateString) => {
@@ -175,21 +176,21 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
                 />
             </td>
 
-            {data.additional_column &&
-                data.additional_column.map((item, index) => (
-                    <td className="px-4 py-2 border border-slate-300">
-                        <input
-                            value={item.value}
-                            type={item.type}
-                            onChange={(e) =>
-                                handleTaskTitleChange(index, e.target.value)
-                            }
-                            onBlur={handleSubmit}
-                        />
-                    </td>
-                ))}
-        </tr>
-    );
+
+      {data.additional_column &&
+        data.additional_column.map((item, index) => (
+          <td key={index} className="px-4 py-2 border border-slate-300">
+            <input
+              value={item.value}
+              type={item.type}
+              onChange={(e) => handleTaskTitleChange(index, e.target.value)}
+              onBlur={handleSubmit}
+            />
+          </td>
+        ))}
+    </tr>
+  );
+ 
 }
 
 export default SingleTask;

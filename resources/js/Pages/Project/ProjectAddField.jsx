@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from "@inertiajs/react";
@@ -7,6 +7,8 @@ export default function ProjectAddField({
   setIsAddFieldOpen,
   isAddFieldOpen,
   project,
+  setProjectColumn,
+  projectColumn,
 }) {
   const { data, setData, patch, processing, errors, reset } = useForm({
     title: "",
@@ -16,10 +18,12 @@ export default function ProjectAddField({
   const handleSubmit = (e) => {
     e.preventDefault();
     patch(route("project.additional-column.create", [project]), {
-      onSuccess: () => {
+      onSuccess: (response) => {
         reset();
         close();
-        window.location.reload();
+        const responseProjectColumn =
+          response.props.projects[0].additional_column;
+        setProjectColumn(JSON.parse(responseProjectColumn));
       },
     });
   };
