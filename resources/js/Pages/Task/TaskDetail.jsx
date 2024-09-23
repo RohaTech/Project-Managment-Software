@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     const [messageList, setMessageList] = useState(messages || []);
@@ -180,7 +181,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                                         alt="trash"
                                                     />
                                                     <p className="text-black">
-                                                        Delete
+                                                        Delete Task
                                                     </p>
                                                 </div>
                                             </button>
@@ -299,41 +300,36 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                                     >
                                                         {message?.user_id ===
                                                             user_id && (
-                                                            <div className="relative flex mt-2">
-                                                                {dropdownVisible[
-                                                                    message?.id
-                                                                ] && (
-                                                                    <div className="absolute mt-10 ml-6 bg-white border rounded shadow-md p-4">
-                                                                        <Menu>
-                                                                            hhh
-                                                                            <MenuButton
-                                                                                onClick={() =>
-                                                                                    toggleDropdown(
-                                                                                        message?.id
-                                                                                    )
-                                                                                }
-                                                                                className="text-blue-500 mr-2 hover:via-blue-300"
-                                                                            >
+                                                            <div className="relative flex mt-2 bg-red-600 mr-8 justify-center items-center mb-2">
+                                                                {message?.id && (  
+                                                                    <div className="absolute mt-10 ml-6 bg-transparent border-none border rounded  p-4">
+                                                                        <Menu
+                                                                            as="div"
+                                                                            className="mb-10 relative inline-block text-left "
+                                                                        >
+                                                                            <Menu.Button className="text-blue-500 mr-2 hover:bg-gray-200 rounded-md p-2">
                                                                                 <svg
+                                                                               
                                                                                     xmlns="http://www.w3.org/2000/svg"
                                                                                     x="0px"
                                                                                     y="0px"
                                                                                     width="20"
                                                                                     height="20"
-                                                                                    viewBox="0 0 50 50"
+                                                                                    viewBox="0 0 30 30"
                                                                                 >
-                                                                                    <path
-                                                                                        fill="#888888"
-                                                                                        d="M9.781,18.278l3.188-3.188c0.781-0.781,2.047-0.781,2.828,0L25,24.292l9.202-9.202c0.781-0.781,2.047-0.781,2.828,0	l3.188,3.188c0.781,0.781,0.781,2.047,0,2.828L26.415,34.91c-0.781,0.781-2.047,0.781-2.828,0L9.782,21.107	C9,20.325,9,19.059,9.781,18.278z"
-                                                                                    ></path>
+                                                                                    <path  fill="gray" d="M3,12v-2c0-0.386,0.223-0.738,0.572-0.904s0.762-0.115,1.062,0.13L15,17.708l10.367-8.482 c0.299-0.245,0.712-0.295,1.062-0.13C26.779,9.261,27,9.614,27,10v2c0,0.3-0.135,0.584-0.367,0.774l-11,9 c-0.369,0.301-0.898,0.301-1.267,0l-11-9C3.135,12.584,3,12.3,3,12z"></path>
                                                                                 </svg>
-                                                                            </MenuButton>
-                                                                            <MenuItems
-                                                                                anchor="bottom"
-                                                                                className="  w-[100px] h-[100px] mt-4 shadow-6 rounded-lg z"
+                                                                            </Menu.Button>
+
+                                                                            <Menu.Items
+                                                                                as="div"
+                                                                                className="absolute bg-white border rounded shadow-lg mt-2 p-2 z-50 w-40"
                                                                             >
-                                                                                <MenuItem>
-                                                                                    {message?.content && (
+                                                                                {/* Edit option */}
+                                                                                <Menu.Item as="div">
+                                                                                    {({
+                                                                                        active,
+                                                                                    }) => (
                                                                                         <button
                                                                                             onClick={() =>
                                                                                                 handleEditMessage(
@@ -341,27 +337,39 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
                                                                                                     message?.content
                                                                                                 )
                                                                                             }
-                                                                                            className="block text-primary hover:text-blue-700 hover:bg-gray"
+                                                                                            className={`${
+                                                                                                active
+                                                                                                    ? "bg-gray-200"
+                                                                                                    : ""
+                                                                                            } block w-full text-left px-4 py-2 text-blue-500`}
                                                                                         >
                                                                                             Edit
                                                                                         </button>
                                                                                     )}
-                                                                                </MenuItem>
-                                                                                <MenuItem className="bg-whiten  overflow-hidden p-2">
-                                                                                    <div className="flex flex-row bg-white">
+                                                                                </Menu.Item>
+
+                                                                                {/* Delete option */}
+                                                                                <Menu.Item as="div">
+                                                                                    {({
+                                                                                        active,
+                                                                                    }) => (
                                                                                         <button
                                                                                             onClick={() =>
                                                                                                 handleDeleteMessage(
                                                                                                     message?.id
                                                                                                 )
                                                                                             }
-                                                                                            className="block text-red-500 hover:text-red-700"
+                                                                                            className={`${
+                                                                                                active
+                                                                                                    ? "bg-gray-200"
+                                                                                                    : ""
+                                                                                            } block w-full text-left px-4 py-2 text-red-500`}
                                                                                         >
                                                                                             Delete
                                                                                         </button>
-                                                                                    </div>
-                                                                                </MenuItem>
-                                                                            </MenuItems>
+                                                                                    )}
+                                                                                </Menu.Item>
+                                                                            </Menu.Items>
                                                                         </Menu>
                                                                     </div>
                                                                 )}

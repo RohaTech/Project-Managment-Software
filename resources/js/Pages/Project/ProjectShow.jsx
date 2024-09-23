@@ -360,7 +360,7 @@ export default function ProjectShow({
                                         onClick={() => setIsAddFieldOpen(true)}
                                         className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
                                     >
-                                        +
+                                        
                                     </th>
                                     <ProjectAddField
                                         setIsAddFieldOpen={setIsAddFieldOpen}
