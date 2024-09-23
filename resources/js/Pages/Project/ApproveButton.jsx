@@ -12,7 +12,7 @@ export default function ApproveButton({ ApproveData, task }) {
     setData("approve", 1);
     patch(route("task.approve", [task]), {});
   };
-  console.log(ApproveData);
+  //   console.log(ApproveData);
 
   return (
     <>

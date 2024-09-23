@@ -31,6 +31,10 @@ export default function ProjectShow({
   const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
   const { auth } = usePage().props;
 
+  const [projectColumn, setProjectColumn] = useState(
+    JSON.parse(project.additional_column)
+  );
+
   const [role, setRole] = useState("");
   useEffect(() => {
     const roleIndex = membersRole.findIndex(
@@ -46,14 +50,6 @@ export default function ProjectShow({
       ...prevState,
       [taskId]: !prevState[taskId],
     }));
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
   };
 
   const handleEditClick = (e) => {
@@ -198,7 +194,7 @@ export default function ProjectShow({
         <div className="flex gap-x-8 items-center">
           <ProjectStatus project={project} role={role} />
           <div className="flex items-center mr-4 gap-x-4">
-            <PopOvers members={members} />
+            <PopOvers members={members} project={project} />
             <button
               onClick={() => setIsOpen(true)}
               className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"
@@ -325,7 +321,11 @@ export default function ProjectShow({
                   <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                     Due Date
                   </th>
-                  <ProjectAdditionalColumn project={project} />
+                  <ProjectAdditionalColumn
+                    project={project}
+                    setProjectColumn={setProjectColumn}
+                    projectColumn={projectColumn}
+                  />
 
                   <th
                     onClick={() => setIsAddFieldOpen(true)}
@@ -337,6 +337,8 @@ export default function ProjectShow({
                     setIsAddFieldOpen={setIsAddFieldOpen}
                     isAddFieldOpen={isAddFieldOpen}
                     project={project}
+                    setProjectColumn={setProjectColumn}
+                    projectColumn={projectColumn}
                   />
                 </tr>
               </thead>
@@ -349,6 +351,7 @@ export default function ProjectShow({
                         handleToggle={handleToggle}
                         openTasks={openTasks}
                         members={members}
+                        role={role}
                       />
                       {openTasks[task.id] &&
                         task.subtasks &&

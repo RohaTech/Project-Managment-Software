@@ -51,21 +51,29 @@ class ProjectMemberController extends Controller
         return redirect(route('home', absolute: false));
     }
     public function show(ProjectMember $projectMember)
-    {   
+    {
         return response()->json($projectMember);
     }
-    public function update(Request $request, ProjectMember $projectMember)
-    {
-        $validated = $request->validate([
-            'role' => 'sometimes|required|string'
-        ]);
-        $projectMember->update($validated);
 
-        $project = Project::find($projectMember->project_id);
+    public function update(Request $request, Project $project)
+    {
+
+        $validated = $request->validate([
+            'role' => 'sometimes|required|string|in:admin,member',
+            'user_id' => '|required|numeric'
+        ]);
+
+        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
+
+
+        $projectMember->update([
+            'role' => $validated['role']
+        ]);
+
 
         $project->activities()->create([
             'user_id' => Auth::id(),
-            'activity' => ' Edited ' . User::find($request->user_id)->name . ' Role to  ' . $request->role,
+            'activity' => ' Edited ' . User::find($validated['user_id'])->name . ' Role to  ' . $validated['role'],
         ]);
     }
 
