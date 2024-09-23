@@ -18,21 +18,20 @@ import ProjectStatus from "./ProjectStatus";
 import TaskSearch from "@/Components/ProjectComponent/TaskSearch";
 
 export default function ProjectShow({
-    project,
-    tasks,
-    users,
-    members,
-    membersRole,
+  project,
+  tasks,
+  users,
+  members,
+  membersRole,
 }) {
-    let [isOpen, setIsOpen] = useState(false);
-    let [openEdit, setOpenEdit] = useState(false);
-    const [openSubTasks, setOpenSubTasks] = useState(tasks.map(() => false));
-    const [openTasks, setOpenTasks] = useState({}); // Single state object
-    const [taskList, setTaskList] = useState(tasks);
-    const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
-    const { auth } = usePage().props;
+  let [isOpen, setIsOpen] = useState(false);
+  let [openEdit, setOpenEdit] = useState(false);
+  const [openSubTasks, setOpenSubTasks] = useState(tasks.map(() => false));
+  const [openTasks, setOpenTasks] = useState({}); // Single state object
+  const [taskList, setTaskList] = useState(tasks);
+  const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
+  const { auth } = usePage().props;
 
- 
   const [projectColumn, setProjectColumn] = useState(
     JSON.parse(project.additional_column)
   );
@@ -46,87 +45,76 @@ export default function ProjectShow({
       setRole(membersRole[roleIndex].role);
     }
   }, []);
- 
 
-    const handleToggle = (taskId) => {
-        setOpenTasks((prevState) => ({
-            ...prevState,
-            [taskId]: !prevState[taskId],
-        }));
-    };
+  const handleToggle = (taskId) => {
+    setOpenTasks((prevState) => ({
+      ...prevState,
+      [taskId]: !prevState[taskId],
+    }));
+  };
 
- 
   const handleEditClick = (e) => {
     e.preventDefault(); // Prevent default link behavior
     setOpenEdit(true); // Open the edit modal
   };
- 
 
-    const {
-        data: editData,
-        setData: setEditData,
-        patch: editPatch,
-        reset: editReset,
-    } = useForm({});
+  const {
+    data: editData,
+    setData: setEditData,
+    patch: editPatch,
+    reset: editReset,
+  } = useForm({});
 
-    const renderSubtasks = (subtasks, level = 0) => {
-        return (
-            <>
-                {subtasks.map((subtask) => {
-                    return (
-                        <React.Fragment key={subtask.id}>
-                            <SingleSubTask
-                                subtask={subtask}
-                                handleToggle={handleToggle}
-                                openTasks={openTasks}
-                                members={members}
-                                level={level}
-                                role={role}
-                            />
-                            {openTasks[subtask.id] &&
-                                subtask.subtasks &&
-                                subtask.subtasks.length > 0 && (
-                                    <tr>
-                                        <td
-                                            colSpan="5"
-                                            className="pl-4 pt-2 pb-4"
-                                        >
-                                            <table className="w-full border-collapse">
-                                                <tbody>
-                                                    {renderSubtasks(
-                                                        subtask.subtasks,
-                                                        level + 1
-                                                    )}
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                )}
-                            {openTasks[subtask.id] &&
-                                subtask.subtasks.length === 0 && (
-                                    <tr>
-                                        <AddSubTask
-                                            parentTaskId={subtask.id}
-                                            setTaskList={setTaskList}
-                                            projectId={project.id}
-                                        />
-                                    </tr>
-                                )}
-                        </React.Fragment>
-                    );
-                })}
+  const renderSubtasks = (subtasks, level = 0) => {
+    return (
+      <>
+        {subtasks.map((subtask) => {
+          return (
+            <React.Fragment key={subtask.id}>
+              <SingleSubTask
+                subtask={subtask}
+                handleToggle={handleToggle}
+                openTasks={openTasks}
+                members={members}
+                level={level}
+                role={role}
+              />
+              {openTasks[subtask.id] &&
+                subtask.subtasks &&
+                subtask.subtasks.length > 0 && (
+                  <tr>
+                    <td colSpan="5" className="pl-4 pt-2 pb-4">
+                      <table className="w-full border-collapse">
+                        <tbody>
+                          {renderSubtasks(subtask.subtasks, level + 1)}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                )}
+              {openTasks[subtask.id] && subtask.subtasks.length === 0 && (
                 <tr>
-                    <AddSubTask
-                        parentTaskId={subtasks[0]?.parent_task_id || null}
-                        setTaskList={setTaskList}
-                        projectId={project.id}
-                    />
+                  <AddSubTask
+                    parentTaskId={subtask.id}
+                    setTaskList={setTaskList}
+                    projectId={project.id}
+                  />
                 </tr>
-            </>
-        );
-    };
+              )}
+            </React.Fragment>
+          );
+        })}
+        <tr>
+          <AddSubTask
+            parentTaskId={subtasks[0]?.parent_task_id || null}
+            setTaskList={setTaskList}
+            projectId={project.id}
+          />
+        </tr>
+      </>
+    );
+  };
 
- 
   return (
     <AuthenticatedLayout>
       <div className="flex justify-between px-2 py-1 border-b border-[#eceff3]">
@@ -275,6 +263,22 @@ export default function ProjectShow({
             </svg>
             filter
           </div>
+          <div>
+            <Link
+              href={route("projectMessages.show", project.id)}
+              className="flex flex-row gap-1 justify-center items-center hover:border-b"
+            >
+              <img
+                width="20"
+                height="20"
+                src="https://img.icons8.com/office/40/chat-message.png"
+                alt="chat-message"
+              />
+              <span className="text-slate-400 text-[13px] font-normal">
+                Discussion{" "}
+              </span>
+            </Link>
+          </div>
         </div>
         <div>
           <div className="p-2 pr-4">
@@ -346,183 +350,36 @@ export default function ProjectShow({
                         <tr>
                           <AddSubTask
                             parentTaskId={task.id}
- 
                             setTaskList={setTaskList}
                             projectId={project.id}
-                        />
-                    </div>
-                    <form className="max-w-[120px]">
-                        <label
-                            htmlFor="default-search"
-                            className="mb-2  text-sm font-medium text-gray-900 sr-only dark:text-white"
-                        >
-                            Search
-                        </label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 start-0 flex items-center  pointer-events-none"></div>
-                            <input
-                                type="search"
-                                id="default-search"
-                                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 px-3 py-1"
-                                placeholder="Search"
-                                required
-                            />
-                            <button
-                                type="submit"
-                                className="text-white absolute end-2.5 bottom-[6px]  backdrop:focus:ring-4  font-medium rounded-lg text-sm px-2"
-                            >
-                                <svg
-                                    className="w-4 h-4 text-primary"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </form>
-                    <div className="flex text-sm text-slate-400 gap-x-1 hover:bg-slate-200 transition duration-300 ease-in-out px-1 py-1 rounded-md cursor-pointer">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 512 512"
-                            width={20}
-                        >
-                            <path
-                                fill="#b0b0fd"
-                                d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"
-                            />
-                        </svg>
-                        filter
-                    </div>
-                    <div>
-                        <Link
-                            href={route("projectMessages.show", project.id)}
-                            className="flex flex-row gap-1 justify-center items-center hover:border-b"
-                        >
-                            <img
-                                width="20"
-                                height="20"
-                                src="https://img.icons8.com/office/40/chat-message.png"
-                                alt="chat-message"
-                            />
-                            <span className="text-slate-400 text-[13px] font-normal">
-                            Discussion                            </span>
-                        </Link>
-                    </div>
-                </div>
-                <div>
-                    <div className="p-2 pr-4">
-                        <table className="w-full border-collapse mb-40">
-                            <thead>
-                                <tr>
-                                    <th className="w-[390px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300">
-                                        Task Name
-                                    </th>
-                                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
-                                        Assigned
-                                    </th>
-                                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
-                                        Status
-                                    </th>
-
-                                    <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">
-                                        Priority
-                                    </th>
-                                    <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
-                                        Due Date
-                                    </th>
-                                    <ProjectAdditionalColumn
-                                        project={project}
-                                    />
-
-                                    <th
-                                        onClick={() => setIsAddFieldOpen(true)}
-                                        className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
-                                    >
-                                        
-                                    </th>
-                                    <ProjectAddField
-                                        setIsAddFieldOpen={setIsAddFieldOpen}
-                                        isAddFieldOpen={isAddFieldOpen}
-                                        project={project}
-                                    />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {taskList.map((task, index) => {
-                                    return (
-                                        <React.Fragment key={task.id}>
-                                            <SingleTask
-                                                task={task}
-                                                handleToggle={handleToggle}
-                                                openTasks={openTasks}
-                                                members={members}
-                                            />
-                                            {openTasks[task.id] &&
-                                                task.subtasks &&
-                                                task.subtasks.length > 0 && (
-                                                    <tr>
-                                                        <td colSpan="6">
-                                                            <table className="w-full">
-                                                                <tbody>
-                                                                    {renderSubtasks(
-                                                                        task.subtasks,
-                                                                        1
-                                                                    )}
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                )}
-                                            {openTasks[task.id] &&
-                                                task.subtasks.length === 0 && (
-                                                    <tr>
-                                                        <AddSubTask
-                                                            parentTaskId={
-                                                                task.id
-                                                            }
-                                                            setTaskList={
-                                                                setTaskList
-                                                            }
-                                                            projectId={
-                                                                project.id
-                                                            }
-                                                        />
-                                                        {/* <td colSpan="5" className="px-4 py-2 border border-slate-300 cursor-pointer pl-10 border-l-0" onClick={() => handleAddNewTask(task.id)}>
+                          />
+                          {/* <td colSpan="5" className="px-4 py-2 border border-slate-300 cursor-pointer pl-10 border-l-0" onClick={() => handleAddNewTask(task.id)}>
                                                   + Add Subtask
                                               </td> */}
-                                                    </tr>
-                                                )}
-                                        </React.Fragment>
-                                    );
-                                })}
-                                <tr className="">
-                                    <td
-                                        colSpan="5"
-                                        className="border border-gray-300 text-gray-400 pl-2 border-x-0"
-                                    >
-                                        <div className="hover:bg-gray-200 w-fit">
-                                            <AddTask
-                                                setTaskList={setTaskList}
-                                                projectId={project.id}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                                {/* {renderSubtasks(tasks)} */}
-                            </tbody>
-                        </table>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+                <tr className="">
+                  <td
+                    colSpan="5"
+                    className="border border-gray-300 text-gray-400 pl-2 border-x-0"
+                  >
+                    <div className="hover:bg-gray-200 w-fit">
+                      <AddTask
+                        setTaskList={setTaskList}
+                        projectId={project.id}
+                      />
                     </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
-    );
+                  </td>
+                </tr>
+                {/* {renderSubtasks(tasks)} */}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </AuthenticatedLayout>
+  );
 }
