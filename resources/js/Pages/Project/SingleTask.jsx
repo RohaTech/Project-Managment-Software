@@ -2,16 +2,39 @@ import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
 import React from "react";
 import ApproveButton from "./ApproveButton";
-import { useEffect } from "react";
+import { useDrag, useDrop } from 'react-dnd';
 
-function SingleTask({ task, handleToggle, openTasks, members, role }) {
+const ItemType = 'ROW';
+
+function SingleTask({ task, handleToggle, openTasks, members, role , index, moveRow}) {
+    // console.log(`Upper ${index}`);
+    const [, ref] = useDrop({
+        accept: ItemType,
+        hover: (draggedItem) => {
+            // console.log(draggedItem);
+          if (draggedItem.index !== index) {
+            moveRow(draggedItem.index, index);
+            draggedItem.index = index;
+          }
+        },
+      });
+
+      const [{ isDragging }, drag] = useDrag({
+        type: ItemType,
+        item: { index },
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      });
+
     const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    };
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+      };
+ 
 
     const statusOptions = [
         { value: "Not Started", label: "Not Started" },
@@ -176,10 +199,10 @@ function SingleTask({ task, handleToggle, openTasks, members, role }) {
                 />
             </td>
 
-
       {data.additional_column &&
         data.additional_column.map((item, index) => (
           <td key={index} className="px-4 py-2 border border-slate-300">
+ 
             <input
               value={item.value}
               type={item.type}

@@ -14,4 +14,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/task/{task}', [TaskController::class, 'update'])->name('task.update');
     Route::patch('/task/{task}/approve', [TaskController::class, 'approve'])->name('task.approve');
     Route::delete('/task/{task}', [TaskController::class, 'destroy'])->name('task.destroy');
+    Route::post('/task/updateOrder', [TaskController::class, 'updateOrder'])->name("task.updateOrder");
 });

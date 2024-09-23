@@ -9,31 +9,23 @@ use Illuminate\Http\Request;
 use App\Models\Attachment;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-
+use Exception;
 
 class MessageController extends Controller
 {
+
+
     public function index($taskId)
     {
-        $Messages = Message::where('task_id', $taskId)->with('user')->get();
-        return response()->json($Messages);
+        try {
+            $Messages = Message::where('task_id', $taskId)->with('user')->get();
+            return response()->json($Messages);
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
-    // public function show(Project $project)
-    // {
-    //     $messages = Message::where('task_id', $project->id)->with('user', 'attachments')->get();
-    //     return Inertia::render('Message/Message', [
-        
-    //         'messages' => $messages,
-    //         'user' => auth()->user(),
-    //         'user_id' => Auth::id(),
-
-    //     ]);
-    // // $messages = Message::with('attachments')
-    // //     ->where('task_id', $taskId)
-    // //     ->get();
-
-    // // return response()->json(['data' => $messages]);
-    // }
+ 
+ 
     public function showProjectMessages($id){
         $project = Project::find($id);
         $messages = Message::where('project_id', $project->id)->with('user', 'attachments')->get();
@@ -58,6 +50,7 @@ class MessageController extends Controller
         ]);
        
 
+ 
     }
 
 
@@ -75,6 +68,7 @@ class MessageController extends Controller
             return response()->json(['error' => 'Either task_id or project_id is required'], 400);
         }
         // Create a new message
+ 
     
         $message=Message::create([
             'project_id' => $request->input('project_id'),
@@ -82,28 +76,28 @@ class MessageController extends Controller
             'user_id' => auth()->id(),
             'content' => $request->input('content'),
         ]);
-    
+
         if ($request->has('content')) {
             $message->content = $request->input('content');
         }
-    
+
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
             $filePath = $file->store('attachments', 'public');
             $fileName = $file->getClientOriginalName();
-        
-    
-        Attachment::create([
-            'message_id' => $message->id,
-            'file_path' => $filePath,
-            'file_name' => $fileName,
-        ]);
 
-    }
+
+            Attachment::create([
+                'message_id' => $message->id,
+                'file_path' => $filePath,
+                'file_name' => $fileName,
+            ]);
+
+        }
         $message->save();
         // return response()->json(['data' => $message->load('attachments')], 201);
     }
-    
+
 
     public function update(Request $request, $id)
     {
@@ -113,7 +107,7 @@ class MessageController extends Controller
 
         $Message = Message::findOrFail($id);
 
-        if ($Message->user_id !==  auth()->id()) {
+        if ($Message->user_id !== auth()->id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

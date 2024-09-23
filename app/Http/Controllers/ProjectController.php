@@ -8,6 +8,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Exception;
 
 
 class ProjectController extends Controller
@@ -17,24 +18,30 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Project::query();
 
-        if ($request->has('name')) {
-            $query->where('name', "like", "%" . $request->input('name') . "%");
+        try {
+            $query = Project::query();
+
+            if ($request->has('name')) {
+                $query->where('name', "like", "%" . $request->input('name') . "%");
+            }
+
+            $userId = Auth::id();
+
+            $projects = $query->whereHas('members', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->with(['creator', 'updateBy']) // Load the creator relationship
+                ->latest()
+                ->get();
+
+            return Inertia::render('Project/ProjectIndex', [
+                'projects' => $projects,
+                'queryParams' => $request->query() ?: null
+            ]);
+        } catch (Exception $ex) {
+            dd($ex);
         }
 
-        $userId = Auth::id();
-
-        $projects = $query->whereHas('members', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->with(['creator', 'updateBy']) // Load the creator relationship
-            ->latest()
-            ->get();
-
-        return Inertia::render('Project/ProjectIndex', [
-            'projects' => $projects,
-            'queryParams' => $request->query() ?: null
-        ]);
     }
 
 
@@ -44,7 +51,11 @@ class ProjectController extends Controller
     public function create()
     {
 
-        return Inertia::render('Project/ProjectCreate', ['user' => auth()->user(),]);
+        try {
+            return Inertia::render('Project/ProjectCreate', ['user' => auth()->user(),]);
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
 
     /**
@@ -53,28 +64,32 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'name' => ['required ', 'max:255'],
-            'description' => ['nullable'],
-        ]);
-        $project = Project::create(
-            [
-                'name' => $request->name,
-                'description' => $request->description,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-            ]
-        );
+        try {
+            $request->validate([
+                'name' => ['required ', 'max:255'],
+                'description' => ['nullable'],
+            ]);
+            $project = Project::create(
+                [
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                ]
+            );
 
-        $project->members()->create([
-            'user_id' => Auth::id(),
-            'role' => 'owner',
-        ]);
+            $project->members()->create([
+                'user_id' => Auth::id(),
+                'role' => 'owner',
+            ]);
 
-        $project->activities()->create([
-            'user_id' => Auth::id(),
-            'activity' => auth()->user()->name . ' created project called ' . $request->name,
-        ]);
+            $project->activities()->create([
+                'user_id' => Auth::id(),
+                'activity' => auth()->user()->name . ' created project called ' . $request->name,
+            ]);
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
 
     /**
@@ -82,62 +97,79 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $members = $project->members;
-        $membersInfo = collect();
-        foreach ($members as $member) {
-            $membersInfo->push([
-                'id' => $member->creator->id,
-                'name' => $member->creator->name,
-                'email' => $member->creator->email,
-                'role' => $member->role,
-            ]);
+        try {
+            $members = $project->members;
+            $membersInfo = collect();
+            foreach ($members as $member) {
+                $membersInfo->push([
+                    'id' => $member->creator->id,
+                    'name' => $member->creator->name,
+                    'email' => $member->creator->email,
+                    'role' => $member->role,
+                ]);
+            }
+
+
+            $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
+            $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
+            $orderedTasks = $tasksWithSubtasks->sortBy('order_column')->values()->toArray();
+            // $orderedTasks = $tasksWithSubtasks->orderBy('order_column', 'asc');
+            // dd($tasksWithSubtasks);
+            // dd($orderedTasks);
+            return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $orderedTasks, "members" => $membersInfo, "membersRole" => $members]);
+
+
+
+        } catch (Exception $ex) {
+            dd($ex);
         }
-
-
-        $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
-        $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
-        return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $tasksWithSubtasks, "members" => $membersInfo, "membersRole" => $members]);
     }
-
-
     private function getTasksWithSubtasks($tasks)
     {
-        $tasksWithSubtasks = collect();
-        foreach ($tasks as $task) {
-            $task->subtasks = $this->getTasksWithSubtasks($task->subtasks);
-            $tasksWithSubtasks->push($task);
+        try {
+            $tasksWithSubtasks = collect();
+            foreach ($tasks as $task) {
+                $task->subtasks = $this->getTasksWithSubtasks($task->subtasks);
+                $tasksWithSubtasks->push($task);
+            }
+            return $tasksWithSubtasks;
+        } catch (Exception $ex) {
+            dd($ex);
         }
-        return $tasksWithSubtasks;
     }
 
 
     public function edit(Project $project)
     {
-
-        return Inertia::render('Project/PopEditProject', ["project" => $project]);
+        try {
+            return Inertia::render('Project/PopEditProject', ["project" => $project]);
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
-
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        $validate = $request->validate([
-            'name' => ['required ', 'max:255'],
-            'description' => ['nullable'],
-        ]);
+        try {
+            $validate = $request->validate([
+                'name' => ['required ', 'max:255'],
+                'description' => ['nullable'],
+            ]);
 
-        $validate['updated_by'] = Auth::id();
-        $project = Project::find($id);
-        $project->update($validate);
+            $validate['updated_by'] = Auth::id();
+            $project = Project::find($id);
+            $project->update($validate);
 
-        $project->activities()->create([
-            'user_id' => Auth::id(),
-            'activity' => ' updated project called ' . $request->name,
-        ]);
-        return redirect()->route('project.show', $id)->with('success', 'Project updated successfully.');
-
+            $project->activities()->create([
+                'user_id' => Auth::id(),
+                'activity' => ' updated project called ' . $request->name,
+            ]);
+            return redirect()->route('project.show', $id)->with('success', 'Project updated successfully.');
+        } catch (Exception $ex) {
+            dd($ex);
+        }
         // return back();
     }
 
@@ -147,7 +179,13 @@ class ProjectController extends Controller
     public function delete($id)
     {
 
-        Project::findOrFail($id)->delete();
+        try {
+
+
+            Project::findOrFail($id)->delete();
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
 
 
@@ -156,94 +194,103 @@ class ProjectController extends Controller
 
     public function showAdditionalColumn(Project $project)
     {
-        $additional_column = json_decode($project->additional_column, true) ?? [];
-
-        return Inertia::render('AdditionalColumn', ["project" => $project, "additional_column" => $additional_column]);
+        try {
+            $additional_column = json_decode($project->additional_column, true) ?? [];
+            return Inertia::render('AdditionalColumn', ["project" => $project, "additional_column" => $additional_column]);
+        } catch (Exception $ex) {
+            dd($ex);
+        }
     }
 
 
 
     public function createAdditionalColumn(Request $request, string $project_id)
     {
-        $validate = $request->validate([
-            'title' => ['required ', 'max:255'],
-            'type' => ['required'],
-        ]);
+        try {
+            $validate = $request->validate([
+                'title' => ['required ', 'max:255'],
+                'type' => ['required'],
+            ]);
 
-        $project = Project::find($project_id);
-        $tasks = $project->tasks()->get();
-        // dd($tasks);
-        $additionalColumn = json_decode($project->additional_column, true) ?? [];
+            $project = Project::find($project_id);
+            $tasks = $project->tasks()->get();
+            // dd($tasks);
+            $additionalColumn = json_decode($project->additional_column, true) ?? [];
+            if (array_search($validate['title'], array_column($additionalColumn, 'title')) !== false) {
+                return back()->withErrors(['title' => 'A title with the same name already exists.']);
+            }
+
+            $newAdditionalColumn = array_merge($additionalColumn, [
+                [
+                    'title' => $validate['title'],
+                    'type' => $validate['type'],
+                ],
+            ]);
+
+            $project->update([
+                'additional_column' => json_encode($newAdditionalColumn),
+            ]);
+
+            foreach ($tasks as $task) {
+                $task->additional_column = [...$task->additional_column, ["title" => $validate['title'], "value" => " ", "type" => $validate['type']]];
+                $task->save();
+            }
 
 
-        if (array_search($validate['title'], array_column($additionalColumn, 'title')) !== false) {
-            return back()->withErrors(['title' => 'A title with the same name already exists.']);
+            $project->activities()->create([
+                'user_id' => Auth::id(),
+                'activity' => auth()->user()->name . ' created a new column called ' . $request->title,
+            ]);
+            return redirect()->back()->with('success', 'Additional column created successfully.');
+        } catch (Exception $ex) {
+            dd($ex);
         }
-
-        $newAdditionalColumn = array_merge($additionalColumn, [
-            [
-                'title' => $validate['title'],
-                'type' => $validate['type'],
-            ],
-        ]);
-
-        $project->update([
-            'additional_column' => json_encode($newAdditionalColumn),
-        ]);
-
-        foreach ($tasks as $task) {
-            $task->additional_column = [...$task->additional_column, ["title" => $validate['title'], "value" => " ", "type" => $validate['type']]];
-            $task->save();
-        }
-
-
-        $project->activities()->create([
-            'user_id' => Auth::id(),
-            'activity' => auth()->user()->name . ' created a new column called ' . $request->title,
-        ]);
-        return redirect()->back()->with('success', 'Additional column created successfully.');
     }
 
 
     public function deleteAdditionalColumn(Request $request, Project $project)
     {
-        $title = $request->input('title');
+        try {
+            $title = $request->input('title');
 
-        $additionalColumn = json_decode($project->additional_column, true) ?? [];
+            $additionalColumn = json_decode($project->additional_column, true) ?? [];
 
-        $newAdditionalColumn = array_filter($additionalColumn, function ($item) use ($title) {
-            return $item['title'] !== $title;
-        });
-
-        // dd($newAdditionalColumn);
-
-
-        $tasks = $project->tasks;
-        foreach ($tasks as $task) {
-            $taskAdditionalColumn = $task->additional_column;
-            // dd($taskAdditionalColumn);
-            $newTaskAdditionalColumn = array_filter($taskAdditionalColumn, function ($item) use ($title) {
+            $newAdditionalColumn = array_filter($additionalColumn, function ($item) use ($title) {
                 return $item['title'] !== $title;
             });
 
+            // dd($newAdditionalColumn);
 
-            $task->update([
-                'additional_column' => $newTaskAdditionalColumn,
+
+            $tasks = $project->tasks;
+            foreach ($tasks as $task) {
+                $taskAdditionalColumn = $task->additional_column;
+                // dd($taskAdditionalColumn);
+                $newTaskAdditionalColumn = array_filter($taskAdditionalColumn, function ($item) use ($title) {
+                    return $item['title'] !== $title;
+                });
+
+
+                $task->update([
+                    'additional_column' => $newTaskAdditionalColumn,
+                ]);
+            }
+
+            $project->update([
+                'additional_column' => json_encode($newAdditionalColumn),
             ]);
+
+
+            $project->activities()->create([
+                'user_id' => Auth::id(),
+                'activity' => auth()->user()->name . ' deleted the additional column ' . $title,
+            ]);
+
+
+            return redirect()->back()->with('success', 'Additional column deleted successfully.');
+        } catch (Exception $ex) {
+            dd($ex);
         }
-
-        $project->update([
-            'additional_column' => json_encode($newAdditionalColumn),
-        ]);
-
-
-        $project->activities()->create([
-            'user_id' => Auth::id(),
-            'activity' => auth()->user()->name . ' deleted the additional column ' . $title,
-        ]);
-
-
-        return redirect()->back()->with('success', 'Additional column deleted successfully.');
     }
 
     // validate on all functions
@@ -251,57 +298,64 @@ class ProjectController extends Controller
 
     public function updateAdditionalColumn(Request $request, Project $project)
     {
+        try {
+            $additional_column = $request->input('additional_column');
+            $titles = array_map('strtolower', array_column($additional_column, 'title'));
+            if (count($titles) !== count(array_unique($titles))) {
+                return back()->withErrors(['title' => 'A title with the same name already exists.']);
+            }
 
-        $additional_column = $request->input('additional_column');
-        $titles = array_map('strtolower', array_column($additional_column, 'title'));
-        if (count($titles) !== count(array_unique($titles))) {
-            return back()->withErrors(['title' => 'A title with the same name already exists.']);
+            $project->update([
+                'additional_column' => json_encode($additional_column),
+            ]);
+
+            // Create an activity log
+            $project->activities()->create([
+                'user_id' => Auth::id(),
+                'activity' => auth()->user()->name . ' updated the additional column ',
+            ]);
+        } catch (Exception $ex) {
+            dd($ex);
         }
-
-        $project->update([
-            'additional_column' => json_encode($additional_column),
-        ]);
-
-        // Create an activity log
-        $project->activities()->create([
-            'user_id' => Auth::id(),
-            'activity' => auth()->user()->name . ' updated the additional column ',
-        ]);
     }
 
     public function updateProjectStatus(Request $request, Project $project)
     {
-
-        $tasks = $project->tasks()->get();
-
-
-        // $members = $project->members()->get();
-        // $owner = $members->where('role', 'owner')->first();
+        try {
+            $tasks = $project->tasks()->get();
 
 
-        // if (auth()->user()->id !== $owner->user_id) {
-        //     return back()->withErrors(['status' => 'Only Owner Can Update The Status']);
-        // }
+            // $members = $project->members()->get();
+            // $owner = $members->where('role', 'owner')->first();
 
 
-
-        $validated = $request->validate([
-            'status' => ['required ', 'in:Pending,In Progress,Completed'],
-        ]);
+            // if (auth()->user()->id !== $owner->user_id) {
+            //     return back()->withErrors(['status' => 'Only Owner Can Update The Status']);
+            // }
 
 
 
-        if ($validated["status"] === 'Completed') {
-            $allTasksCompleted = $tasks->every(function ($task) {
-                return $task->status === 'Completed';
-            });
+            $validated = $request->validate([
+                'status' => ['required ', 'in:Pending,In Progress,Completed'],
+            ]);
 
-            if (!$allTasksCompleted) {
-                return back()->withErrors(['status' => 'Cannot set status to completed , complete all tasks.']);
+
+
+            if ($validated["status"] === 'Completed') {
+                $allTasksCompleted = $tasks->every(function ($task) {
+                    return $task->status === 'Completed';
+                });
+
+                if (!$allTasksCompleted) {
+                    return back()->withErrors(['status' => 'Cannot set status to completed , complete all tasks.']);
+                }
             }
+            $project->update([
+                'status' => $validated['status']
+            ]);
+        } catch (Exception $ex) {
+            dd($ex);
         }
-        $project->update([
-            'status' => $validated['status']
-        ]);
     }
+
 }
