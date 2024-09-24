@@ -11,8 +11,9 @@ import DefaultLayout from "./DefaultLayout";
 export default function AuthenticatedLayout({ header, children, projects }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
+  const [isSideBar, setIsSideBar] = useState(true);
 
-  let asideProjects; 
+  let asideProjects;
   if (projects) {
     asideProjects = projects;
     console.log(asideProjects);
@@ -108,7 +109,13 @@ export default function AuthenticatedLayout({ header, children, projects }) {
         </nav>
       </header>
       <main>
-        <DefaultLayout asideProjects={asideProjects}>{children}</DefaultLayout>
+        <DefaultLayout
+          asideProjects={asideProjects}
+          isSideBar={isSideBar}
+          setIsSideBar={setIsSideBar}
+        >
+          {children}
+        </DefaultLayout>
       </main>
     </div>
   );

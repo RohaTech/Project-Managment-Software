@@ -14,7 +14,7 @@ export default function Dashboard({
     <AuthenticatedLayout>
       <Head title="Dashboard" />
 
-      <div className="grid  cursor-pointer grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid pb-16  cursor-pointer grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title="Total Projects" total={`${projectsCount}`}>
           <svg
             className="size-8"
