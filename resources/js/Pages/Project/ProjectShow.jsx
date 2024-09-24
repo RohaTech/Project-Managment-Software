@@ -62,7 +62,6 @@ export default function ProjectShow({
       updatedRows.splice(toIndex, 0, movedRow);
     }
     setTaskList(updatedRows);
-
     saveOrder(updatedRows);
   };
 

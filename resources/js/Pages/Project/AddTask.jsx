@@ -16,8 +16,7 @@ function AddTask({ setTaskList, projectId }) {
     const handleAddNewTask = () => {
         post("/task", {
             onSuccess: (response) => {
- 
-            console.log("Response Tasks: ",response.props.tasks);
+
             const newTask = response.props.tasks; // Assuming the rhover:bg-gray-200esponse contains the new task
             setTaskList(newTask);
                     },
@@ -32,7 +31,7 @@ function AddTask({ setTaskList, projectId }) {
     <span> +Add New</span>
 </button>
   )
- 
+
 }
 
 export default AddTask;
