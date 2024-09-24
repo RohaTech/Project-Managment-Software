@@ -73,7 +73,7 @@ export default function TaskSearch({ project }) {
   //     </>
   //   );
   return (
-    <div>
+    <div className="z-50">
       <form className="max-w-[120px]">
         <label
           htmlFor="default-search"
