@@ -1,25 +1,50 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import DangerButton from "@/Components/DangerButton";
 import InputError from "@/Components/InputError";
 import { useForm } from "@inertiajs/react";
 import ProjectAdditionalColumnModal from "./ProjectAdditionalColumnModal";
 
-export default function ProjectAdditionalColumn({ project }) {
-  const additional_column = JSON.parse(project.additional_column);
+export default function ProjectAdditionalColumn({
+  project,
+  projectColumn,
+  setProjectColumn,
+}) {
+  //   const additional_column = JSON.parse(project.additional_column);
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
   const [deleteTitle, setDeleteTitle] = useState();
+  const [isDeleting, setIsDeleting] = useState(false);
   const { data, setData, patch, processing, errors, reset } = useForm({
     additional_column:
-      additional_column &&
-      additional_column.map((item) => ({
+      projectColumn &&
+      projectColumn.map((item) => ({
         title: item.title,
         type: item.type,
       })),
   });
-  //   console.log(additional_column);
+  //   useEffect(() => {
+  //     console.log(isDeleting);
+  //     console.log(projectColumn);
+  //   }, [projectColumn, isDeleting]);
+  useEffect(() => {
+    setData({
+      additional_column:
+        projectColumn &&
+        projectColumn.map((item) => ({
+          title: item.title,
+          type: item.type,
+        })),
+    });
+  }, [projectColumn]);
+
   const handleProjectSubmit = (e) => {
     e.preventDefault();
-    patch(route("project.additional-column.update", [project]));
+    patch(
+      route("project.additional-column.update", [project], {
+        onSuccess: () => {
+          console.log("sucesss");
+        },
+      })
+    );
   };
 
   const handleProjectTitleChange = (index, value) => {
@@ -63,7 +88,8 @@ export default function ProjectAdditionalColumn({ project }) {
               setConfirmingUserDeletion={setConfirmingUserDeletion}
               project={project}
               deleteTitle={deleteTitle}
-              additional_column={additional_column}
+              setIsDeleting={setIsDeleting}
+              additional_column={projectColumn}
             />
           </th>
         ))}

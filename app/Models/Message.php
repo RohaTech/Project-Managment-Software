@@ -9,6 +9,7 @@ class Message extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'project_id',
         'task_id',
         'user_id',
         'content',
@@ -36,5 +37,9 @@ class Message extends Model
     public function attachments()
     {
         return $this->hasMany(Attachment::class);
+    }
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 }

@@ -1,24 +1,22 @@
-import { useForm } from '@inertiajs/react';
-import React from 'react'
+import { useForm } from "@inertiajs/react";
+import React from "react";
 
-function AddTask({setTaskList, projectId}) {
-
+function AddTask({ setTaskList, projectId }) {
     const { data, setData, post, reset } = useForm({
-        name: 'My Task',
+        name: "My Task",
         project_id: projectId,
-        assigned: '',
-        status: '',
-        priority: '',
-        due_date: '',
-        description: '',
-        parent_task_id: null
+        assigned: "",
+        status: "",
+        priority: "",
+        due_date: "",
+        description: "",
+        parent_task_id: null,
     });
 
-    const handleAddNewTask = ()=>{
-
-        post('/task',
-            {
+    const handleAddNewTask = () => {
+        post("/task", {
             onSuccess: (response) => {
+ 
             console.log("Response Tasks: ",response.props.tasks);
             const newTask = response.props.tasks; // Assuming the rhover:bg-gray-200esponse contains the new task
             setTaskList(newTask);
@@ -31,9 +29,10 @@ function AddTask({setTaskList, projectId}) {
     className=" transition duration-300 ease-in-out rounded-lg flex items-center px-2 py-1 "
     onClick={() => handleAddNewTask()}
 >
-    <span className=" ">+</span> <span className="">Add New</span>
+    <span> +Add New</span>
 </button>
   )
+ 
 }
 
-export default AddTask
+export default AddTask;

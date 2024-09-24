@@ -13,6 +13,7 @@ class Task extends Model
     protected $fillable = [
         'name',
         'description',
+        'order_column',
         'priority',
         'status',
         'due_date',
@@ -25,7 +26,7 @@ class Task extends Model
         'parent_task_id',
         'additional_column',
         "approved"
- 
+
     ];
     protected $casts = [
         'created_at' => 'datetime',
