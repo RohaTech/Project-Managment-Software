@@ -10,7 +10,7 @@ export default function TaskSearch({ project }) {
     const fetchTasks = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8001/task-search?query=${searchQuery}`,
+          `http://127.0.0.1:8001/task-search?query=${searchQuery}&projectId=${project.id}`,
           {
             method: "GET",
             headers: {
@@ -35,6 +35,10 @@ export default function TaskSearch({ project }) {
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    console.log(fetchedData);
+  }, [fetchedData]);
+
   const mappedTasks =
     fetchedData &&
     fetchedData.tasks.map((task, index) => (
@@ -48,30 +52,6 @@ export default function TaskSearch({ project }) {
       </Link>
     ));
 
-  useEffect(() => {
-    if (mappedTasks) {
-      console.log(mappedTasks.length);
-    }
-  }, [fetchedData]);
-  //   const mappedTasks = (
-  //     <>
-  //       <li className="border border-gray-300 rounded-md p-2 hover:bg-primary/50 cursor-pointer">
-  //         Task 1
-  //       </li>
-  //       <li className="border border-gray-300 rounded-md p-2 hover:bg-primary/50 cursor-pointer">
-  //         Task 1
-  //       </li>
-  //       <li className="border border-gray-300 rounded-md p-2 hover:bg-primary/50 cursor-pointer">
-  //         Task 1
-  //       </li>
-  //       <li className="border border-gray-300 rounded-md p-2 hover:bg-primary/50 cursor-pointer">
-  //         Task 1
-  //       </li>
-  //       <li className="border border-gray-300 rounded-md p-2 hover:bg-primary/50 cursor-pointer">
-  //         Task 1
-  //       </li>
-  //     </>
-  //   );
   return (
     <div className="z-50">
       <form className="max-w-[120px]">
@@ -94,7 +74,7 @@ export default function TaskSearch({ project }) {
             }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 px-3 py-1"
+            className="block w-[130px] text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 pl-2 py-1 mr-3"
             placeholder="Search"
             required
           />
