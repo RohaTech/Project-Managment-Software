@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use App\Models\Attachment;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-use Exception;
+use App\Events\MessageSent;
+
+
 
 class MessageController extends Controller
 {
@@ -93,7 +95,8 @@ class MessageController extends Controller
                 'file_name' => $fileName,
             ]);
 
-        }
+    }    
+        broadcast(event: new MessageSent($message))->toOthers();
         $message->save();
         // return response()->json(['data' => $message->load('attachments')], 201);
     }
