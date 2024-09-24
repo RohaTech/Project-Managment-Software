@@ -224,7 +224,7 @@ export default function ProjectShow({
         <div className="flex gap-x-8 items-center">
           <ProjectStatus project={project} role={role} />
           <div className="flex items-center mr-4 gap-x-4">
-            <PopOvers members={members} project={project} />
+            <PopOvers members={members} project={project} role={role} />
             <button
               onClick={() => setIsOpen(true)}
               className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"

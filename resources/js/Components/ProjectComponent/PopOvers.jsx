@@ -3,12 +3,12 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import MembersEditDialog from "./MembersEditDialog";
 import MembersDeleteDialog from "./MembersDeleteDialog";
 
-function PopOvers({ members, project }) {
+function PopOvers({ members, project, role }) {
   const [isMembersEditDialogOpen, setIsMembersEditDialogOpen] = useState(false);
   const [isMembersDeleteDialogOpen, setIsMembersDeleteDialogOpen] =
     useState(false);
   const [selectedMember, setSelectedMember] = useState();
-
+  console.log(role);
   return (
     <>
       <Popover className="relative ">
@@ -59,7 +59,7 @@ function PopOvers({ members, project }) {
 
                 <div
                   className={`mt-4 ml-2 hidden  justify-start items-center ${
-                    member.role === "owner"
+                    member.role === "owner" || role === "member"
                       ? "hidden"
                       : "group-hover:flex gap-x-5"
                   }`}
@@ -69,7 +69,9 @@ function PopOvers({ members, project }) {
                       setIsMembersEditDialogOpen(true);
                       setSelectedMember(member);
                     }}
-                    className=" group relative"
+                    className={`group relative ${
+                      role === "member" ? "hidden" : ""
+                    }`}
                   >
                     <svg
                       className="size-3.5   fill-primary"
@@ -83,7 +85,7 @@ function PopOvers({ members, project }) {
                     </p>
                   </div>
                   <div
-                    className="group"
+                    className={`group ${role === "owner" ? "" : "hidden"}`}
                     onClick={() => {
                       setIsMembersDeleteDialogOpen(true);
                       setSelectedMember(member);
