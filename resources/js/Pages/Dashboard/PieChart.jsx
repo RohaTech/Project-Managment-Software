@@ -13,9 +13,9 @@ export function PieChart({ taskStats }) {
   const data = [
     ["Task Status", "Count"],
     ["Completed", taskStats.taskCompleted],
-    ["Pending", taskStats.taskPending],
+    ["Not Started", taskStats.taskNotStarted],
     ["In Progress", taskStats.taskInprogress],
-    ["Cancelled", taskStats.taskCancelled], // CSS-style declaration
+    ["Postponed", taskStats.taskPostPoned], // CSS-style declaration
   ];
   return (
     <div className=" min-w-[560px]   rounded-sm border border-stroke   shadow-default    ">
