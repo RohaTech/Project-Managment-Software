@@ -86,6 +86,7 @@ class ProjectController extends Controller
                 'user_id' => Auth::id(),
                 'activity' => auth()->user()->name . ' created project called ' . $request->name,
             ]);
+            return redirect()->route('project.index')->with('success', 'Project updated successfully.');
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -172,13 +173,16 @@ class ProjectController extends Controller
     /**name
      * Remove the specified resource from storage.
      */
-    public function delete($id)
+    public function delete(Project $project)
     {
 
         try {
+            if ($project->created_by !== auth()->user()->id) {
+                return back()->withErrors(['Error' => 'Unauthorized Access']);
+            }
 
-
-            Project::findOrFail($id)->delete();
+            $project->delete();
+            return redirect()->route('project.index')->with('success', 'Project updated successfully.');
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -318,6 +322,8 @@ class ProjectController extends Controller
     public function updateProjectStatus(Request $request, Project $project)
     {
         try {
+
+
             $tasks = $project->tasks()->get();
 
 

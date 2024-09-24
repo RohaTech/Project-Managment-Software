@@ -207,13 +207,16 @@ export default function ProjectShow({
           <div className="capitalize font-bold">{project.name}</div>
           <button
             onClick={handleEditClick}
-            className="hover:bg-IconBg p-2 rounded-lg transition duration-300 ease-in-out text-xs text-primary"
+            className={`bg-IconBg hover:bg-gray-300 py-1 px-4 mt-1 font-bold rounded-lg transition duration-300 ease-in-out text-xs text-primary ${
+              role === "member" ? "hidden" : ""
+            }`}
           >
             Edit
           </button>
           <div>
             {openEdit && (
               <PopEditProject
+                role={role}
                 openEdit={openEdit}
                 setOpenEdit={setOpenEdit}
                 project={project}
