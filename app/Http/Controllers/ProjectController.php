@@ -41,7 +41,6 @@ class ProjectController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
-
     }
 
 
@@ -117,9 +116,6 @@ class ProjectController extends Controller
             // dd($tasksWithSubtasks);
             // dd($orderedTasks);
             return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $orderedTasks, "members" => $membersInfo, "membersRole" => $members]);
-
-
-
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -357,5 +353,4 @@ class ProjectController extends Controller
             dd($ex);
         }
     }
-
 }
