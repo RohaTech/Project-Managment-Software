@@ -14,8 +14,10 @@ export default function DefaultLayout({ children, setIsSideBar, isSideBar }) {
           {/* <!-- ===== Main Content Start ===== --> */}
           <div>
             <div
-              className={`mx-auto p-1 md:p-1 duration-700 ease-linear  2xl:p-10 overscroll-contain overflow-y-auto ${
-                isSideBar ? "translate-x-72.5" : "translate-x-[30px] "
+              className={`mx-auto p-1 md:p-1 duration-700 ease-linear   2xl:p-10 overscroll-contain overflow-y-auto ${
+                isSideBar
+                  ? "translate-x-[160px] w-[1290px]"
+                  : "translate-x-[30px]  "
               }`}
             >
               {children}
