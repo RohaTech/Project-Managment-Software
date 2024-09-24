@@ -51,6 +51,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
+ 
     }
 
     /**
@@ -66,6 +67,7 @@ class TaskController extends Controller
                 'name' => 'required|string|max:255',
                 'project_id' => 'required|exists:projects,id',
                 'assigned' => 'nullable|exists:users,id',
+ 
                 'priority' => 'nullable|string',
                 'due_date' => 'nullable|date',
                 'description' => 'nullable|string', // add this
@@ -90,15 +92,14 @@ class TaskController extends Controller
                     "value" => "  "
                 ];
             }
-
-
-
-
             $project = Project::find($request->project_id);
+            $maxOrder = Task::max('order_column');
 
+            // Task::create($validated);
 
-            Task::create($validated);
-
+            $newTask = Task::create(array_merge($validated, [
+                'order_column' => $maxOrder ? $maxOrder + 1 : 0,  // If no tasks exist, set it to 0
+            ]));
 
             $project->activities()->create([
                 'user_id' => Auth::id(),
@@ -132,6 +133,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
+ 
     }
 
     /**
@@ -166,7 +168,7 @@ class TaskController extends Controller
                 'assigned' => $validated['assigned'] ?? $task->assigned,
                 'status' => $validated['status'] ?? $task->status,
                 'approved' => $validated['approved'] ?? $task->approved,
-                'priority' => $validated['priority'] ?? $task->priority,
+                'priority' => $validated['priority'],
                 'due_date' => $validated['due_date'] ?? $task->due_date,
                 'additional_column' => $validated['additional_column'] ?? $task->additional_column,
                 'updated_by' => auth()->id(),
@@ -203,7 +205,7 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
-
+ 
     {
         try {
             $project = Project::find($task->project_id);
@@ -217,6 +219,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
+ 
     }
     public function updateOrder(Request $request)
     {
