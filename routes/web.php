@@ -52,17 +52,17 @@ Route::get('/dashboard', function () {
 
     $taskStats = [
         'taskCount' => $tasks->count(),
-        'taskCompleted' => $tasks->where('status', 'completed')->count(),
-        'taskPending' => $tasks->where('status', 'pending')->count(),
-        'taskInprogress' => $tasks->where('status', 'inprogress')->count(),
-        'taskCancelled' => $tasks->where('status', 'cancelled')->count(),
+        'taskCompleted' => $tasks->where('status', 'Completed')->count(),
+        'taskNotStarted' => $tasks->where('status', 'Not Started ')->count(),
+        'taskInprogress' => $tasks->where('status', 'In Progress')->count(),
+        'taskPostPoned' => $tasks->where('status', 'Postponed')->count(),
     ];
     $personalTasksStats = [
         'taskCount' => $personalTasks->count(),
-        'taskCompleted' => $personalTasks->where('status', 'completed')->count(),
-        'taskPending' => $personalTasks->where('status', 'pending')->count(),
-        'taskInprogress' => $personalTasks->where('status', 'inprogress')->count(),
-        'taskCancelled' => $personalTasks->where('status', 'cancelled')->count(),
+        'taskCompleted' => $personalTasks->where('status', 'Completed')->count(),
+        'taskNotStarted' => $personalTasks->where('status', 'Not Started')->count(),
+        'taskInprogress' => $personalTasks->where('status', 'In Progress')->count(),
+        'taskPostPoned' => $personalTasks->where('status', 'Postponed')->count(),
     ];
 
     return Inertia::render(
@@ -101,4 +101,3 @@ require __DIR__ . '/task.php';
 require __DIR__ . '/activityLogs.php';
 require __DIR__ . '/subtask.php';
 require __DIR__ . '/message.php';
-

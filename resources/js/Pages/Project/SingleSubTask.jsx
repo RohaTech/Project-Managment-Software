@@ -1,59 +1,69 @@
 import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
 import React from "react";
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop } from "react-dnd";
 
- 
-const ItemType = 'SUbTASK';
+const ItemType = "SUbTASK";
 
-function SingleSubTask({ subtask, handleToggle, openTasks, members, level, role, index, moveRow, parent_task_id }) {
+function SingleSubTask({
+  subtask,
+  handleToggle,
+  openTasks,
+  members,
+  level,
+  role,
+  index,
+  moveRow,
+  parent_task_id,
+}) {
+  const [, ref] = useDrop({
+    accept: ItemType,
+    hover: (draggedItem) => {
+      if (
+        draggedItem.index !== index ||
+        draggedItem.parent_task_id !== parent_task_id
+      ) {
+        moveRow(draggedItem.index, index, parent_task_id);
+        draggedItem.index = index;
+        draggedItem.parent_task_id = parent_task_id;
+      }
+    },
+  });
 
-    const [, ref] = useDrop({
-        accept: ItemType,
-        hover: (draggedItem) => {
-          if (draggedItem.index !== index || draggedItem.parent_task_id !== parent_task_id) {
-            moveRow(draggedItem.index, index, parent_task_id);
-            draggedItem.index = index;
-            draggedItem.parent_task_id = parent_task_id;
-          }
-        },
-      });
+  const [{ isDragging }, drag] = useDrag({
+    type: ItemType,
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
 
-      const [{ isDragging }, drag] = useDrag({
-        type: ItemType,
-        item: { index },
-        collect: (monitor) => ({
-          isDragging: monitor.isDragging(),
-        }),
-      });
-
-const statusOptions = [
+  const statusOptions = [
     { value: "Not Started", label: "Not Started" },
     { value: "In Progress", label: "In Progress" },
     { value: "Completed", label: "Completed" },
-    { value: "Pending", label: "Pending" },
-];
+    { value: "Postponed", label: "Postponed" },
+  ];
   // console.log(tasks);
   const priorityOptions = [
     { value: "Low", label: "Low" },
     { value: "Medium", label: "Medium" },
     { value: "High", label: "High" },
   ];
- 
 
-    const { data, setData, patch, errors } = useForm({
-        name: subtask.name,
-        assigned: subtask.assigned,
-        status: subtask.status,
-        priority: subtask.priority,
-        due_date: subtask.due_date,
-    });
+  const { data, setData, patch, errors } = useForm({
+    name: subtask.name,
+    assigned: subtask.assigned,
+    status: subtask.status,
+    priority: subtask.priority,
+    due_date: subtask.due_date,
+  });
 
-    const handleSubtaskSubmit = (e) => {
-        e.preventDefault();
-        patch(`/task/${subtask.id}`);
-    };
- 
+  const handleSubtaskSubmit = (e) => {
+    e.preventDefault();
+    patch(`/task/${subtask.id}`);
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -62,13 +72,14 @@ const statusOptions = [
     return `${year}-${month}-${day}`;
   };
   return (
-    <tr className={`bg-gray-${100 + level * 50}`}
-        ref={(node) => drag(ref(node))}
-        style={{
-            opacity: isDragging ? 0.5 : 1,
-            cursor: 'move',
-        }}
-        >
+    <tr
+      className={`bg-gray-${100 + level * 50}`}
+      ref={(node) => drag(ref(node))}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        cursor: "move",
+      }}
+    >
       <td className="px-4 py-1 border border-l-0 border-slate-300 flex items-center group transition duration-600 ease-in-out">
         <span
           className="cursor-pointer"
@@ -176,7 +187,6 @@ const statusOptions = [
       </td>
     </tr>
   );
-
 }
 
 export default SingleSubTask;

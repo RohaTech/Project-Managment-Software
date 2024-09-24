@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+
 class TaskController extends Controller
 {
 
@@ -50,8 +51,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
-
-
+ 
     }
 
     /**
@@ -67,7 +67,7 @@ class TaskController extends Controller
                 'name' => 'required|string|max:255',
                 'project_id' => 'required|exists:projects,id',
                 'assigned' => 'nullable|exists:users,id',
-                // 'status' => 'nullable|string',
+ 
                 'priority' => 'nullable|string',
                 'due_date' => 'nullable|date',
                 'description' => 'nullable|string', // add this
@@ -105,7 +105,6 @@ class TaskController extends Controller
                 'user_id' => Auth::id(),
                 'activity' => ' created Task called ' . $request->name,
             ]);
-
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -134,7 +133,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
-
+ 
     }
 
     /**
@@ -155,7 +154,7 @@ class TaskController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'assigned' => 'nullable|exists:users,id',
-                'status' => 'nullable|string',
+                'status' => 'string',
                 'approved' => 'nullable',
                 'priority' => 'nullable|string',
                 'due_date' => 'nullable|date',
@@ -206,6 +205,7 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
+ 
     {
         try {
             $project = Project::find($task->project_id);
@@ -219,7 +219,7 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
-
+ 
     }
     public function updateOrder(Request $request)
     {
@@ -230,5 +230,4 @@ class TaskController extends Controller
                 ->update(['order_column' => $orderedTask['order_column']]);
         }
     }
-
 }

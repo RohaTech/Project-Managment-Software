@@ -47,7 +47,7 @@ function SingleTask({
     { value: "Not Started", label: "Not Started" },
     { value: "In Progress", label: "In Progress" },
     { value: "Completed", label: "Completed" },
-    { value: "Pending", label: "Pending" },
+    { value: "Postponed", label: "Postponed" },
   ];
   // console.log(tasks);
   const priorityOptions = [
