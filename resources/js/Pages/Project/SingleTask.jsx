@@ -1,6 +1,9 @@
 import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
-import React, { useState } from "react";
+ 
+import { useEffect } from "react";
+ 
+ 
 import ApproveButton from "./ApproveButton";
 import { useDrag, useDrop } from "react-dnd";
 
@@ -67,6 +70,10 @@ function SingleTask({
     due_date: task.due_date,
     additional_column: task.additional_column,
   });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
