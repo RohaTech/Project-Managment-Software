@@ -1,9 +1,8 @@
 import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
- 
-import { useEffect } from "react";
- 
- 
+
+import { useEffect, useState } from "react";
+
 import ApproveButton from "./ApproveButton";
 import { useDrag, useDrop } from "react-dnd";
 
@@ -55,11 +54,25 @@ function SingleTask({
   // console.log(tasks);
   const priorityOptions = [
     // {value: null, label: 'Not Set', color: 'bg-gray-300 text-black'},
-    { value: "Low", label: "Low",color: 'bg-[#de2f4c] text-white hover:bg-[#de2f42]' },
-    { value: "Medium", label: "Medium" , color: 'bg-[#fdab3d] text-white hover:bg-[#fdab30]'},
-    { value: "High", label: "High",color: 'bg-[#01c877] text-white hover:bg-[#01c870]' },
+    {
+      value: "Low",
+      label: "Low",
+      color: "bg-[#de2f4c] text-white hover:bg-[#de2f42]",
+    },
+    {
+      value: "Medium",
+      label: "Medium",
+      color: "bg-[#fdab3d] text-white hover:bg-[#fdab30]",
+    },
+    {
+      value: "High",
+      label: "High",
+      color: "bg-[#01c877] text-white hover:bg-[#01c870]",
+    },
   ];
-  const [selectedPriority, setSelectedPriority] = useState(task.priority || null);
+  const [selectedPriority, setSelectedPriority] = useState(
+    task.priority || null
+  );
 
   const { data, setData, patch, errors } = useForm({
     name: task.name,
@@ -205,23 +218,23 @@ function SingleTask({
       </td>
       <td className="border border-r-0 border-slate-300 border-collapse">
         <select
-            className={`border-0 w-40 flex ${
-                selectedPriority === null
-                    ? 'bg-gray-300 text-black'  // Gray background for "Not Set"
-                    : priorityOptions.find(p => p.value === selectedPriority)?.color // Dynamic color for priorities
-            }`}
-            onChange={handlePriorityChange}
-            onBlur={handleSubmit}
-            value={selectedPriority || "null"} // If selectedPriority is null, show "Not Set"
-            style={{
-                padding: '8px', // Adds padding inside the select element
-                lineHeight: '1.8rem', // Increases the space between options when clicked
-                fontSize: '1rem', // Optional: Adjusts font size for larger text
-              }}
+          className={`border-0 w-40 flex ${
+            selectedPriority === null
+              ? "bg-gray-300 text-black" // Gray background for "Not Set"
+              : priorityOptions.find((p) => p.value === selectedPriority)?.color // Dynamic color for priorities
+          }`}
+          onChange={handlePriorityChange}
+          onBlur={handleSubmit}
+          value={selectedPriority || "null"} // If selectedPriority is null, show "Not Set"
+          style={{
+            padding: "8px", // Adds padding inside the select element
+            lineHeight: "1.8rem", // Increases the space between options when clicked
+            fontSize: "1rem", // Optional: Adjusts font size for larger text
+          }}
         >
-             <option value="null" className="bg-gray-300 text-black h-10">
-                Not Set
-            </option>
+          <option value="null" className="bg-gray-300 text-black h-10">
+            Not Set
+          </option>
           {priorityOptions.map((priority, index) => (
             <option
               key={index}
@@ -229,8 +242,8 @@ function SingleTask({
               selected={priority.value === task.priority}
               className={priority.color}
               style={{
-                padding: '10px', // Adds padding inside each option
-                fontSize: '1rem', // Adjust font size
+                padding: "10px", // Adds padding inside each option
+                fontSize: "1rem", // Adjust font size
               }}
             >
               {priority.label}
@@ -249,7 +262,10 @@ function SingleTask({
 
       {data.additional_column &&
         data.additional_column.map((item, index) => (
-          <td key={index} className="px-4 border border-slate-300 border-collapse">
+          <td
+            key={index}
+            className="px-4 border border-slate-300 border-collapse"
+          >
             <input
               value={item.value}
               type={item.type}

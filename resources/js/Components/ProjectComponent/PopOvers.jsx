@@ -8,7 +8,7 @@ function PopOvers({ members, project, role }) {
   const [isMembersDeleteDialogOpen, setIsMembersDeleteDialogOpen] =
     useState(false);
   const [selectedMember, setSelectedMember] = useState();
-  console.log(role);
+
   return (
     <>
       <Popover className="relative ">
