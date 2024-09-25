@@ -84,10 +84,6 @@ function SingleTask({
     additional_column: task.additional_column,
   });
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     patch(`/task/${task.id}`);
