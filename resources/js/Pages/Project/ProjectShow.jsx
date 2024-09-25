@@ -352,7 +352,7 @@ export default function ProjectShow({
                 onClose={() => setIsOpen(false)}
                 className="relative z-50"
               >
-                <div className="fixed inset-0 flex items-center justify-center p-4 ">
+                <div className="fixed inset-0   flex items-center justify-center p-4 ">
                   <Dialog.Panel className="bg-slate-200 rounded-lg p-6 max-w-sm w-[500px]">
                     <DialogTitle>Invite Team Members</DialogTitle>
                     <form className="flex gap-x-2" onSubmit={handleInvite}>
