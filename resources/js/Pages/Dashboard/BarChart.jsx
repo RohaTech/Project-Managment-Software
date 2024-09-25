@@ -12,9 +12,9 @@ export function BarChart({ personalTasksStats }) {
   const data = [
     ["Task Status", "Count"],
     ["Completed", personalTasksStats.taskCompleted],
-    ["Pending", personalTasksStats.taskPending],
+    ["Postponed", personalTasksStats.taskPostPoned],
     ["In Progress", personalTasksStats.taskInprogress],
-    ["Cancelled", personalTasksStats.taskCancelled],
+    ["Not Started", personalTasksStats.taskNotStarted],
   ];
 
   return (

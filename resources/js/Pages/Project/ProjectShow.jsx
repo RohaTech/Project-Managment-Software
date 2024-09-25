@@ -62,7 +62,6 @@ export default function ProjectShow({
       updatedRows.splice(toIndex, 0, movedRow);
     }
     setTaskList(updatedRows);
-
     saveOrder(updatedRows);
   };
 
@@ -236,13 +235,16 @@ export default function ProjectShow({
           <div className="capitalize font-bold">{project.name}</div>
           <button
             onClick={handleEditClick}
-            className="hover:bg-IconBg p-2 rounded-lg transition duration-300 ease-in-out text-xs text-primary"
+            className={`bg-IconBg hover:bg-gray-300 py-1 px-4 mt-1 font-bold rounded-lg transition duration-300 ease-in-out text-xs text-primary ${
+              role === "member" ? "hidden" : ""
+            }`}
           >
             Edit
           </button>
           <div>
             {openEdit && (
               <PopEditProject
+                role={role}
                 openEdit={openEdit}
                 setOpenEdit={setOpenEdit}
                 project={project}
@@ -253,7 +255,7 @@ export default function ProjectShow({
         <div className="flex gap-x-8 items-center">
           <ProjectStatus project={project} role={role} />
           <div className="flex items-center mr-4 gap-x-4">
-            <PopOvers members={members} project={project} />
+            <PopOvers members={members} project={project} role={role} />
             <button
               onClick={() => setIsOpen(true)}
               className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"
