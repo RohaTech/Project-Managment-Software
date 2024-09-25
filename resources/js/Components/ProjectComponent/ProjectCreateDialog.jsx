@@ -41,16 +41,16 @@ export default function ProjectCreateDialog({
         <div className="flex min-h-full   items-center justify-end p-4">
           <DialogPanel
             transition
-            className="w-[800px] h-[500px]   absolute top-20  left-[35%] mt-16 mr-16   rounded-xl  bg-white   border border-gray   py-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+            className="w-[1200px] h-[600px]  absolute top-20  left-[20%] mt-4 mr-16   rounded-xl  bg-white   border border-gray   py-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
           >
             <DialogTitle
               as="h3"
-              className="text-2xl flex items-center justify-between px-6 font-semibold py-3 text-center  text-primary"
+              className="text-2xl flex items-center justify-between px-8 font-semibold py-3 text-center  text-primary"
             >
               New project
               <svg
                 onClick={close}
-                className="size-5 cursor-pointer"
+                className="w-6 h-4 cursor-pointer"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 384 512"
               >
@@ -61,40 +61,51 @@ export default function ProjectCreateDialog({
               onSubmit={submit}
               className="mx-auto flex flex-col  ml-8 mt-8 justify-center"
             >
-              <div>
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="name"
-                >
-                  Project name
-                </label>
+              <div className="grid grid-cols-4  gap-x-8 px-4">
+                <div className="col-span-2">
+                  <div>
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="name"
+                    >
+                      Project name
+                    </label>
 
-                <input
-                  id="name"
-                  name="name"
-                  className="appearance-none block w-[500px] bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  value={data.name}
-                  onChange={(e) => setData("name", e.target.value)}
-                  isFocused={true}
-                />
+                    <input
+                      id="name"
+                      name="name"
+                      className="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      value={data.name}
+                      onChange={(e) => setData("name", e.target.value)}
+                      isFocused={true}
+                    />
 
-                <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.name} className="mt-2" />
+                  </div>
+
+                  <div className="mt-4">
+                    <InputLabel htmlFor="description" value="Description" />
+
+                    <input
+                      id="description"
+                      name="description"
+                      className="appearance-none block h-[150px] w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      value={data.description}
+                      onChange={(e) => setData("description", e.target.value)}
+                    ></input>
+
+                    <InputError message={errors.description} className="mt-2" />
+                  </div>
+                </div>
+                <div className="col-span-2 shadow-md shadow-gray-300 ">
+                  <img
+                    src="/image/create_project_image.png"
+                    alt="create project"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
-
-              <div className="mt-4">
-                <InputLabel htmlFor="description" value="Description" />
-
-                <input
-                  id="description"
-                  name="description"
-                  className="appearance-none block h-[150px] w-[500px] bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  value={data.description}
-                  onChange={(e) => setData("description", e.target.value)}
-                ></input>
-
-                <InputError message={errors.description} className="mt-2" />
-              </div>
-              <div className="flex items-center justify-end mt-4 mr-28">
+              <div className="flex items-center justify-end mt-8 mr-24 ">
                 <PrimaryButton
                   className="ms-4 bg-primary"
                   disabled={processing}
