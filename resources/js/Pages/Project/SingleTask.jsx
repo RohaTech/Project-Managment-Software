@@ -1,6 +1,9 @@
 import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
+ 
 import { useEffect } from "react";
+ 
+ 
 import ApproveButton from "./ApproveButton";
 import { useDrag, useDrop } from "react-dnd";
 
@@ -51,10 +54,12 @@ function SingleTask({
   ];
   // console.log(tasks);
   const priorityOptions = [
-    { value: "Low", label: "Low" },
-    { value: "Medium", label: "Medium" },
-    { value: "High", label: "High" },
+    // {value: null, label: 'Not Set', color: 'bg-gray-300 text-black'},
+    { value: "Low", label: "Low",color: 'bg-[#de2f4c] text-white hover:bg-[#de2f42]' },
+    { value: "Medium", label: "Medium" , color: 'bg-[#fdab3d] text-white hover:bg-[#fdab30]'},
+    { value: "High", label: "High",color: 'bg-[#01c877] text-white hover:bg-[#01c870]' },
   ];
+  const [selectedPriority, setSelectedPriority] = useState(task.priority || null);
 
   const { data, setData, patch, errors } = useForm({
     name: task.name,
@@ -79,17 +84,25 @@ function SingleTask({
     newAdditionalColumn[index].value = value;
     setData("additional_column", newAdditionalColumn);
   };
+
+  const handlePriorityChange = (e) => {
+    const selectedValue = e.target.value === "null" ? null : e.target.value;
+    setSelectedPriority(selectedValue);
+    console.log("Selected ", selectedValue);
+    setData("priority", selectedValue);
+  };
+
   return (
     <tr
       key={task.id}
-      className="border-l-2 border-l-blue-500"
+      className="border-l-2 border-l-blue-500 border-collapse"
       ref={(node) => drag(ref(node))}
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",
       }}
     >
-      <td className="px-4 py-2 border border-l-0 border-slate-300 flex items-center group">
+      <td className="px-4 border border-l-0 border-slate-300 flex items-center group border-collapse w-[390px]">
         <span className="cursor-pointer" onClick={() => handleToggle(task.id)}>
           {openTasks[task.id] ? (
             <svg
@@ -112,12 +125,13 @@ function SingleTask({
           )}
         </span>
         <form onSubmit={handleSubmit} className="flex-grow">
-          <TextInput
+          <input
+            type="text"
             value={data.name}
             id="name"
             onChange={(e) => setData("name", e.target.value)}
             onBlur={handleSubmit}
-            className="border-0 w-full focus:ring-0 focus:border-slate-300"
+            className="border-0 w-full focus:ring-0 focus:outline-none focus:border-slate-300"
           />
         </form>
         <Link href={route("task.show", task.id)}>
@@ -134,7 +148,7 @@ function SingleTask({
           </svg>
         </Link>
       </td>
-      <td className="px-4 py-2 border border-slate-300">
+      <td className="px-4 border border-slate-300 border-collapse">
         <select
           className="border-0"
           onChange={(e) => setData("assigned", e.target.value)}
@@ -151,7 +165,7 @@ function SingleTask({
           ))}
         </select>
       </td>
-      <td className="px-4 py-2 border border-slate-300">
+      <td className="px-4 border border-slate-300 border-collapse">
         <select
           className="border-0"
           onChange={(e) => {
@@ -189,27 +203,45 @@ function SingleTask({
           <ApproveButton ApproveData={data} task={task} />
         )}
       </td>
-      <td className="px-4 py-2 border border-r-0 border-slate-300">
+      <td className="border border-r-0 border-slate-300 border-collapse">
         <select
-          className="border-0"
-          onChange={(e) => setData("priority", e.target.value)}
-          onBlur={handleSubmit}
+            className={`border-0 w-40 flex ${
+                selectedPriority === null
+                    ? 'bg-gray-300 text-black'  // Gray background for "Not Set"
+                    : priorityOptions.find(p => p.value === selectedPriority)?.color // Dynamic color for priorities
+            }`}
+            onChange={handlePriorityChange}
+            onBlur={handleSubmit}
+            value={selectedPriority || "null"} // If selectedPriority is null, show "Not Set"
+            style={{
+                padding: '8px', // Adds padding inside the select element
+                lineHeight: '1.8rem', // Increases the space between options when clicked
+                fontSize: '1rem', // Optional: Adjusts font size for larger text
+              }}
         >
+             <option value="null" className="bg-gray-300 text-black h-10">
+                Not Set
+            </option>
           {priorityOptions.map((priority, index) => (
             <option
               key={index}
               value={priority.value}
               selected={priority.value === task.priority}
+              className={priority.color}
+              style={{
+                padding: '10px', // Adds padding inside each option
+                fontSize: '1rem', // Adjust font size
+              }}
             >
               {priority.label}
             </option>
           ))}
         </select>
       </td>
-      <td className="px-4 py-2 border border-slate-300">
+      <td className="px-4 border border-slate-300 border-collapse">
         <input
           type="date"
-          value={task.due_date ? formatDate(task.due_date) : ""}
+          value={task.due_date ? formatDatprioritye(task.due_date) : ""}
           onChange={(e) => setData("due_date", e.target.value)}
           onBlur={handleSubmit}
         />
@@ -217,7 +249,7 @@ function SingleTask({
 
       {data.additional_column &&
         data.additional_column.map((item, index) => (
-          <td key={index} className="px-4 py-2 border border-slate-300">
+          <td key={index} className="px-4 border border-slate-300 border-collapse">
             <input
               value={item.value}
               type={item.type}
