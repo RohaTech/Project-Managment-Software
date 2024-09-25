@@ -26,23 +26,23 @@ class MessageController extends Controller
             dd($ex);
         }
     }
- 
- 
-    public function showProjectMessages($id){
+
+
+    public function showProjectMessages($id)
+    {
         $project = Project::find($id);
         $messages = Message::where('project_id', $project->id)->with('user', 'attachments')->get();
         return Inertia::render('Message/Message', [
-            'project'=> $project,
-            'project_id'=>$project->id,
+            'project' => $project,
+            'project_id' => $project->id,
             'messages' => $messages,
             'user' => auth()->user(),
             'user_id' => Auth::id(),
         ]);
-       
-
     }
 
-    public function showTaskMessages(Task $task){
+    public function showTaskMessages(Task $task)
+    {
         $messages = Message::where('task_id', $task->id)->with('user', 'attachments')->get();
 
         return Inertia::render('Message/Message', [
@@ -50,17 +50,14 @@ class MessageController extends Controller
             'user' => auth()->user(),
             'user_id' => Auth::id(),
         ]);
-       
-
- 
     }
 
 
     public function store(Request $request)
-    {   
+    {
         $request->validate([
             'task_id' => 'nullable|exists:tasks,id',
-            'project_id' => 'nullable|exists:projects,id',            
+            'project_id' => 'nullable|exists:projects,id',
             'content' => 'nullable|string',
             'attachment' => 'nullable|file|max:10240', // max 10 MB, adjust as needed
         ]);
@@ -70,9 +67,9 @@ class MessageController extends Controller
             return response()->json(['error' => 'Either task_id or project_id is required'], 400);
         }
         // Create a new message
- 
-    
-        $message=Message::create([
+
+
+        $message = Message::create([
             'project_id' => $request->input('project_id'),
             'task_id' => $request->input('task_id'),
             'user_id' => auth()->id(),
@@ -94,9 +91,8 @@ class MessageController extends Controller
                 'file_path' => $filePath,
                 'file_name' => $fileName,
             ]);
-
-    }    
-        broadcast(event: new MessageSent($message))->toOthers();
+        }
+        // broadcast(event: new MessageSent($message))->toOthers();
         $message->save();
         // return response()->json(['data' => $message->load('attachments')], 201);
     }

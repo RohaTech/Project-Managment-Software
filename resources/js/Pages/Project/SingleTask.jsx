@@ -88,6 +88,7 @@ function SingleTask({
     additional_column: task.additional_column,
   });
 
+ 
   const isDatePassed = (dateString) => {
     const today = new Date(); // Current date and time
     const inputDate = new Date(dateString); // Convert the input string to a Date object
@@ -100,6 +101,7 @@ function SingleTask({
   };
 
 
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     patch(`/task/${task.id}`);

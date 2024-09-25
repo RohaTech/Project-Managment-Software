@@ -76,11 +76,15 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
     ));
 
   return (
-    <div className="fixed left-0 z-[50] h-full   ">
+    <div
+      className={`fixed left-0 z-[50] h-full  ${
+        !isSideBar ? "    w-0   " : "flex "
+      }   `}
+    >
       <aside
         ref={sidebar}
         className={`z-[50]       origin-right  bg-[#f7f8f9] h-screen   w-72.5 flex-col overflow-hidden duration-700 ease-linear ${
-          !isSideBar ? " -translate-x-[300px]    " : "flex "
+          !isSideBar ? " -translate-x-[300px]  z-0   " : "flex "
         }   `}
       >
         <div className="no-scrollbar  flex flex-col overflow-y-auto duration-300 ease-linear">
@@ -279,7 +283,7 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
           setIsSideBar(true);
         }}
         className={`  cursor-pointer    left-0  h-full  origin-left    w-[50px] flex-col overflow-hidden bg-[#f7f8f9] duration-1000  ease-linear ${
-          isSideBar ? "w-0 opacity-0 " : "absolute top-1"
+          isSideBar ? "w-0 hidden " : "absolute top-1"
         }`}
       >
         <svg
