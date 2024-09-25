@@ -442,12 +442,11 @@ export default function ProjectShow({
                       <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                         Status
                       </th>
-
-                      <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">
-                        Priority
-                      </th>
                       <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                         Due Date
+                      </th>
+                      <th className="w-7/50 px-4 py-2 border border-r-0 text-left border-slate-300">
+                        Priority
                       </th>
                       <ProjectAdditionalColumn
                         project={project}
