@@ -143,6 +143,35 @@ export default function ProjectShow({
     );
   };
 
+  
+  const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const handleInvite = (e) => {
+    e.preventDefault();
+    setSuccessMessage("Sending invitation...");
+    axios
+      .post("http://127.0.0.1:8001/api/invite-member", {
+        email,
+        project: project.id,
+      })
+      .then((response) => {
+        setSuccessMessage(
+          response.data.message||  "Invitation sent successfully!"
+        );
+        setEmail("");
+      })
+      .catch((error) => {
+        console.error("Error sending invitation:", error);
+        setErrorMessage(
+          error.response?.data?.message 
+           || "There was an error sending the invitation. Please try again."
+        );
+      });
+  };
+
+
   return (
     <AuthenticatedLayout>
       <div className="flex justify-between px-2 py-1 border-b border-[#eceff3]">
@@ -255,18 +284,33 @@ export default function ProjectShow({
                 <div className="fixed inset-0 flex items-center justify-center p-4 ">
                   <Dialog.Panel className="bg-slate-200 rounded-lg p-6 max-w-sm w-[500px]">
                     <DialogTitle>Invite Team Members</DialogTitle>
-                    <form className="flex gap-x-2">
+                    <form className="flex gap-x-2" onSubmit={handleInvite}>
                       <TextInput
                         id="email"
                         name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="mt-1 block w-full rounded-md border-gray-300 bg-slate-200 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         placeholder="Enter the email to invite"
                         isFocused={true}
                       />
-                      <PrimaryButton className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded-md shadow-md transition duration-300 ease-in-out">
+                      <PrimaryButton
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded-md shadow-md transition duration-300 ease-in-out"
+                      >
                         Invite
                       </PrimaryButton>
                     </form>
+                    {errorMessage && (
+                      <p className="mt-4 text-center text-red-500">
+                        {errorMessage}
+                      </p>
+                    )}
+                    {successMessage && (
+                      <p className="mt-4 text-center text-green-500">
+                        {successMessage}
+                      </p>
+                    )}
                   </Dialog.Panel>
                 </div>
               </Dialog>
