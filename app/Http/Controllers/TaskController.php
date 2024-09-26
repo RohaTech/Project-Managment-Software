@@ -51,7 +51,6 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
- 
     }
 
     /**
@@ -67,7 +66,7 @@ class TaskController extends Controller
                 'name' => 'required|string|max:255',
                 'project_id' => 'required|exists:projects,id',
                 'assigned' => 'nullable|exists:users,id',
- 
+
                 'priority' => 'nullable|string',
                 'due_date' => 'nullable|date',
                 'description' => 'nullable|string', // add this
@@ -133,7 +132,6 @@ class TaskController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
- 
     }
 
     /**
@@ -149,7 +147,12 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        // dd($request);
+        $project = $task->project()->first();
+        $members = ProjectMember::where("user_id", auth()->user()->id)->where('project_id', $project->id)->first();
+
+        if ($members->role === "member" && $task->assigned !== auth()->user()->id) {
+            return back()->withErrors(['Error' => 'you are not authorized to change']);
+        }
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -205,7 +208,7 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
- 
+
     {
         try {
             $project = Project::find($task->project_id);
@@ -215,11 +218,10 @@ class TaskController extends Controller
                 'activity' => ' Deleted Task called ' . $task->name,
             ]);
             $task->delete();
-            return redirect()->route('project.show',$task->project_id)->with('success', 'Task deleted successfully.');
+            return redirect()->route('project.show', $task->project_id)->with('success', 'Task deleted successfully.');
         } catch (Exception $ex) {
             dd($ex);
         }
- 
     }
     public function updateOrder(Request $request)
     {

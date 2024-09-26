@@ -65,33 +65,30 @@ class ProjectMemberController extends Controller
 
     public function update(Request $request, Project $project)
     {
-        try {
-            $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
 
-            if ($currentMember->role === "member") {
-                return back()->withErrors(['Error' => 'Unauthorized Access']);
-            }
+        $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
 
-            $validated = $request->validate([
-                'role' => 'sometimes|required|string|in:admin,member',
-                'user_id' => '|required|numeric'
-            ]);
-
-            $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
-
-
-            $projectMember->update([
-                'role' => $validated['role']
-            ]);
-
-
-            $project->activities()->create([
-                'user_id' => Auth::id(),
-                'activity' => ' Edited ' . User::find($validated['user_id'])->name . ' Role to  ' . $validated['role'],
-            ]);
-        } catch (Exception $ex) {
-            dd($ex);
+        if ($currentMember->role === "member") {
+            return back()->withErrors(['Error' => 'Unauthorized Access']);
         }
+
+        $validated = $request->validate([
+            'role' => 'sometimes|required|string|in:admin,member',
+            'user_id' => '|required|numeric'
+        ]);
+
+        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
+
+
+        $projectMember->update([
+            'role' => $validated['role']
+        ]);
+
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Edited ' . User::find($validated['user_id'])->name . ' Role to  ' . $validated['role'],
+        ]);
     }
 
     public function destroy(Request $request, Project $project)
