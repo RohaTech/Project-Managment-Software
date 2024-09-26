@@ -18,7 +18,6 @@ export default function ProjectAdditionalColumnModal({
 
   const handlePatch = (e) => {
     e.preventDefault();
-    // window.location.reload();
 
     patch(
       route("project.additional-column.delete", [project], {
@@ -27,7 +26,10 @@ export default function ProjectAdditionalColumnModal({
         },
       })
     );
-    setIsDeleting((prevIsDeleting) => !prevIsDeleting);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   function open() {
@@ -71,6 +73,7 @@ export default function ProjectAdditionalColumnModal({
 
                 <PrimaryButton
                   className="ms-3 bg-red-500"
+                  disabled={processing}
                   onClick={(e) => {
                     setData("title", deleteTitle);
                     handlePatch(e);

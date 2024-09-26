@@ -70,14 +70,14 @@ class ApiController extends Controller
                     $query->where('user_id', $userId);
                 });
 
-                $allTasks = Task::whereIn('project_id', $allProjects->pluck('id'))->get();
+                $allTasks = Task::whereIn('project_id', $allProjects->pluck('id'))->whereNull('parent_task_id')->get();
 
-                $subtasks = SubTask::whereIn('task_id', $allTasks->pluck('id'))
+                $subtasks = Task::whereIn('parent_task_id', $allTasks->pluck('id'))
                     ->when($query, function ($q) use ($query) {
                         $q->where('name', 'like', '%' . $query . '%');
                     })->latest()
                     ->get();
-                $tasks = Task::whereIn('project_id', $allProjects->pluck('id'))
+                $tasks = Task::whereIn('project_id', $allProjects->pluck('id'))->whereNull('parent_task_id')
                     ->when($query, function ($q) use ($query) {
                         $q->where('name', 'like', '%' . $query . '%');
                     })->latest()

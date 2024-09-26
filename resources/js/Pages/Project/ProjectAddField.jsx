@@ -21,6 +21,7 @@ export default function ProjectAddField({
       onSuccess: (response) => {
         reset();
         close();
+        window.location.reload();
         const responseProjectColumn =
           response.props.projects[0].additional_column;
         setProjectColumn(JSON.parse(responseProjectColumn));
