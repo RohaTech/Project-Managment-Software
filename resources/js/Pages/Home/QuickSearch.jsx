@@ -10,7 +10,7 @@ export const QuickSearch = () => {
     const fetchProjects = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/home/all-search?query=${searchQuery}`,
+          `http://127.0.0.1:8001/home/all-search?query=${searchQuery}`,
           {
             method: "GET",
             headers: {
