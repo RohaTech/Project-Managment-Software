@@ -38,6 +38,7 @@ function SingleTask({
   });
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -115,6 +116,7 @@ function SingleTask({
   };
 
   const handleSubmit = (e) => {
+    setIsErrorMessage(true);
     e.preventDefault();
     patch(`/task/${task.id}`);
   };
@@ -140,16 +142,37 @@ function SingleTask({
     });
   };
 
+  useEffect(() => {
+    console.log(isErrorMessage);
+  }, [isErrorMessage]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsErrorMessage(false);
+    }, 2000);
+
+    if (isErrorMessage) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    }
+  }, [isErrorMessage]);
+
   return (
     <tr
       key={task.id}
-      className="border-l-2 border-l-blue-500 border-collapse text-xs"
+      className="border-l-2 border-l-blue-500 border-collapse text-xs relative"
       ref={(node) => drag(ref(node))}
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",
       }}
     >
+      {errors.Error && isErrorMessage && (
+        <div className="shadow-md rounded-md text-xs mt-1 absolute -top-[35px] bg-red-500 text-white p-2 left-[400px]">
+          {errors.Error}
+        </div>
+      )}
       <td className="px-4 border border-l-0 border-slate-300 flex items-center group border-collapse w-[390px] ">
         <span className="cursor-pointer" onClick={() => handleToggle(task.id)}>
           {openTasks[task.id] ? (
