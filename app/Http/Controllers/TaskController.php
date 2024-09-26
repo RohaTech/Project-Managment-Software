@@ -215,7 +215,7 @@ class TaskController extends Controller
                 'activity' => ' Deleted Task called ' . $task->name,
             ]);
             $task->delete();
-            return redirect()->route('task.index')->with('success', 'Task deleted successfully.');
+            return redirect()->route('project.show',$task->project_id)->with('success', 'Task deleted successfully.');
         } catch (Exception $ex) {
             dd($ex);
         }
