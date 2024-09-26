@@ -142,7 +142,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     }
   };
   return (
-    <div>
+    <AuthenticatedLayout>
       <div className=" mx-auto  overflow-hidden overflow-y-hidden h-[100%] ">
         <div className="sticky-task-name-bar fixed">
           <div className="flex justify-between sticky top-0 z-50 border-b w-[100%] shadow-slate-300 h-[70px] mb-0 fixed">
@@ -559,7 +559,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
           </form>
         </div>
       </div>
-    </div>
+    </AuthenticatedLayout>
   );
 };
 

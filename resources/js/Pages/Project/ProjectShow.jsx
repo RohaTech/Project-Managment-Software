@@ -567,7 +567,6 @@ export default function ProjectShow({
             </div>
           </div>
         </div>
-        {/* <TaskDetail /> */}
       </div>
     </AuthenticatedLayout>
   );

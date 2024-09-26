@@ -151,7 +151,7 @@ function SingleTask({
       setIsErrorMessage(false);
     }, 2000);
 
-    if (isErrorMessage) {
+    if (isErrorMessage && role === "member") {
       setTimeout(() => {
         window.location.reload();
       }, 3000);
