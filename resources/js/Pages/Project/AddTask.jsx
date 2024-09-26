@@ -25,7 +25,7 @@ function AddTask({ setTaskList, projectId }) {
         }
   return (
     <button
-    className=" transition duration-300 ease-in-out rounded-lg flex items-center px-2 py-1 "
+    className=" transition duration-300 ease-in-out rounded-lg flex items-center px-2 py-1 text-sm"
     onClick={() => handleAddNewTask()}
 >
     <span> +Add New</span>

@@ -24,7 +24,7 @@ function AddSubTask({parentTaskId, setTaskList, projectId}) {
     }
 
   return (
-    <td colSpan="5" className="px-4 py-2 border border-slate-300 cursor-pointer pl-10 border-l-0" onClick={() => handleAddNewTask(parentTaskId)}>
+    <td colSpan="5" className="px-4 py-2 border border-slate-300 text-sm transition duration-200 ease-in-out w-fit cursor-pointer pl-10 border-l-0" onClick={() => handleAddNewTask(parentTaskId)}>
     + Add Subtask
 </td>
     )
