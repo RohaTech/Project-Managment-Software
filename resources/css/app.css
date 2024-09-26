@@ -7,4 +7,12 @@
     left: 0;
     background-color: white;
     z-index: 10;
-  }
+}
+.sticky-task-name-bar {
+    position: sticky;
+    top: 80px; /* adjust this value to match the height of your navbar */
+    z-index: 1000; /* adjust this value to ensure it's higher than the navbar's z-index */
+    background-color: #fff; /* add a background color to ensure it covers the content underneath */
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}

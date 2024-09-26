@@ -92,7 +92,6 @@ class MessageController extends Controller
                 'file_name' => $fileName,
             ]);
         }
-        // broadcast(event: new MessageSent($message))->toOthers();
         $message->save();
         // return response()->json(['data' => $message->load('attachments')], 201);
     }
