@@ -9,15 +9,7 @@ import { Textarea } from "@headlessui/react";
 
 function PopEditProject({ openEdit, setOpenEdit, project, role }) {
   console.log("PopEditProject openEdit:", openEdit);
-  const {
-    data,
-    setData,
-    patch,
-    delete: destroy,
-    processing,
-    errors,
-    reset,
-  } = useForm({
+  const { data, setData, patch, processing, errors, reset } = useForm({
     name: project.name,
     description: project.description,
   });
@@ -26,12 +18,6 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
     e.preventDefault();
     patch(route("project.update", [project.id]));
     setOpenEdit(false); // Close the dialog after submission
-  };
-  const deleteProject = (e) => {
-    e.preventDefault();
-    destroy(route("project.delete", [project]), {
-      onSuccess: () => setOpenEdit(false),
-    });
   };
 
   return (
@@ -89,15 +75,6 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
                 disabled={processing}
               >
                 Save
-              </PrimaryButton>
-              <PrimaryButton
-                onClick={deleteProject}
-                className={`bg-red-500  text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out ${
-                  role === "owner" ? "" : "hidden"
-                }`}
-                disabled={processing}
-              >
-                delete
               </PrimaryButton>
             </div>
           </form>
