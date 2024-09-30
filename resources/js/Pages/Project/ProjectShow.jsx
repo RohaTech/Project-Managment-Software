@@ -435,7 +435,7 @@ export default function ProjectShow({
                   <table className="w-full border-collapse mb-40">
                     <thead>
                       <tr>
-                        <th className="w-[390px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300 sticky-column">
+                        <th className="w-[350px] px-4 py-2 border border-l-4 border-l-sky-500 text-left border-slate-300 sticky-column">
                           Task Name
                         </th>
                         <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
