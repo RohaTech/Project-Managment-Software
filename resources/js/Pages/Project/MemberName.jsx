@@ -33,7 +33,7 @@ const MemberName = ({members, setData, task, handleAssignedSubmit}) => {
                   e.preventDefault();
                   setData('assigned', parseInt(member.id));
                   setSelectedMember(member);
-                  handleAssignedSubmit();
+                //   handleAssignedSubmit();
                   close(); // Manually close the menu
                 }}
                 className={`block px-4 py-2 text-sm text-gray-700 w-full  text-left bg-slate-300 z-100 hover:bg-slate-400 transition duration-400 ease-in-out`}
@@ -49,7 +49,7 @@ const MemberName = ({members, setData, task, handleAssignedSubmit}) => {
                 e.preventDefault();
                 setData('assigned', null);
                 setSelectedMember(null);
-                handleAssignedSubmit();
+                // handleAssignedSubmit();
                 close(); // Manually close the menu
               }}
               className="block px-4 py-2 text-sm text-red-700 w-full text-left bg-red-200 z-100"

@@ -126,6 +126,7 @@ function SingleTask({
   const handleAssignedSubmit = ()=>{
     setIsErrorMessage(true);
     patch(`/task/${task.id}`);
+    return false;
   }
 
   const handleTaskTitleChange = (index, value) => {
