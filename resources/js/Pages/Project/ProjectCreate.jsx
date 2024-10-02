@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import ProjectCreateDialog from "@/Components/ProjectComponent/ProjectCreateDialog";
 
 export default function Project() {
-  const [isDeleteDialog, setIsDeleteDialog] = useState(false);
+  const [isCreateDialog, setIsisCreateDialog] = useState(false);
   return (
     <AuthenticatedLayout>
       <div className="flex flex-col items-center  min-h-[600px] -translate-y-10  justify-center ">
@@ -21,7 +21,7 @@ export default function Project() {
         </div>
         <div className="flex gap-x-4 mt-8 cursor-pointer">
           <div
-            onClick={() => setIsDeleteDialog(true)}
+            onClick={() => setIsisCreateDialog(true)}
             className="h-[220px] rounded-xl w-[150px] flex flex-col justify-center items-center hover:shadow-xl  hover:-translate-y-4   duration-300 ease-linear hover:bg-[#f8f7f7]"
           >
             <div className="size-[120px] border-[3px] border-dotted border-[#edeae9] rounded-lg mb-4 flex justify-center items-center ">
@@ -125,7 +125,11 @@ export default function Project() {
               <h2 className="text-[#afabac] text-sm">Choose From Library</h2>
             </div>
           </div>
-          <div className="h-[220px] rounded-xl w-[150px] flex flex-col justify-center items-center hover:-translate-y-4 hover:shadow-xl group  duration-300 ease-linear hover:bg-[#f8f7f7]">
+
+          <Link
+            href={route("project.copy")}
+            className="h-[220px] rounded-xl w-[150px] flex flex-col justify-center items-center hover:-translate-y-4 hover:shadow-xl group  duration-300 ease-linear hover:bg-[#f8f7f7]"
+          >
             <div className="size-[120px] border border-[#edeae9] rounded-lg mb-4 flex justify-center items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -187,12 +191,12 @@ export default function Project() {
               <h1 className="font-semibold ">Copy Project</h1>
               <h2 className="text-[#afabac] text-sm">Duplicate project</h2>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
       <ProjectCreateDialog
-        isDeleteDialog={isDeleteDialog}
-        setIsDeleteDialog={setIsDeleteDialog}
+        isCreateDialog={isCreateDialog}
+        setIsisCreateDialog={setIsisCreateDialog}
       />
     </AuthenticatedLayout>
   );

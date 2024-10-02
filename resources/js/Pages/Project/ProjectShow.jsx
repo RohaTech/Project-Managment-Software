@@ -24,6 +24,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskSearch from "@/Components/ProjectComponent/TaskSearch";
 import ProjectDeletePop from "@/Components/ProjectComponent/ProjectDeletePop";
 import TaskDetail from "../Task/TaskDetail";
+import ProjectShowCopyDialog from "@/Components/ProjectComponent/ProjectShowCopyDialog";
 
 export default function ProjectShow({
   project,
@@ -39,6 +40,7 @@ export default function ProjectShow({
   const [openTasks, setOpenTasks] = useState({}); // Single state object
   const [taskList, setTaskList] = useState(tasks);
   const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
+  const [isCopyOpen, setIsCopyOpen] = useState(false);
   const { auth } = usePage().props;
 
   const [projectColumn, setProjectColumn] = useState(
@@ -88,6 +90,10 @@ export default function ProjectShow({
   const handleEditClick = (e) => {
     e.preventDefault(); // Prevent default link behavior
     setOpenEdit(true); // Open the edit modal
+  };
+  const handleEditDuplicate = (e) => {
+    e.preventDefault(); // Prevent default link behavior
+    setIsCopyOpen(true); // Open the edit modal
   };
 
   const handleDeleteClick = (e) => {
@@ -276,7 +282,10 @@ export default function ProjectShow({
                     </button>
                   </MenuItem>
                   <MenuItem>
-                    <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 ">
+                    <button
+                      onClick={handleEditDuplicate}
+                      className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 "
+                    >
                       <svg
                         className="size-3 fill-black/30"
                         xmlns="http://www.w3.org/2000/svg"
@@ -287,6 +296,11 @@ export default function ProjectShow({
                       Duplicate
                     </button>
                   </MenuItem>
+                  <ProjectShowCopyDialog
+                    isCopyOpen={isCopyOpen}
+                    setIsCopyOpen={setIsCopyOpen}
+                    project={project}
+                  />
                   <div className="my-1 h-px " />
 
                   <MenuItem>
@@ -460,7 +474,7 @@ export default function ProjectShow({
                           onClick={() => setIsAddFieldOpen(true)}
                           className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
                         >
-                          +
+                          + Add Column
                         </th>
                         <ProjectAddField
                           setIsAddFieldOpen={setIsAddFieldOpen}

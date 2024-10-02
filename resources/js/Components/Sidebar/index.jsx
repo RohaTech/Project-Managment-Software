@@ -112,9 +112,9 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2  ">
                 <Link href={route("home")}>
-                  <div className="flex items-center hover:text-primaryColor  px-6 text gap-x-2 cursor-pointer ">
+                  <div className="flex items-center hover:text-primaryColor hover:font-bold  px-6 text gap-x-2 cursor-pointer ">
                     <svg
                       className="size-4 fill-primaryColor"
                       xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +127,7 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                 </Link>
                 <Link
                   href={route("project.create")}
-                  className="flex  items-center px-6 text gap-x-2 cursor-pointer hover:text-primaryColor  "
+                  className="flex  items-center px-6 text gap-x-2 cursor-pointer hover:font-bold  hover:text-primaryColor  "
                 >
                   <svg
                     className="size-4 fill-primaryColor"

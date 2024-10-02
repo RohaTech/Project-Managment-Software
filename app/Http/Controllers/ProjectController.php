@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCreate', ['user' => auth()->user(),]);
+            return Inertia::render('Project/ProjectCreate',);
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -86,7 +86,7 @@ class ProjectController extends Controller
                 'user_id' => Auth::id(),
                 'activity' => auth()->user()->name . ' created project called ' . $request->name,
             ]);
-            return redirect()->route('project.index')->with('success', 'Project updated successfully.');
+            return redirect()->route('project.show', $project->id)->with('success', 'Task created successfully.');
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -358,5 +358,50 @@ class ProjectController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
+    }
+
+    public function copyProjectCreate(Request $request)
+    {
+
+        try {
+            return Inertia::render('Project/ProjectCopy',);
+        } catch (Exception $ex) {
+            dd($ex);
+        }
+    }
+
+    public function copyProjectStore(Project $project)
+    {
+        $newProject = Project::create([
+            'name' => $project->name . " - copy",
+            'description' => $project->description,
+            'additional_column' => $project->additional_column,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
+        ]);
+
+        $parentTaskArray = [];
+        $tasks = $project->tasks;
+        foreach ($tasks as $task) {
+            if (!$task->parent_task_id) {
+                $newParentTask = $newProject->tasks()->create([
+                    'name' => $task->name . " - copy",
+                    'project_id' => $task->id,
+                    'description' => $task->description,
+                    'priority' => $task->priority,
+                    'additional_column' => $task->additional_column,
+                    'created_by' => auth()->id(),
+                    'updated_by' => auth()->id(),
+                ]);
+                array_push($parentTaskArray, $newParentTask);
+            }
+        }
+
+
+        $newProject->members()->create([
+            'user_id' => Auth::id(),
+            'role' => 'owner',
+        ]);
+        return redirect()->route('project.show', $newProject->id)->with('success', 'Task created successfully.');
     }
 }
