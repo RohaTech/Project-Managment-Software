@@ -147,6 +147,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        // dd($request);
         $project = $task->project()->first();
         $members = ProjectMember::where("user_id", auth()->user()->id)->where('project_id', $project->id)->first();
 
@@ -168,11 +169,11 @@ class TaskController extends Controller
 
             $task->update([
                 'name' => $validated['name'],
-                'assigned' => $validated['assigned'] ?? $task->assigned,
+                'assigned' => $validated['assigned'],
                 'status' => $validated['status'] ?? $task->status,
-                'approved' => $validated['approved'] ?? $task->approved,
+                'approved' => $validated['approved'],
                 'priority' => $validated['priority'],
-                'due_date' => $validated['due_date'] ?? $task->due_date,
+                'due_date' => $validated['due_date'],
                 'additional_column' => $validated['additional_column'] ?? $task->additional_column,
                 'updated_by' => auth()->id(),
                 'description' => $validated['description'] ?? $task->description, // add this
@@ -208,7 +209,6 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
-
     {
         try {
             $project = Project::find($task->project_id);

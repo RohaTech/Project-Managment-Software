@@ -9,8 +9,8 @@ import { Textarea } from "@headlessui/react";
 import TextInput from "@/Components/TextInput";
 
 export default function ProjectCreateDialog({
-  setIsDeleteDialog,
-  isDeleteDialog,
+  setIsisCreateDialog,
+  isCreateDialog,
 }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
@@ -23,15 +23,15 @@ export default function ProjectCreateDialog({
   };
 
   function open() {
-    setIsDeleteDialog(true);
+    setIsisCreateDialog(true);
   }
 
   function close() {
-    setIsDeleteDialog(false);
+    setIsisCreateDialog(false);
   }
   return (
     <Dialog
-      open={isDeleteDialog}
+      open={isCreateDialog}
       as="div"
       className="relative z-10 focus:outline-none   "
       onClose={close}
@@ -86,13 +86,13 @@ export default function ProjectCreateDialog({
                   <div className="mt-4">
                     <InputLabel htmlFor="description" value="Description" />
 
-                    <input
+                    <textarea
                       id="description"
                       name="description"
-                      className="appearance-none block h-[150px] w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      className="appearance-none block h-[150px]  mt-2 w-full  text-gray-700 border border-gray-200 rounded   mb-3 leading-tight focus:outline-none focus:bg-white"
                       value={data.description}
                       onChange={(e) => setData("description", e.target.value)}
-                    ></input>
+                    ></textarea>
 
                     <InputError message={errors.description} className="mt-2" />
                   </div>
