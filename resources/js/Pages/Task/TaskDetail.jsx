@@ -5,6 +5,19 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+
+// Initialize Echo
+if (!window.echo) {
+    window.Pusher = Pusher;
+    window.echo = new Echo({
+        broadcaster: "pusher",
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+        forceTLS: true,
+    });
+}
 
 const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
   const [messageList, setMessageList] = useState(messages || []);
@@ -12,6 +25,56 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
   const [dropdownVisible, setDropdownVisible] = useState({});
   const [attachmentPreview, setAttachmentPreview] = useState(null);
   const messagesEndRef = useRef(null);
+
+
+  useEffect(() => {
+    // Listen for new messages on the project channel
+    const channel = echo.private(`tasks.${task.id}.messages`);
+    if (channel) {
+        console.log("hello");
+    }
+    channel
+        .listen("MessageSent", (event) => {
+            console.log("New message received:", event.message);
+            setMessageList((prevMessages) => [
+                ...prevMessages,
+                event.message,
+            ]);
+        })
+        .error((error) => {
+            console.error("Error subscribing to channel:", error);
+        });
+
+    // Listen for MessageUpdated event
+    channel
+        .listen("MessageUpdated", (event) => {
+            setMessageList((prevMessages) =>
+                prevMessages.map((msg) =>
+                    msg.id === event.message.id ? event.message : msg
+                )
+            );
+        })
+        .error((error) => {
+            console.error("Error subscribing to channel:", error);
+        });
+
+    // Listen for MessageDeleted event
+    channel
+        .listen("MessageDeleted", (event) => {
+            setMessageList((prevMessages) =>
+                prevMessages.filter((msg) => msg.id !== event.message_id)
+            );
+        })
+        .error((error) => {
+            console.error("Error subscribing to channel:", error);
+        });
+    // Clean up the listener on component unmount
+    return () => {
+        channel.stopListening("MessageSent");
+        channel.stopListening("MessageUpdated");
+        channel.stopListening("MessageDeleted");
+    };
+}, [task.id]);
 
   useEffect(() => {
     scrollToBottom();
