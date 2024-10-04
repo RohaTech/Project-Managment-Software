@@ -1,7 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import React, { useEffect, useRef, useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { Description, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import PopOvers from "@/Components/ProjectComponent/PopOvers";
 import PopEditProject from "./PopEditProject";
 import InputLabel from "@/Components/InputLabel";
@@ -17,10 +17,8 @@ import SingleSubTask from "./SingleSubTask";
 import ProjectAdditionalColumn from "./ProjectAdditionalColumn";
 import ProjectAddField from "./ProjectAddField";
 import ProjectStatus from "./ProjectStatus";
-
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
 import TaskSearch from "@/Components/ProjectComponent/TaskSearch";
 import ProjectDeletePop from "@/Components/ProjectComponent/ProjectDeletePop";
 import TaskDetail from "../Task/TaskDetail";
@@ -36,12 +34,49 @@ export default function ProjectShow({
   let [isOpen, setIsOpen] = useState(false);
   let [openEdit, setOpenEdit] = useState(false);
   let [openDelete, setOpenDelete] = useState(false);
-  //   const [openSubTasks, setOpenSubTasks] = useState(tasks.map(() => false));
+  const [openFilter, setOpenFilter] = useState(false);
   const [openTasks, setOpenTasks] = useState({}); // Single state object
   const [taskList, setTaskList] = useState(tasks);
   const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
   const [isCopyOpen, setIsCopyOpen] = useState(false);
   const { auth } = usePage().props;
+  const [inFilterMode, setInFilterMode] = useState(false);
+  const [filterCriteria, setFilterCriteria] = useState({
+    assigned: '',
+    status: '',
+    priority: ''
+  });
+
+  const initialFilterCriteria = {
+    assigned: '',
+    status: '',
+    priority: ''
+  };
+
+  const applyFilter = (criteria) => {
+    let Demotasks = tasks;
+    console.log(criteria);
+    if (criteria.assigned) {
+        // Demotasks = Demotasks.filter(task => task.assigned.toLowerCase().includes(criteria.assigned.toLowerCase()));
+      Demotasks = Demotasks.filter(task => task.assigned === parseInt(criteria.assigned));
+    }
+    if (criteria.status) {
+      Demotasks = Demotasks.filter(task => task.status === criteria.status);
+    }
+    if (criteria.priority) {
+      Demotasks = Demotasks.filter(task => task.priority === criteria.priority);
+    }
+    setTaskList(Demotasks);
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilterCriteria(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+    applyFilter({ ...filterCriteria, [name]: value });
+  };
 
   const [projectColumn, setProjectColumn] = useState(
     JSON.parse(project.additional_column)
@@ -95,6 +130,13 @@ export default function ProjectShow({
     e.preventDefault(); // Prevent default link behavior
     setIsCopyOpen(true); // Open the edit modal
   };
+
+  const handleFilterClick = (e)=>{
+    setInFilterMode(true);
+    e.preventDefault();
+    setOpenFilter(true);
+  }
+
 
   const handleDeleteClick = (e) => {
     e.preventDefault(); // Prevent default link behavior
@@ -184,6 +226,8 @@ export default function ProjectShow({
         );
       });
   };
+
+
 
   return (
     <AuthenticatedLayout>
@@ -412,19 +456,68 @@ export default function ProjectShow({
               <AddTask setTaskList={setTaskList} projectId={project.id} />
             </div>
             <TaskSearch project={project} />
-            <div className="flex text-sm text-slate-400 gap-x-1 hover:bg-slate-200 transition duration-300 ease-in-out px-1 py-1 rounded-md cursor-pointer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                width={20}
-              >
-                <path
-                  fill="#b0b0fd"
-                  d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"
-                />
-              </svg>
-              filter
+            <div className={`${inFilterMode ? 'bg-blue-300':''} flex items-center ml-1 rounded-lg px-[6px]`}>
+                <div onClick={handleFilterClick} className={`flex text-sm gap-x-1 ml-2 transition duration-300 ease-in-out px-1 py-1 rounded-md cursor-pointer ${inFilterMode ? "": "bg-slate-300"}`}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    width={20}
+                  >
+                    <path
+                      fill="#4f5100"
+                      d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"
+                    />
+                  </svg>
+                  filter
+                </div>
+                {inFilterMode && <span onClick={()=> {
+                    setInFilterMode(false);
+                    applyFilter(initialFilterCriteria);
+                }
+                    } className="hover:text-red-400 transition duration-300 ease-in-out cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 24 24">
+                    <path d="M 5.9902344 4.9902344 A 1.0001 1.0001 0 0 0 5.2929688 6.7070312 L 10.585938 12 L 5.2929688 17.292969 A 1.0001 1.0001 0 1 0 6.7070312 18.707031 L 12 13.414062 L 17.292969 18.707031 A 1.0001 1.0001 0 1 0 18.707031 17.292969 L 13.414062 12 L 18.707031 6.7070312 A 1.0001 1.0001 0 0 0 17.980469 4.9902344 A 1.0001 1.0001 0 0 0 17.292969 5.2929688 L 12 10.585938 L 6.7070312 5.2929688 A 1.0001 1.0001 0 0 0 5.9902344 4.9902344 z"></path>
+                    </svg></span>}
             </div>
+            <Dialog open={openFilter} onClose={() => setOpenFilter(false)} className="relative z-50" >
+                    <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-slate-100/60">
+                        <DialogPanel className="max-w-2xl space-y-4 top-15 border bg-white p-12 rounded-xl">
+                            <DialogTitle className="font-bold">Filtering Criteria</DialogTitle>
+                            <div className="flex gap-x-10">
+                                <div>
+                                    <h2>Assigned</h2>
+                                    <select name="assigned" onChange={handleFilterChange}>
+                                        <option value="">All Assigned</option>
+                                        {members.map(member=>{
+                                            return (
+                                                <option value={member.id}>{member.name.split(" ")[0]}</option>
+                                            )
+                                        })}
+                                        <option value={null}>Not Assigned</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <h2>Status</h2>
+                                    <select name="status" onChange={handleFilterChange}>
+                                        <option value="">All</option>
+                                        <option value="Not Started">Not Started</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <h2>Priority</h2>
+                                    <select name="priority" onChange={handleFilterChange}>
+                                        <option value="">All</option>
+                                        <option value="High">High</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Low">Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </DialogPanel>
+                    </div>
+            </Dialog>
+
             <div>
               <Link
                 href={route("projectMessages.show", project.id)}

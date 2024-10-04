@@ -171,7 +171,7 @@ class TaskController extends Controller
                 'name' => $validated['name'],
                 'assigned' => $validated['assigned'],
                 'status' => $validated['status'] ?? $task->status,
-                'approved' => $validated['approved'],
+                'approved' => $validated['approved'] ?? $task->approved,
                 'priority' => $validated['priority'],
                 'due_date' => $validated['due_date'],
                 'additional_column' => $validated['additional_column'] ?? $task->additional_column,
@@ -189,7 +189,7 @@ class TaskController extends Controller
                 'activity' => 'Update Task called ' . $request->name,
             ]);
         } catch (Exception $ex) {
-            dd($ex->getMessage);
+            dd($ex);
         }
         // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
