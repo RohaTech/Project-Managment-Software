@@ -1,14 +1,15 @@
+import { FloatingQuickSearch } from "@/Components/FloatingQuickSearch";
 import Sidebar from "@/Components/Sidebar";
 import React, { useEffect, useRef, useState } from "react";
 export default function DefaultLayout({ children, setIsSideBar, isSideBar }) {
   return (
-    <div className="dark:bg-boxdark-2 ">
+    <div className="dark:bg-boxdark-2   ">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex h-screen overflow-hidden  ">
+      <div className="flex h-screen overflow-hidden relative ">
+        <FloatingQuickSearch />
         {/* <!-- ===== Sidebar Start ===== --> */}
         <Sidebar isSideBar={isSideBar} setIsSideBar={setIsSideBar} />
         {/* <!-- ===== Sidebar End ===== --> */}
-
         {/* <!-- ===== Content Area Start ===== --> */}
         <div className="relative flex  flex-1 flex-col overflow-y-auto overflow-x-hidden ">
           {/* <!-- ===== Main Content Start ===== --> */}
