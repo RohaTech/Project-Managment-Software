@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCreate',);
+            return Inertia::render('Project/ProjectCreate', );
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -67,10 +67,12 @@ class ProjectController extends Controller
             $request->validate([
                 'name' => ['required ', 'max:255'],
                 'description' => ['nullable'],
+                'type' => ['required'],
             ]);
             $project = Project::create(
                 [
                     'name' => $request->name,
+                    'type' => $request->type,
                     'description' => $request->description,
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
@@ -153,12 +155,12 @@ class ProjectController extends Controller
             $validate = $request->validate([
                 'name' => ['required ', 'max:255'],
                 'description' => ['nullable'],
+                'type' => ['required']
             ]);
 
             $validate['updated_by'] = Auth::id();
             $project = Project::find($id);
             $project->update($validate);
-
             $project->activities()->create([
                 'user_id' => Auth::id(),
                 'activity' => ' updated project called ' . $request->name,
@@ -364,7 +366,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCopy',);
+            return Inertia::render('Project/ProjectCopy', );
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -375,6 +377,7 @@ class ProjectController extends Controller
         $newProject = Project::create([
             'name' => $project->name . " - copy",
             'description' => $project->description,
+            'type' => $project->type,
             'additional_column' => $project->additional_column,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),

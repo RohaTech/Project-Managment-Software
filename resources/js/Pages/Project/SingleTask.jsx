@@ -19,8 +19,129 @@ function SingleTask({
   role,
   index,
   moveRow,
+  projectType
 }) {
   // console.log(`Upper ${index}`);
+//   console.log(projectType);
+    const [typeState, setTypeState] = useState([]);
+    useEffect(()=>{
+        switch(projectType){
+            case 'Software Development':
+                setTypeState([
+                    "Requirement Gathering",
+                    "Design & Architecture",
+                    "Development",
+                    "Code Review",
+                    "Testing & QA",
+                    "Bug Fixing",
+                    "Deployment",
+                    "Maintenance",
+                    "Documentation",
+                    "User Training",
+                ]);
+                break;
+            case "Construction":
+                setTypeState([
+                    "Site Surveying",
+                    "Design & Planning",
+                    "Budgeting",
+                    "Permitting",
+                    "Foundation laying",
+                    "Structural Work",
+                    "Electrical & Plumbing",
+                    "Finishing Work",
+                    "Inspection & Handover"
+                ]);
+                break;
+            case "Marketing":
+                setTypeState([
+                    "Market Research",
+                    "Strategy Planning",
+                    "Content Creation",
+                    "Design & Development",
+                    "SEO & SEM",
+                    "Social Media",
+                    "Email Marketing",
+                    "Analytics & Reporting",
+                    "Client Meeting",
+                    "Campaign Launch"
+                ]);
+                break;
+            case "Research & Development":
+                setTypeState([
+                    "Idea Generation",
+                    "Research Planning",
+                    "Data Collection",
+                    "Data Analysis",
+                    "Hypothesis Testing",
+                    "Experimentation",
+                    "Results Interpretation",
+                    "Documentation",
+                    "Peer Review",
+                    "Publication",
+                    "Presentation"
+                ]);
+                break;
+            case "Healthcare":
+                setTypeState([
+                    "Patient Care Planning",
+                    "Clinical Trials",
+                    "Data Collection",
+                    "Data Analysis",
+                    "Treatment Administration",
+                    "Regulatory Compliance",
+                    "Medical Record Keeping",
+                    "Consultation & Diagnosis",
+                    "Health Education",
+                    "Reporting"
+                ]);
+                break;
+            case "Education":
+                setTypeState([
+                    "Curriculum Development",
+                    "Lesson Planning",
+                    "Content Creation",
+                    "Student Assessment",
+                    "Classroom Instruction",
+                    "Training & Workshops",
+                    "Grading & Feedback",
+                    "Student Support",
+                    "Event Organization",
+                    "Reporting and Accreditaion"
+                ]);
+                break;
+            case "Manufacturing":
+                setTypeState([
+                    "Product Design",
+                    "Prototyping",
+                    "Material Sourcing",
+                    "Production Planning",
+                    "Quality Control",
+                    "Assembly Line Setup",
+                    "Inventory Management",
+                    "Packaging",
+                    "Shipping & Logistics",
+                    "Maintenance"
+                ]);
+                break;
+            case "Finance/Banking":
+                setTypeState([
+                   "Risk Assessment",
+                   "Budgeting",
+                   "Financial Auditing",
+                   "Investment Analysis",
+                   "Compliance & Regulation",
+                   "Loan Processing",
+                   "Reporting",
+                   "Customer Management",
+                   "Fraud Detection",
+                   "Portfolio Management"
+                ]);
+                break;
+            default:
+                setTypeState([]);
+        }
+    }, [projectType]);
 
   const [, ref] = useDrop({
     accept: ItemType,
@@ -103,6 +224,7 @@ function SingleTask({
     name: task.name,
     assigned: task.assigned,
     status: task.status,
+    type: task.type,
     approved: task.approved,
     priority: task.priority,
     due_date: task.due_date,
@@ -205,6 +327,17 @@ function SingleTask({
       <td className="border border-slate-300 border-collapse w-[150px]">
       <MemberName members={members} setData={setData} task= {task} handleAssignedSubmit={handleAssignedSubmit}  />
       </td>
+      <td className="border border-slate-300 border-collapse w-[150px]">
+        <select name="type" id="type" onChange={(e)=> setData('type', e.target.value)} onBlur={handleSubmit} className="w-[180px] rounded-lg border-0">
+            {
+                typeState.map(type=>{
+                    return (
+                        <option value={type} selected={data.type=== type}>{type}</option>
+                    )
+                })
+            }
+        </select>
+      </td>
       <td className="border border-slate-300 border-collapse relative">
         <select
           className={`border-0 text-sm ${
@@ -249,7 +382,7 @@ function SingleTask({
           <ApproveButton ApproveData={data} task={task} />
         )}
       </td>
-      <td className="border border-slate-300 border-collapse text-center cursor-pointer flex items-center">
+      <td className="border border-slate-300 border-collapse text-center cursor-pointer flex items-center w-[150px] overflow-hidden">
 
       { data.status === "Completed" ? (
     <div>{IconCollection.Completed}</div>):

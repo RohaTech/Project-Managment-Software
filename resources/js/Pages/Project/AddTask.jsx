@@ -4,6 +4,7 @@ import React from "react";
 function AddTask({ setTaskList, projectId }) {
     const { data, setData, post, reset } = useForm({
         name: "My Task",
+        type: "Documentation",
         project_id: projectId,
         assigned: "",
         status: "",
