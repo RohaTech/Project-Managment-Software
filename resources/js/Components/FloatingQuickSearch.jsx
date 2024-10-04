@@ -83,7 +83,7 @@ export const FloatingQuickSearch = () => {
     <div className="">
       <div
         onClick={open}
-        className="fixed z-999999 cursor-pointer bottom-10 right-20 size-13  flex justify-center items-center group rounded-full bg-primary hover:scale-110 ease-linear duration-200 "
+        className="fixed z-999999 animate-pulse hover:animate-none cursor-pointer bottom-10 right-20 size-13  flex justify-center items-center group rounded-full bg-primary hover:scale-110 ease-linear duration-200 "
       >
         <svg
           className="size-7 group:hover:scale-110 ease-linear duration-200  fill-white"
