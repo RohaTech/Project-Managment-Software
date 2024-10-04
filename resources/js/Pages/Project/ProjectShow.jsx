@@ -1,7 +1,12 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import React, { useEffect, useRef, useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Description, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 import PopOvers from "@/Components/ProjectComponent/PopOvers";
 import PopEditProject from "./PopEditProject";
 import InputLabel from "@/Components/InputLabel";
@@ -23,6 +28,7 @@ import TaskSearch from "@/Components/ProjectComponent/TaskSearch";
 import ProjectDeletePop from "@/Components/ProjectComponent/ProjectDeletePop";
 import TaskDetail from "../Task/TaskDetail";
 import ProjectShowCopyDialog from "@/Components/ProjectComponent/ProjectShowCopyDialog";
+import ProjectOption from "@/Components/ProjectComponent/ProjectOption";
 
 export default function ProjectShow({
   project,
@@ -42,38 +48,42 @@ export default function ProjectShow({
   const { auth } = usePage().props;
   const [inFilterMode, setInFilterMode] = useState(false);
   const [filterCriteria, setFilterCriteria] = useState({
-    assigned: '',
-    status: '',
-    priority: ''
+    assigned: "",
+    status: "",
+    priority: "",
   });
 
   const initialFilterCriteria = {
-    assigned: '',
-    status: '',
-    priority: ''
+    assigned: "",
+    status: "",
+    priority: "",
   };
 
   const applyFilter = (criteria) => {
     let Demotasks = tasks;
     console.log(criteria);
     if (criteria.assigned) {
-        // Demotasks = Demotasks.filter(task => task.assigned.toLowerCase().includes(criteria.assigned.toLowerCase()));
-      Demotasks = Demotasks.filter(task => task.assigned === parseInt(criteria.assigned));
+      // Demotasks = Demotasks.filter(task => task.assigned.toLowerCase().includes(criteria.assigned.toLowerCase()));
+      Demotasks = Demotasks.filter(
+        (task) => task.assigned === parseInt(criteria.assigned)
+      );
     }
     if (criteria.status) {
-      Demotasks = Demotasks.filter(task => task.status === criteria.status);
+      Demotasks = Demotasks.filter((task) => task.status === criteria.status);
     }
     if (criteria.priority) {
-      Demotasks = Demotasks.filter(task => task.priority === criteria.priority);
+      Demotasks = Demotasks.filter(
+        (task) => task.priority === criteria.priority
+      );
     }
     setTaskList(Demotasks);
   };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilterCriteria(prevState => ({
+    setFilterCriteria((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
     applyFilter({ ...filterCriteria, [name]: value });
   };
@@ -131,12 +141,11 @@ export default function ProjectShow({
     setIsCopyOpen(true); // Open the edit modal
   };
 
-  const handleFilterClick = (e)=>{
+  const handleFilterClick = (e) => {
     setInFilterMode(true);
     e.preventDefault();
     setOpenFilter(true);
-  }
-
+  };
 
   const handleDeleteClick = (e) => {
     e.preventDefault(); // Prevent default link behavior
@@ -227,8 +236,6 @@ export default function ProjectShow({
       });
   };
 
-
-
   return (
     <AuthenticatedLayout>
       <div className="">
@@ -291,97 +298,19 @@ export default function ProjectShow({
               </svg>
             </div>
             <div className="capitalize font-bold">{project.name}</div>
-            <div className={` z-999    text-right `}>
-              <Menu>
-                <MenuButton className=" mt-3 px-1 focus:outline-none ">
-                  <svg
-                    className="fill-primaryColor  size-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512"
-                  >
-                    <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" />
-                  </svg>
-                </MenuButton>
-
-                <MenuItems
-                  transition
-                  anchor="right start"
-                  className="w-52 origin-top-right rounded-xl border  bg-white border-white/5 shadow-lg shadow-blue-200  p-1 text-sm/6     transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
-                >
-                  <MenuItem>
-                    <button
-                      onClick={handleEditClick}
-                      className={`group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 ${
-                        role === "member" ? "hidden" : ""
-                      } `}
-                    >
-                      <svg
-                        className="size-3 fill-black/30"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                      >
-                        <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
-                      </svg>
-                      Edit
-                    </button>
-                  </MenuItem>
-                  <MenuItem>
-                    <button
-                      onClick={handleEditDuplicate}
-                      className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 "
-                    >
-                      <svg
-                        className="size-3 fill-black/30"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 448 512"
-                      >
-                        <path d="M384 336l-192 0c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l140.1 0L400 115.9 400 320c0 8.8-7.2 16-16 16zM192 384l192 0c35.3 0 64-28.7 64-64l0-204.1c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1L192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-32-48 0 0 32c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l32 0 0-48-32 0z" />
-                      </svg>
-                      Duplicate
-                    </button>
-                  </MenuItem>
-                  <ProjectShowCopyDialog
-                    isCopyOpen={isCopyOpen}
-                    setIsCopyOpen={setIsCopyOpen}
-                    project={project}
-                  />
-                  <div className="my-1 h-px " />
-
-                  <MenuItem>
-                    <button
-                      onClick={handleDeleteClick}
-                      className={`group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 ${
-                        role === "owner" ? "" : "hidden"
-                      } `}
-                    >
-                      <svg
-                        className={`size-3 fill-black/30  `}
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 448 512"
-                      >
-                        <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z" />
-                      </svg>
-                      Delete
-                    </button>
-                  </MenuItem>
-                </MenuItems>
-              </Menu>
-              <div>
-                {openEdit && (
-                  <PopEditProject
-                    role={role}
-                    openEdit={openEdit}
-                    setOpenEdit={setOpenEdit}
-                    project={project}
-                  />
-                )}
-              </div>
-              <ProjectDeletePop
-                openDelete={openDelete}
-                setOpenDelete={setOpenDelete}
-                project={project}
-              />
-            </div>
+            <ProjectOption
+              handleEditClick={handleEditClick}
+              handleDeleteClick={handleDeleteClick}
+              handleEditDuplicate={handleEditDuplicate}
+              role={role}
+              isCopyOpen={isCopyOpen}
+              setIsCopyOpen={setIsCopyOpen}
+              project={project}
+              openEdit={openEdit}
+              setOpenEdit={setOpenEdit}
+              openDelete={openDelete}
+              setOpenDelete={setOpenDelete}
+            />
           </div>
           <div className="flex gap-x-8 items-center">
             <ProjectStatus project={project} role={role} />
@@ -456,66 +385,96 @@ export default function ProjectShow({
               <AddTask setTaskList={setTaskList} projectId={project.id} />
             </div>
             <TaskSearch project={project} />
-            <div className={`${inFilterMode ? 'bg-blue-300':''} flex items-center ml-1 rounded-lg px-[6px]`}>
-                <div onClick={handleFilterClick} className={`flex text-sm gap-x-1 ml-2 transition duration-300 ease-in-out px-1 py-1 rounded-md cursor-pointer`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"
-                    width={20}
-                  >
-                    <path
-                      fill="#757D86"
-                      d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"
-                    />
-                  </svg>
-                  filter
-                </div>
-                {inFilterMode && <span onClick={()=> {
+            <div
+              className={`${
+                inFilterMode ? "bg-blue-300" : ""
+              } flex items-center ml-1 rounded-lg px-[6px]`}
+            >
+              <div
+                onClick={handleFilterClick}
+                className={`flex text-sm gap-x-1 ml-2 transition duration-300 ease-in-out px-1 py-1 rounded-md cursor-pointer ${
+                  inFilterMode ? "" : "bg-slate-300"
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  width={20}
+                >
+                  <path
+                    fill="#4f5100"
+                    d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"
+                  />
+                </svg>
+                filter
+              </div>
+              {inFilterMode && (
+                <span
+                  onClick={() => {
                     setInFilterMode(false);
                     applyFilter(initialFilterCriteria);
-                }
-                    } className="hover:text-red-400 transition duration-300 ease-in-out cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 24 24">
+                  }}
+                  className="hover:text-red-400 transition duration-300 ease-in-out cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M 5.9902344 4.9902344 A 1.0001 1.0001 0 0 0 5.2929688 6.7070312 L 10.585938 12 L 5.2929688 17.292969 A 1.0001 1.0001 0 1 0 6.7070312 18.707031 L 12 13.414062 L 17.292969 18.707031 A 1.0001 1.0001 0 1 0 18.707031 17.292969 L 13.414062 12 L 18.707031 6.7070312 A 1.0001 1.0001 0 0 0 17.980469 4.9902344 A 1.0001 1.0001 0 0 0 17.292969 5.2929688 L 12 10.585938 L 6.7070312 5.2929688 A 1.0001 1.0001 0 0 0 5.9902344 4.9902344 z"></path>
-                    </svg></span>}
+                  </svg>
+                </span>
+              )}
             </div>
-            <Dialog open={openFilter} onClose={() => setOpenFilter(false)} className="relative z-50" >
-                    <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-slate-100/60">
-                        <DialogPanel className="max-w-2xl space-y-4 top-15 border bg-white p-12 rounded-xl">
-                            <DialogTitle className="font-bold">Filtering Criteria</DialogTitle>
-                            <div className="flex gap-x-10">
-                                <div>
-                                    <h2>Assigned</h2>
-                                    <select name="assigned" onChange={handleFilterChange}>
-                                        <option value="">All Assigned</option>
-                                        {members.map(member=>{
-                                            return (
-                                                <option value={member.id}>{member.name.split(" ")[0]}</option>
-                                            )
-                                        })}
-                                        <option value={null}>Not Assigned</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <h2>Status</h2>
-                                    <select name="status" onChange={handleFilterChange}>
-                                        <option value="">All</option>
-                                        <option value="Not Started">Not Started</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="Completed">Completed</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <h2>Priority</h2>
-                                    <select name="priority" onChange={handleFilterChange}>
-                                        <option value="">All</option>
-                                        <option value="High">High</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Low">Low</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </DialogPanel>
+            <Dialog
+              open={openFilter}
+              onClose={() => setOpenFilter(false)}
+              className="relative z-50"
+            >
+              <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-slate-100/60">
+                <DialogPanel className="max-w-2xl space-y-4 top-15 border bg-white p-12 rounded-xl">
+                  <DialogTitle className="font-bold">
+                    Filtering Criteria
+                  </DialogTitle>
+                  <div className="flex gap-x-10">
+                    <div>
+                      <h2>Assigned</h2>
+                      <select name="assigned" onChange={handleFilterChange}>
+                        <option value="">All Assigned</option>
+                        {members.map((member) => {
+                          return (
+                            <option value={member.id}>
+                              {member.name.split(" ")[0]}
+                            </option>
+                          );
+                        })}
+                        <option value={null}>Not Assigned</option>
+                      </select>
                     </div>
+                    <div>
+                      <h2>Status</h2>
+                      <select name="status" onChange={handleFilterChange}>
+                        <option value="">All</option>
+                        <option value="Not Started">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                    </div>
+                    <div>
+                      <h2>Priority</h2>
+                      <select name="priority" onChange={handleFilterChange}>
+                        <option value="">All</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                      </select>
+                    </div>
+                  </div>
+                </DialogPanel>
+              </div>
             </Dialog>
 
             <div>
