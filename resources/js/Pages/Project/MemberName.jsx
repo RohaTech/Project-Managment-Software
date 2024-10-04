@@ -7,9 +7,9 @@ const MemberName = ({ members, setData, task, handleAssignedSubmit }) => {
   );
   const [selectedMember, setSelectedMember] = useState(initialAssignedMember);
 
-  //   useEffect(() => {
-  //     handleAssignedSubmit(); // Submit the form after the value has been set
-  //   }, [selectedMember]);
+  useEffect(() => {
+    handleAssignedSubmit(); // Submit the form after the value has been set
+  }, [selectedMember]);
   return (
     <Menu as="div" className="relative inline-block text-left w-full">
       <div>
