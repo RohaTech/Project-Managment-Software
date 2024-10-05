@@ -62,7 +62,7 @@ export default function Project_Index({ projects, queryParams = null }) {
         </div>
 
         <div className="flex flex-col">
-          <div className="grid grid-cols-4 p-5 font-semibold text-primary  uppercase  rounded-sm bg-[#f7f9fc] ">
+          <div className="grid grid-cols-4 p-5 font-semibold text-primary  uppercase  rounded-sm bg-[#f7f9fc]  ">
             <div className=" ml-8 ">
               <h1 className=" ">Name</h1>
             </div>
@@ -81,15 +81,15 @@ export default function Project_Index({ projects, queryParams = null }) {
             <Link
               key={project.id}
               href={route("project.show", project)}
-              className="block"
+              className="block "
             >
               <div
-                className={`grid grid-cols-4 hover:bg-gray-200 group  ${
+                className={`grid grid-cols-4 duration-300 ease-linear hover:bg-gray-100 group  hover:shadow-md ${
                   key === projects.length - 1 ? "" : "border-b border-stroke "
                 }`}
                 key={key}
               >
-                <div className="flex items-center group-hover:text-primaryColor group-hover:font-bold  p-2.5 xl:p-5">
+                <div className="flex items-center group-hover:text-primaryColor group-hover:font-semibold duration-300 ease-linear  p-2.5 xl:p-5">
                   <h1 className="text-nowrap">{project.name}</h1>
                 </div>
 

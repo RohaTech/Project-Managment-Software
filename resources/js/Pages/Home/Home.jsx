@@ -1372,14 +1372,14 @@ export default function Home({ user, projects, activities }) {
                           viewBox="0 -6.5 38 38"
                           version="1.1"
                           xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink"
+                          xmlnsXlink="http://www.w3.org/1999/xlink"
                           fill="#5e5c64"
                         >
-                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                           <g
                             id="SVGRepo_tracerCarrier"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           ></g>
                           <g id="SVGRepo_iconCarrier">
                             {" "}
@@ -1388,16 +1388,16 @@ export default function Home({ user, projects, activities }) {
                             <g
                               id="icons"
                               stroke="none"
-                              stroke-width="1"
+                              strokeWidth="1"
                               fill="none"
-                              fill-rule="evenodd"
+                              fillRule="evenodd"
                             >
                               {" "}
                               <g
                                 id="ui-gambling-website-lined-icnos-casinoshunter"
                                 transform="translate(-1511.000000, -158.000000)"
                                 fill="#0011ff"
-                                fill-rule="nonzero"
+                                fillRule="nonzero"
                               >
                                 {" "}
                                 <g
