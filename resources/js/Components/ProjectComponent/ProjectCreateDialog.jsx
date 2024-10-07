@@ -12,27 +12,25 @@ export default function ProjectCreateDialog({
   setIsisCreateDialog,
   isCreateDialog,
 }) {
+  const projectTypes = [
+    "Software Development",
+    "Construction",
+    "Marketing",
+    "Research & Development",
+    "Healthcare",
+    "Education",
+    "Manufacturing",
+    "Finance/Banking",
+  ];
 
-    const projectTypes = [
-        "Software Development",
-        "Construction",
-        "Marketing",
-        "Research & Development",
-        "Healthcare",
-        "Education",
-        "Manufacturing",
-        "Finance/Banking",
-    ];
-
-
-    const { data, setData, post, processing, errors, reset } = useForm({
+  const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
     description: "",
-    type:""
+    type: "",
   });
   const submit = (e) => {
     e.preventDefault();
-
+    console.log(data);
     post(route("project.store"));
   };
 
@@ -107,18 +105,19 @@ export default function ProjectCreateDialog({
                       onChange={(e) => setData("description", e.target.value)}
                     ></textarea>
 
-
-
                     <InputError message={errors.description} className="mt-2" />
                   </div>
                   <div className="mt-4">
-                    <InputLabel htmlFor="type" value="type" className="mb-1"/>
-                    <select name="type" id="type" onChange={(e)=> setData("type", e.target.value)} className="w-full">
-                        {projectTypes.map(type=>{
-                            return(
-                                <option value={type}>{type}</option>
-                            )
-                        })}
+                    <InputLabel htmlFor="type" value="type" className="mb-1" />
+                    <select
+                      name="type"
+                      id="type"
+                      onChange={(e) => setData("type", e.target.value)}
+                      className="w-full"
+                    >
+                      {projectTypes.map((type) => {
+                        return <option value={type}>{type}</option>;
+                      })}
                     </select>
                     <InputError message={errors.type} className="mt-2" />
                   </div>

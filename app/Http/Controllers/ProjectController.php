@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCreate', );
+            return Inertia::render('Project/ProjectCreate',);
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -64,6 +64,8 @@ class ProjectController extends Controller
     {
 
         try {
+
+            // dd($request);
             $request->validate([
                 'name' => ['required ', 'max:255'],
                 'description' => ['nullable'],
@@ -366,7 +368,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCopy', );
+            return Inertia::render('Project/ProjectCopy',);
         } catch (Exception $ex) {
             dd($ex);
         }
