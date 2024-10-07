@@ -57,7 +57,7 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
 
   const mappedAsideProjects = projects.slice(0, 5).map((project) => (
     <Link href={route("project.show", project.id)} key={project.id}>
-      <li className="px-1 py-2 hover:text-primary hover:font-bold">
+      <li className="px-1 py-2 hover:text-primary hover:font-semi-bold -translate-x-4">
         <h1 className="text-sm text-balance  capitalize">{project.name}</h1>
       </li>
     </Link>

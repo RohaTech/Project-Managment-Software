@@ -47,7 +47,7 @@ export default function Dashboard({
 
   return (
     <AuthenticatedLayout>
-      <div className="ml-8 mb-3 pb-6 flex items-center gap-x-4 border-b border-b-gray-300">
+      {/* <div className="ml-8 mb-3 pb-6 flex items-center gap-x-4 border-b border-b-gray-300">
         <div className="">
           <h1 className="">Select Projects </h1>
         </div>
@@ -135,7 +135,7 @@ export default function Dashboard({
             </button>
           </div>
         )}
-      </div>
+      </div> */}
       <div className="grid pb-16  cursor-pointer grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title="Total Projects" total={`${projectsCount}`}>
           <svg
