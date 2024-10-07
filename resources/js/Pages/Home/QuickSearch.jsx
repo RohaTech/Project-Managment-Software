@@ -79,6 +79,8 @@ export const QuickSearch = () => {
         </li>
       </Link>
     ));
+
+  console.log(searchQuery);
   return (
     <div className="">
       <button
@@ -160,39 +162,48 @@ export const QuickSearch = () => {
                 <div className="mt-4  flex flex-col gap-y-1 border-t border-primary  p-2">
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Projects</h1>
-                    <ul className="space-y-2 mt-4">
-                      {mappedProjects && mappedProjects.length > 0 ? (
-                        mappedProjects
-                      ) : (
-                        <h1 className="uppercase text-red-500">
-                          NO Projects Found
+                    <ul className="space-y-2">
+                      {mappedProjects &&
+                        mappedProjects.length > 0 &&
+                        searchQuery.length > 0 &&
+                        mappedProjects}
+                    </ul>
+                    {mappedProjects &&
+                      mappedProjects.length === 0 &&
+                      searchQuery.length > 0 && (
+                        <h1 className="uppercase    text-red-500">
+                          NO Project Found
                         </h1>
                       )}
-                    </ul>
                   </div>
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Task</h1>
                     <ul className="space-y-2">
-                      {mappedTasks && mappedTasks.length > 0 ? (
-                        mappedTasks
-                      ) : (
+                      {mappedTasks && mappedTasks.length > 0 && mappedTasks}
+                    </ul>
+                    {mappedTasks &&
+                      mappedTasks.length === 0 &&
+                      searchQuery.length > 0 && (
                         <h1 className="uppercase    text-red-500">
-                          NO Tasks Found
+                          NO Task Found
                         </h1>
                       )}
-                    </ul>
                   </div>
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Sub-Tasks</h1>
                     <ul className="space-y-2">
-                      {mappedSubtasks && mappedSubtasks.length > 0 ? (
-                        mappedSubtasks
-                      ) : (
+                      {mappedSubtasks &&
+                        mappedSubtasks.length > 0 &&
+                        searchQuery.length > 0 &&
+                        mappedSubtasks}
+                    </ul>
+                    {mappedSubtasks &&
+                      mappedSubtasks.length === 0 &&
+                      searchQuery.length > 0 && (
                         <h1 className="uppercase    text-red-500">
                           NO Subtasks Found
                         </h1>
                       )}
-                    </ul>
                   </div>
                 </div>
               </div>
