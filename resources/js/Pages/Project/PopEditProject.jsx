@@ -8,6 +8,7 @@ import { useForm } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 
 function PopEditProject({ openEdit, setOpenEdit, project, role }) {
+ 
 //   console.log("PopEditProject openEdit:", openEdit);
 
   const projectTypes = [
@@ -20,6 +21,7 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
         "Manufacturing",
         "Finance/Banking",
     ];
+ 
   const { data, setData, patch, processing, errors, reset } = useForm({
     name: project.name,
     description: project.description,

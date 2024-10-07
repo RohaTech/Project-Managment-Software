@@ -1,7 +1,10 @@
 <?php
 
 return [
+'provider'=>[
 
+    Illuminate\Broadcasting\BroadcastServiceProvider::class,
+],
     /*
     |--------------------------------------------------------------------------
     | Application Name

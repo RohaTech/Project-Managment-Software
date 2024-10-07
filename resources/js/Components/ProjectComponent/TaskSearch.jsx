@@ -35,10 +35,6 @@ export default function TaskSearch({ project }) {
     }
   }, [searchQuery]);
 
-  useEffect(() => {
-    console.log(fetchedData);
-  }, [fetchedData]);
-
   const mappedTasks =
     fetchedData &&
     fetchedData.tasks.map((task, index) => (

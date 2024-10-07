@@ -182,7 +182,6 @@ class TaskController extends Controller
                 'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
             ]);
 
-            // dd('Hello2');
 
             $project = Project::find($task->project_id);
 

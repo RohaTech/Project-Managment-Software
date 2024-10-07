@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\Project;
 use App\Models\Task;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Attachment;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Events\MessageSent;
+use App\Events\MessageUpdated;
+use App\Events\MessageDeleted;
+
 
 
 
@@ -93,7 +97,9 @@ class MessageController extends Controller
             ]);
         }
         $message->save();
-        // return response()->json(['data' => $message->load('attachments')], 201);
+        logger('hellooooooooooo');
+        broadcast(new MessageSent($message));
+       
     }
 
 
@@ -111,12 +117,19 @@ class MessageController extends Controller
 
         $Message->content = $request->input('content');
         $Message->save();
+        broadcast(new MessageUpdated($Message));
 
-        // return response()->json($Message);
+        
     }
 
     public function destroy(Message $message)
-    {
-        $message->delete();
+    {          
+        $projectId = $message->project_id;  
+        $taskId = $message->task_id;         
+        
+        $message->delete();                 
+    
+        broadcast(new MessageDeleted($message, $projectId,$taskId));
+
     }
 }
