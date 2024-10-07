@@ -430,7 +430,8 @@ export default function ProjectShow({
                   </svg>
                 </span>
               )}
- 
+              </div>
+
             <Dialog open={openFilter} onClose={() => setOpenFilter(false)} className="relative z-50" >
                     <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-slate-100/60">
                         <DialogPanel className="max-w-2xl space-y-4 top-15 border bg-white p-12 rounded-xl">
@@ -469,8 +470,8 @@ export default function ProjectShow({
                                 </div>
                             </div>
                         </DialogPanel>
- 
-
+                    </div>
+                </Dialog>
             <div>
               <Link
                 href={route("projectMessages.show", project.id)}
