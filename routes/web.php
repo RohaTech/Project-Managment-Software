@@ -36,13 +36,13 @@ Route::get('/home', function () {
 Route::get('/dashboard', function () {
     $userId = auth()->id();
 
-    $projects = Project::whereHas('members', function ($query) use ($userId) {
+    $AllProjects = Project::whereHas('members', function ($query) use ($userId) {
         $query->where('user_id', $userId);
     })->get();
 
-    $projectsCount = $projects->count();
+    $projectsCount = $AllProjects->count();
 
-    $tasks = Task::whereIn('project_id', $projects->pluck('id'))->get();
+    $tasks = Task::whereIn('project_id', $AllProjects->pluck('id'))->get();
 
 
     $personalTasks = $tasks->filter(function ($task) use ($userId) {
@@ -68,10 +68,10 @@ Route::get('/dashboard', function () {
     return Inertia::render(
         'Dashboard/Dashboard',
         [
-            'user' => auth()->user(),
             'projectsCount' => $projectsCount,
             'taskStats' => $taskStats,
-            "personalTasksStats" => $personalTasksStats
+            "personalTasksStats" => $personalTasksStats,
+            "projects" => $AllProjects
         ]
     );
 })->middleware(['auth', 'verified'])->name('dashboard');
