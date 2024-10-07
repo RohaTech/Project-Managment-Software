@@ -64,9 +64,9 @@ class TaskController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
+                'type' => 'required|string',
                 'project_id' => 'required|exists:projects,id',
                 'assigned' => 'nullable|exists:users,id',
-
                 'priority' => 'nullable|string',
                 'due_date' => 'nullable|date',
                 'description' => 'nullable|string', // add this
@@ -157,6 +157,7 @@ class TaskController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
+                'type' => 'required|string',
                 'assigned' => 'nullable|exists:users,id',
                 'status' => 'string',
                 'approved' => 'nullable',
@@ -169,6 +170,7 @@ class TaskController extends Controller
 
             $task->update([
                 'name' => $validated['name'],
+                'type' => $validated['type'],
                 'assigned' => $validated['assigned'],
                 'status' => $validated['status'] ?? $task->status,
                 'approved' => $validated['approved'] ?? $task->approved,

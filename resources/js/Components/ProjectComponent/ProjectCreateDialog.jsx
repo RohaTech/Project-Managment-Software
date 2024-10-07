@@ -12,9 +12,23 @@ export default function ProjectCreateDialog({
   setIsisCreateDialog,
   isCreateDialog,
 }) {
-  const { data, setData, post, processing, errors, reset } = useForm({
+
+    const projectTypes = [
+        "Software Development",
+        "Construction",
+        "Marketing",
+        "Research & Development",
+        "Healthcare",
+        "Education",
+        "Manufacturing",
+        "Finance/Banking",
+    ];
+
+
+    const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
     description: "",
+    type:""
   });
   const submit = (e) => {
     e.preventDefault();
@@ -79,7 +93,6 @@ export default function ProjectCreateDialog({
                       onChange={(e) => setData("name", e.target.value)}
                       isFocused={true}
                     />
-
                     <InputError message={errors.name} className="mt-2" />
                   </div>
 
@@ -94,7 +107,20 @@ export default function ProjectCreateDialog({
                       onChange={(e) => setData("description", e.target.value)}
                     ></textarea>
 
+
+
                     <InputError message={errors.description} className="mt-2" />
+                  </div>
+                  <div className="mt-4">
+                    <InputLabel htmlFor="type" value="type" className="mb-1"/>
+                    <select name="type" id="type" onChange={(e)=> setData("type", e.target.value)} className="w-full">
+                        {projectTypes.map(type=>{
+                            return(
+                                <option value={type}>{type}</option>
+                            )
+                        })}
+                    </select>
+                    <InputError message={errors.type} className="mt-2" />
                   </div>
                 </div>
                 <div className="col-span-2 shadow-md shadow-gray-300 ">

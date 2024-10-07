@@ -8,9 +8,24 @@ import { useForm } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 
 function PopEditProject({ openEdit, setOpenEdit, project, role }) {
+ 
+//   console.log("PopEditProject openEdit:", openEdit);
+
+  const projectTypes = [
+        "Software Development",
+        "Construction",
+        "Marketing",
+        "Research & Development",
+        "Healthcare",
+        "Education",
+        "Manufacturing",
+        "Finance/Banking",
+    ];
+ 
   const { data, setData, patch, processing, errors, reset } = useForm({
     name: project.name,
     description: project.description,
+    type: project.type
   });
 
   const submit = (e) => {
@@ -66,6 +81,24 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
                 className="mt-2 text-red-600"
               />
             </div>
+            <div className="mt-4">
+              <InputLabel
+                htmlFor="type"
+                value="Type"
+                className="text-gray-700"
+              />
+              <select
+                name="type"
+                id="type"
+                onChange={(e) => setData("type", e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 bg-slate-200 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              >
+                {projectTypes.map((type) => {
+                  return <option value={type} selected={data.type===type}>{type}</option>;
+                })}
+              </select>
+              <InputError message={errors.type} className="mt-2 text-red-600" />
+              </div>
 
             <div className="flex gap-x-5 items-center justify-end mt-6">
               <PrimaryButton

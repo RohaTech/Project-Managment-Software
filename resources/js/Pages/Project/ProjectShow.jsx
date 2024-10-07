@@ -37,6 +37,8 @@ export default function ProjectShow({
   members,
   membersRole,
 }) {
+
+    // console.log(project.type);
   let [isOpen, setIsOpen] = useState(false);
   let [openEdit, setOpenEdit] = useState(false);
   let [openDelete, setOpenDelete] = useState(false);
@@ -428,54 +430,46 @@ export default function ProjectShow({
                   </svg>
                 </span>
               )}
-            </div>
-            <Dialog
-              open={openFilter}
-              onClose={() => setOpenFilter(false)}
-              className="relative z-50"
-            >
-              <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-slate-100/60">
-                <DialogPanel className="max-w-2xl space-y-4 top-15 border bg-white p-12 rounded-xl">
-                  <DialogTitle className="font-bold">
-                    Filtering Criteria
-                  </DialogTitle>
-                  <div className="flex gap-x-10">
-                    <div>
-                      <h2>Assigned</h2>
-                      <select name="assigned" onChange={handleFilterChange}>
-                        <option value="">All Assigned</option>
-                        {members.map((member) => {
-                          return (
-                            <option value={member.id}>
-                              {member.name.split(" ")[0]}
-                            </option>
-                          );
-                        })}
-                        <option value={null}>Not Assigned</option>
-                      </select>
-                    </div>
-                    <div>
-                      <h2>Status</h2>
-                      <select name="status" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="Not Started">Not Started</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
-                      </select>
-                    </div>
-                    <div>
-                      <h2>Priority</h2>
-                      <select name="priority" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                      </select>
-                    </div>
-                  </div>
-                </DialogPanel>
-              </div>
-            </Dialog>
+ 
+            <Dialog open={openFilter} onClose={() => setOpenFilter(false)} className="relative z-50" >
+                    <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-slate-100/60">
+                        <DialogPanel className="max-w-2xl space-y-4 top-15 border bg-white p-12 rounded-xl">
+                            <DialogTitle className="font-bold">Filtering Criteria</DialogTitle>
+                            <div className="flex gap-x-10">
+                                <div>
+                                    <h2>Assigned</h2>
+                                    <select name="assigned" onChange={handleFilterChange} >
+                                        <option value="">All Assigned</option>
+                                        {members.map(member=>{
+                                            return (
+                                                <option value={member.id} selected={parseInt(filterCriteria.assigned) === parseInt(member.id)}>{member.name.split(" ")[0]}</option>
+                                            )
+                                        })}
+                                        {/* <option value={null}>Not Assigned</option> */}
+                                    </select>
+                                </div>
+                                <div>
+                                    <h2>Status</h2>
+                                    <select name="status" onChange={handleFilterChange}>
+                                        <option value="">All</option>
+                                        <option selected={filterCriteria.status === "Not Started"} value="Not Started">Not Started</option>
+                                        <option selected={filterCriteria.status === "In Progress"} value="In Progress">In Progress</option>
+                                        <option selected={filterCriteria.status === "Completed"} value="Completed">Completed</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <h2>Priority</h2>
+                                    <select name="priority" onChange={handleFilterChange}>
+                                        <option  value="">All</option>
+                                        <option selected={filterCriteria.priority === "High"} value="High">High</option>
+                                        <option selected={filterCriteria.priority === "Medium"} value="Medium">Medium</option>
+                                        <option selected={filterCriteria.priority === "Low"} value="Low">Low</option>
+                                        {/* <option value={null}>Not set</option> */}
+                                    </select>
+                                </div>
+                            </div>
+                        </DialogPanel>
+ 
 
             <div>
               <Link
@@ -506,6 +500,9 @@ export default function ProjectShow({
                         </th>
                         <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                           Assigned
+                        </th>
+                        <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
+                          Type
                         </th>
                         <th className="w-7/50 px-4 py-2 border text-left border-slate-300">
                           Status
@@ -552,6 +549,7 @@ export default function ProjectShow({
                                 role={role}
                                 index={index}
                                 moveRow={moveRow}
+                                projectType={project.type}
                               />
                               {openTasks[task.id] &&
                                 task.subtasks &&
