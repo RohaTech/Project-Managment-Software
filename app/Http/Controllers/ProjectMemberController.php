@@ -118,4 +118,33 @@ class ProjectMemberController extends Controller
             dd($ex);
         }
     }
+    public function transfer(Request $request, Project $project)
+    {
+        try {
+
+            $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
+
+            if ($currentMember->role !== "owner") {
+                return back()->withErrors(['Error' => 'Unauthorized Access']);
+            }
+
+            $validated = $request->validate([
+                'member_id' => '|required|numeric'
+            ]);
+
+            $newOwner = ProjectMember::where('user_id', $validated['member_id'])->first();
+            $oldOwner = ProjectMember::where('user_id', auth()->user()->id)->first();
+
+
+            $newOwner->update([
+                'role' => "owner"
+            ]);
+            $oldOwner->update([
+                'role' => "member"
+            ]);
+            return redirect()->route('home')->with('success', 'Project updated successfully.');
+        } catch (Exception $ex) {
+            dd($ex);
+        }
+    }
 }

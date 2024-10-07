@@ -20,10 +20,10 @@ export default function AuthenticatedLayout({ header, children, projects }) {
   }
 
   return (
-    <div className="  relative overflow-x-hidden overflow-y-hidden ">
+    <div className=" h-screen relative overflow-x-hidden overflow-y-hidden ">
       <header className="w-full mb-0.5 sticky top-0 left-0 z-[10000] bg-white">
-        <nav className="bg-white border-gray-200 py-4 shadow-md ">
-          <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
+        <nav className="bg-white border-gray-200 py-4 shadow-md   w-full">
+          <div className="flex flex-wrap items-center justify-between w-full  px-16 mx-auto">
             <div href="#" className="flex items-center">
               <ApplicationLogo />
             </div>

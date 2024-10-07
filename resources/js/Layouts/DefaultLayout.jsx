@@ -3,7 +3,7 @@ import Sidebar from "@/Components/Sidebar";
 import React, { useEffect, useRef, useState } from "react";
 export default function DefaultLayout({ children, setIsSideBar, isSideBar }) {
   return (
-    <div className="dark:bg-boxdark-2   ">
+    <div className="dark:bg-boxdark-2  z   ">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden relative ">
         <FloatingQuickSearch />
