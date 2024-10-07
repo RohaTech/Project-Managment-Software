@@ -5,6 +5,7 @@ function AddSubTask({parentTaskId, setTaskList, projectId}) {
     // console.log(parentTaskId);
     const { data, setData, post, reset } = useForm({
         name: 'My SubTask',
+        type: "N/A",
         project_id: projectId,
         assigned: '',
         status: '',

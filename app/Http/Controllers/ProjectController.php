@@ -390,6 +390,7 @@ class ProjectController extends Controller
                 $newParentTask = $newProject->tasks()->create([
                     'name' => $task->name . " - copy",
                     'project_id' => $task->id,
+                    'type' => $project->type,
                     'description' => $task->description,
                     'priority' => $task->priority,
                     'additional_column' => $task->additional_column,

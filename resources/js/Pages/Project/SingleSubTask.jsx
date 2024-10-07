@@ -71,6 +71,7 @@ function SingleSubTask({
   const [isEditing, setIsEditing] = useState(false);
   const { data, setData, patch, errors } = useForm({
     name: subtask.name,
+    type: subtask.type,
     assigned: subtask.assigned,
     status: subtask.status,
     priority: subtask.priority,
@@ -173,7 +174,7 @@ function SingleSubTask({
         </Link>
       </td>
 
-      <td className="border border-slate-300">
+      <td className="border border-slate-300 w-[150px]">
         <select
           className="border-0"
           onChange={(e) => setData("assigned", e.target.value)}
@@ -194,7 +195,10 @@ function SingleSubTask({
           ))}{" "}
         </select>
       </td>
-      <td className="border border-slate-300 border-collapse">
+      <td className="border border-slate-300 border-collapse w-[180px]">
+           {data.type}
+      </td>
+      <td className="border border-slate-300 border-collapse w-[150px]">
         <select
            className={`border-0 text-sm ${selectedStatus === "Not Started" ?
             "bg-gray-200 text-black":statusOptions.find((p)=>p.value === selectedStatus)?.color}`}
