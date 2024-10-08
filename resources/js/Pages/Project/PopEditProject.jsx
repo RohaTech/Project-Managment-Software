@@ -8,7 +8,7 @@ import { useForm } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 
 function PopEditProject({ openEdit, setOpenEdit, project, role }) {
- 
+
 //   console.log("PopEditProject openEdit:", openEdit);
 
   const projectTypes = [
@@ -21,7 +21,7 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
         "Manufacturing",
         "Finance/Banking",
     ];
- 
+
   const { data, setData, patch, processing, errors, reset } = useForm({
     name: project.name,
     description: project.description,
@@ -81,7 +81,7 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
                 className="mt-2 text-red-600"
               />
             </div>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <InputLabel
                 htmlFor="type"
                 value="Type"
@@ -98,7 +98,7 @@ function PopEditProject({ openEdit, setOpenEdit, project, role }) {
                 })}
               </select>
               <InputError message={errors.type} className="mt-2 text-red-600" />
-              </div>
+              </div> */}
 
             <div className="flex gap-x-5 items-center justify-end mt-6">
               <PrimaryButton

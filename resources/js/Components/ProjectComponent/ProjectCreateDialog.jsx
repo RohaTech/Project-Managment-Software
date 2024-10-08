@@ -26,7 +26,7 @@ export default function ProjectCreateDialog({
   const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
     description: "",
-    type: "",
+    type: "Software Development",
   });
   const submit = (e) => {
     e.preventDefault();
