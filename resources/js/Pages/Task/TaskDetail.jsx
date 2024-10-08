@@ -35,6 +35,7 @@ const TaskDetail = ({ task, messages, user_id, user, assigned }) => {
     errors,
   } = useForm({
     name: task.name,
+    type:task.type,
     assigned: task.assigned,
     status: task.status,
     approved: task.approved,
