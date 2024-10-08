@@ -9,15 +9,12 @@ export const QuickSearch = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8001/home/all-search?query=${searchQuery}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`home/all-search?query=${searchQuery}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           console.log("Network Error");
         }
@@ -179,7 +176,10 @@ export const QuickSearch = () => {
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Task</h1>
                     <ul className="space-y-2">
-                      {mappedTasks && mappedTasks.length > 0 && mappedTasks}
+                      {mappedTasks &&
+                        mappedTasks.length > 0 &&
+                        searchQuery.length > 0 &&
+                        mappedTasks}
                     </ul>
                     {mappedTasks &&
                       mappedTasks.length === 0 &&
