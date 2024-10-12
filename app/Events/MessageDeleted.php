@@ -13,36 +13,34 @@ class MessageDeleted implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-    public $projectId;
-    public $taskId;
+   
 
-    public function __construct($message, $projectId, $taskId)
+    public function __construct($message)
     {
         $this->message = $message;
-        $this->projectId = $projectId;
-        $this->taskId = $taskId;
+        logger($message);
     }
 
     public function broadcastOn(): array
-    {   logger("dawit");
+    {               return [new PrivateChannel('tasks.' . $this->message->task_id . '.messages')];
+
+        logger("dawit");
         logger($this->message->project_id);
         // Check if it's a project message or task message and broadcast to the appropriate channel
-        if ($this->projectId) {
-            return [new PrivateChannel('projects.' . $this->projectId . '.messages')];
-        } elseif ($this->taskId) {
-            return [new PrivateChannel('tasks.' . $this->taskId . '.messages')];
-        }
+        // if ($this->message->project_id) {
+        //     return [new PrivateChannel('projects.' . $this->message->project_id . '.messages')];
+        // } elseif ($this->message->task_id) {
+        //     return [new PrivateChannel('tasks.' . $this->message->task_id . '.messages')];
+        // }
 
-        return [];
+        // return [];
     }
 
     public function broadcastWith(): array
     {
         // Return both messageId, projectId, and taskId for the frontend
         return [
-            'messageId' => $this->message,
-            'projectId' => $this->projectId,
-            'taskId' => $this->taskId,
+            'message' => $this->message,
         ];
     }
 }

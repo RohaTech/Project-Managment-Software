@@ -123,13 +123,9 @@ class MessageController extends Controller
     }
 
     public function destroy(Message $message)
-    {          
-        $projectId = $message->project_id;  
-        $taskId = $message->task_id;         
-        
+    {                 
         $message->delete();                 
-    
-        broadcast(new MessageDeleted($message, $projectId,$taskId));
+        // broadcast(new MessageDeleted($message));
 
     }
 }

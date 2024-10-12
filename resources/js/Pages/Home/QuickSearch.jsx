@@ -9,7 +9,7 @@ export const QuickSearch = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch(`home/all-search?query=${searchQuery}`, {
+        const response = await fetch(`/all-search?query=${searchQuery}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
