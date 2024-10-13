@@ -4,6 +4,7 @@ import { Link, usePage } from "@inertiajs/react";
 const Sidebar = ({ setIsSideBar, isSideBar }) => {
   const [fetchedData, setFetchedData] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const { projects } = usePage().props;
 
   useEffect(() => {
@@ -150,7 +151,13 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                   <div className="absolute inset-y-0 start-0 flex items-center  pointer-events-none"></div>
                   <input
                     type="search"
-                    id="default-search"
+                    id="sidebar-search"
+                    onFocus={() => {
+                      setIsFocused(true);
+                    }}
+                    onBlur={() => {
+                      setIsFocused(false);
+                    }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg group bg-gray-50 focus:ring-blue-500 focus:border-blue-500  "
@@ -180,13 +187,27 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                 </div>
               </form>
 
-              <ul className="flex flex-col px-8 text-sm gap-y-2">
-                {mappedProjects && mappedProjects.length > 0 ? (
-                  mappedProjects
-                ) : (
-                  <h1 className=" hidden">NO Projects Found</h1>
-                )}
+              <ul
+                className={`flex flex-col px-8 text-sm gap-y-2 ${
+                  isFocused ? "" : "hidden"
+                }`}
+              >
+                {mappedProjects &&
+                  mappedProjects.length > 0 &&
+                  searchQuery.length > 0 &&
+                  mappedProjects}
               </ul>
+              {mappedProjects &&
+                mappedProjects.length === 0 &&
+                searchQuery.length > 0 && (
+                  <h1
+                    className={`ml-8 uppercase text-red-500 ${
+                      isFocused ? "" : "hidden"
+                    }  `}
+                  >
+                    NO Projects Found
+                  </h1>
+                )}
 
               <ul className="mb-6 mt-2 pt-2  border-t  border-graydark   flex flex-col gap-1.5">
                 {/* <!-- Menu Item Project --> */}
