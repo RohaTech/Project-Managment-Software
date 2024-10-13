@@ -358,7 +358,7 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
           </nav>
           {/* <!-- Sidebar Menu --> */}
         </div>
-        <div className="bg-slate-300 mb-17 space-y-2 mt-auto py-8  ">
+        <div className="border-t border-slate-400 mb-17 space-y-2 mt-auto py-8  ">
           <Link
             href={route("profile.edit")}
             className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-black duration-1000 ease-linear hover:bg-primary hover:text-white px-6  `}
