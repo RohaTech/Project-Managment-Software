@@ -148,7 +148,7 @@ export const QuickSearch = () => {
                 </svg>
               </div>
 
-              <div className="mt-8 ">
+              <div className={`mt-8 ${searchQuery.length > 0 ? "" : "hidden"}`}>
                 <div className="flex gap-x-16">
                   <h1 className="text-xl text-primary font-bold">
                     Search Results
