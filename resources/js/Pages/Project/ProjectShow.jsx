@@ -320,7 +320,9 @@ export default function ProjectShow({
               <PopOvers members={members} project={project} role={role} />
               <button
                 onClick={() => setIsOpen(true)}
-                className="bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold"
+                className={`bg-primary text-white px-2 py-1 rounded-lg flex items-center gap-x-1 font-bold ${
+                  role === "member" ? "hidden" : ""
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
