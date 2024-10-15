@@ -212,7 +212,12 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         try {
-            $project = Project::find($task->project_id);
+            $project = $task->project()->first();
+            $members = ProjectMember::where("user_id", auth()->user()->id)->where('project_id', $project->id)->first();
+
+            if ($members->role === "member" && $task->assigned !== auth()->user()->id) {
+                return back()->withErrors(['Error' => 'you are not authorized to change']);
+            }
 
             $project->activities()->create([
                 'user_id' => Auth::id(),
