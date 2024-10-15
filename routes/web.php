@@ -7,11 +7,18 @@ use App\Models\Task;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'user' => auth()->user()
     ]);
 })->name('welcome');
+Route::get('/contact', function () {
+    return Inertia::render('ContactUs/ContactUs');
+})->name('contact');
+Route::get('/AboutUs', function () {
+    return Inertia::render('AboutUs/AboutUs');
+})->name('AboutUs');
 
 Route::get('/home', function () {
     $userId = auth()->id();
