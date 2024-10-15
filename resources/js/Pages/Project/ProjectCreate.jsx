@@ -38,7 +38,7 @@ export default function Project() {
               <h2 className="text-[#afabac] text-sm">Use Default Layout</h2>
             </div>
           </div>
-          <div className="h-[220px] rounded-xl w-[150px] flex-col flex justify-center items-center hover:-translate-y-4 hover:shadow-xl group  duration-300 ease-linear hover:bg-[#f8f7f7]">
+          {/* <div className="h-[220px] rounded-xl w-[150px] flex-col flex justify-center items-center hover:-translate-y-4 hover:shadow-xl group  duration-300 ease-linear hover:bg-[#f8f7f7]">
             <div className="size-[120px] border border-[#edeae9] rounded-lg mb-4 flex justify-center items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@ export default function Project() {
               <h1 className="font-semibold ">Use a template</h1>
               <h2 className="text-[#afabac] text-sm">Choose From Library</h2>
             </div>
-          </div>
+          </div> */}
 
           <Link
             href={route("project.copy")}

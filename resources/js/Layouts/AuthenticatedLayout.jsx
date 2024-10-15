@@ -72,20 +72,20 @@ export default function AuthenticatedLayout({ header, children, projects }) {
                 <li>
                   <Link
                     href={route("home")}
-                    className="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 "
+                    className="block py-2 pl-3 pr-4     rounded lg:bg-transparent  lg:p-0 "
                     aria-current="page"
                   >
                     Home
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     href="#"
                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                   >
                     Templates
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     href={route("contact")}
