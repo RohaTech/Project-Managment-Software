@@ -108,7 +108,7 @@ export const QuickSearch = () => {
           <div className="flex min-h-full bg-yellow-00 items-center justify-end p-4">
             <DialogPanel
               transition
-              className="w-[1100px] absolute top-10 mt-16 mr-16 min-h-[500px] backdrop-blur-2xl  rounded-xl  bg-white   border border-gray  shadow-2xl  p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="w-[1100px] absolute top-10  mt-24 mr-48 min-h-[500px] backdrop-blur-2xl  rounded-xl  bg-white   border border-gray  shadow-2xl  p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               <DialogTitle
                 as="h3"
