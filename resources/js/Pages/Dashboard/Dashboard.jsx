@@ -1,19 +1,141 @@
+import { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+
 import CardDataStats from "./CardDataStats";
 import { PieChart } from "./PieChart";
 import { BarChart } from "./BarChart";
-
+import clsx from "clsx";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+  ComboboxButton,
+} from "@headlessui/react";
 export default function Dashboard({
   projectsCount,
   taskStats,
   personalTasksStats,
+  projects,
 }) {
-  //   console.log(taskStats);
+  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [selectionError, setSelectionError] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const filteredProjects =
+    query === ""
+      ? projects
+      : projects.filter((project) => {
+          return project.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+  useEffect(() => {
+    if (selectionError) {
+      setTimeout(() => {
+        setSelectionError(false);
+      }, 2000);
+    }
+  }, [selectionError]);
+
+  const removeSelection = (name) => {
+    const filteredSelection = selectedProjects.filter(
+      (project) => project.name !== name
+    );
+
+    setSelectedProjects(filteredSelection);
+  };
+
   return (
     <AuthenticatedLayout>
-      <Head title="Dashboard" />
+      {/* <div className="ml-8 mb-3 pb-6 flex items-center gap-x-4 border-b border-b-gray-300">
+        <div className="">
+          <h1 className="">Select Projects </h1>
+        </div>
+        <Combobox
+          multiple
+          value={selectedProjects}
+          onChange={(projects) => {
+            if (projects.length <= 3) {
+              setSelectedProjects(projects);
+            } else {
+              setSelectionError(true);
+            }
+          }}
+          onClose={() => setQuery("")}
+        >
+          <div className="relative">
+            {selectionError && (
+              <div className="text-red-500 -top-6 -left-3 text-nowrap absolute text-sm mb-2">
+                You can only select up to 3 projects.
+              </div>
+            )}
+            <ComboboxInput
+              className={clsx(
+                "w-full rounded-lg border-gray-300 bg-white/5 py-1.5 pr-8 pl-3 text-sm/6 ",
+                "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+              )}
+              displayValue={(person) => person?.name}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
+              <div className="flex-col flex">
+                <svg
+                  className="fill-primaryColor size-2.5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z" />
+                </svg>
+                <svg
+                  className="fill-primaryColor size-2.5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+                </svg>
+              </div>
+            </ComboboxButton>
+          </div>
 
+          <ComboboxOptions
+            anchor="bottom"
+            className={clsx(
+              " rounded-xl border border-gray-200 p-3 bg-white min-w-[288px] cursor-pointer  empty:invisible",
+              "transition duration-100 ease-in divide-y mt-2 data-[leave]:data-[closed]:opacity-0"
+            )}
+          >
+            {filteredProjects.map((project) => (
+              <ComboboxOption
+                key={project.id}
+                value={project}
+                className={`data-[focus]:bg-blue-100 p-0.5 data-[selected]:bg-primary data-[selected]:text-white `}
+              >
+                {project.name}
+              </ComboboxOption>
+            ))}
+          </ComboboxOptions>
+        </Combobox>
+        {selectedProjects.length > 0 && (
+          <div className="flex gap-x-2">
+            <ul className="flex flex-wrap gap-x-2 gap-y-2 cursor-pointer">
+              {selectedProjects.map((project) => (
+                <li
+                  onClick={() => {
+                    removeSelection(project.name);
+                  }}
+                  className="bg-gray-200 p-2 justify-center items-center flex rounded"
+                  key={project.id}
+                >
+                  {project.name}
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setSelectedProjects([])} className="p-3">
+              X
+            </button>
+          </div>
+        )}
+      </div> */}
       <div className="grid pb-16  cursor-pointer grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title="Total Projects" total={`${projectsCount}`}>
           <svg

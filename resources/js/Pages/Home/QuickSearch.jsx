@@ -9,15 +9,12 @@ export const QuickSearch = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8000/home/all-search?query=${searchQuery}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`/all-search?query=${searchQuery}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           console.log("Network Error");
         }
@@ -79,6 +76,8 @@ export const QuickSearch = () => {
         </li>
       </Link>
     ));
+
+  console.log(searchQuery);
   return (
     <div className="">
       <button
@@ -109,7 +108,7 @@ export const QuickSearch = () => {
           <div className="flex min-h-full bg-yellow-00 items-center justify-end p-4">
             <DialogPanel
               transition
-              className="w-[1100px] absolute top-10 mt-16 mr-16 min-h-[500px] backdrop-blur-2xl  rounded-xl  bg-white   border border-gray  shadow-2xl  p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="w-[1100px] absolute top-10  mt-24 mr-48 min-h-[500px] backdrop-blur-2xl  rounded-xl  bg-white   border border-gray  shadow-2xl  p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               <DialogTitle
                 as="h3"
@@ -149,7 +148,7 @@ export const QuickSearch = () => {
                 </svg>
               </div>
 
-              <div className="mt-8 ">
+              <div className={`mt-8 ${searchQuery.length > 0 ? "" : "hidden"}`}>
                 <div className="flex gap-x-16">
                   <h1 className="text-xl text-primary font-bold">
                     Search Results
@@ -160,39 +159,51 @@ export const QuickSearch = () => {
                 <div className="mt-4  flex flex-col gap-y-1 border-t border-primary  p-2">
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Projects</h1>
-                    <ul className="space-y-2 mt-4">
-                      {mappedProjects && mappedProjects.length > 0 ? (
-                        mappedProjects
-                      ) : (
-                        <h1 className="uppercase text-red-500">
-                          NO Projects Found
+                    <ul className="space-y-2">
+                      {mappedProjects &&
+                        mappedProjects.length > 0 &&
+                        searchQuery.length > 0 &&
+                        mappedProjects}
+                    </ul>
+                    {mappedProjects &&
+                      mappedProjects.length === 0 &&
+                      searchQuery.length > 0 && (
+                        <h1 className="uppercase    text-red-500">
+                          NO Project Found
                         </h1>
                       )}
-                    </ul>
                   </div>
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Task</h1>
                     <ul className="space-y-2">
-                      {mappedTasks && mappedTasks.length > 0 ? (
-                        mappedTasks
-                      ) : (
+                      {mappedTasks &&
+                        mappedTasks.length > 0 &&
+                        searchQuery.length > 0 &&
+                        mappedTasks}
+                    </ul>
+                    {mappedTasks &&
+                      mappedTasks.length === 0 &&
+                      searchQuery.length > 0 && (
                         <h1 className="uppercase    text-red-500">
-                          NO Tasks Found
+                          NO Task Found
                         </h1>
                       )}
-                    </ul>
                   </div>
                   <div className=" py-2">
                     <h1 className="font-bold  text-primary">Sub-Tasks</h1>
                     <ul className="space-y-2">
-                      {mappedSubtasks && mappedSubtasks.length > 0 ? (
-                        mappedSubtasks
-                      ) : (
+                      {mappedSubtasks &&
+                        mappedSubtasks.length > 0 &&
+                        searchQuery.length > 0 &&
+                        mappedSubtasks}
+                    </ul>
+                    {mappedSubtasks &&
+                      mappedSubtasks.length === 0 &&
+                      searchQuery.length > 0 && (
                         <h1 className="uppercase    text-red-500">
                           NO Subtasks Found
                         </h1>
                       )}
-                    </ul>
                   </div>
                 </div>
               </div>

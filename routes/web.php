@@ -7,11 +7,18 @@ use App\Models\Task;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'user' => auth()->user()
     ]);
 })->name('welcome');
+Route::get('/contact', function () {
+    return Inertia::render('ContactUs/ContactUs');
+})->name('contact');
+Route::get('/AboutUs', function () {
+    return Inertia::render('AboutUs/AboutUs');
+})->name('AboutUs');
 
 Route::get('/home', function () {
     $userId = auth()->id();
@@ -36,13 +43,13 @@ Route::get('/home', function () {
 Route::get('/dashboard', function () {
     $userId = auth()->id();
 
-    $projects = Project::whereHas('members', function ($query) use ($userId) {
+    $AllProjects = Project::whereHas('members', function ($query) use ($userId) {
         $query->where('user_id', $userId);
     })->get();
 
-    $projectsCount = $projects->count();
+    $projectsCount = $AllProjects->count();
 
-    $tasks = Task::whereIn('project_id', $projects->pluck('id'))->get();
+    $tasks = Task::whereIn('project_id', $AllProjects->pluck('id'))->get();
 
 
     $personalTasks = $tasks->filter(function ($task) use ($userId) {
@@ -68,17 +75,17 @@ Route::get('/dashboard', function () {
     return Inertia::render(
         'Dashboard/Dashboard',
         [
-            'user' => auth()->user(),
             'projectsCount' => $projectsCount,
             'taskStats' => $taskStats,
-            "personalTasksStats" => $personalTasksStats
+            "personalTasksStats" => $personalTasksStats,
+            "projects" => $AllProjects
         ]
     );
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home/all-search', [ApiController::class, 'search'])->name('all.search');
+    Route::get('/all-search', [ApiController::class, 'search'])->name('all.search');
     Route::get('/project-search', [ApiController::class, 'projectOnlySearch'])->name('project.search');
     Route::get('/task-search', [ApiController::class, 'taskSearch'])->name('task.search');
 });

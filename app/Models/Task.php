@@ -12,6 +12,7 @@ class Task extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
+        'type',
         'description',
         'order_column',
         'priority',

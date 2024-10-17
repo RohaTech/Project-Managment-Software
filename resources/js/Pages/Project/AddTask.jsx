@@ -4,6 +4,7 @@ import React from "react";
 function AddTask({ setTaskList, projectId }) {
     const { data, setData, post, reset } = useForm({
         name: "My Task",
+        type: "Documentation",
         project_id: projectId,
         assigned: "",
         status: "",
@@ -16,8 +17,7 @@ function AddTask({ setTaskList, projectId }) {
     const handleAddNewTask = () => {
         post("/task", {
             onSuccess: (response) => {
- 
-            console.log("Response Tasks: ",response.props.tasks);
+
             const newTask = response.props.tasks; // Assuming the rhover:bg-gray-200esponse contains the new task
             setTaskList(newTask);
                     },
@@ -26,13 +26,13 @@ function AddTask({ setTaskList, projectId }) {
         }
   return (
     <button
-    className=" transition duration-300 ease-in-out rounded-lg flex items-center px-2 py-1 "
+    className=" transition duration-300 ease-in-out rounded-lg flex items-center px-2 py-1 text-sm"
     onClick={() => handleAddNewTask()}
 >
     <span> +Add New</span>
 </button>
   )
- 
+
 }
 
 export default AddTask;

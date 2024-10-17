@@ -13,9 +13,9 @@ function RightSide() {
           />
         </div>
         <h3>Boost your work-flow in minutes with ready-made templates</h3>
-        <div className="self-center text-center border-[1px] border-graydark rounded-xl w-full py-2 hover:bg-[#d7d3d3] transition duration-300 ease-in-out">
+        {/* <div className="self-center text-center border-[1px] border-graydark rounded-xl w-full py-2 hover:bg-[#d7d3d3] transition duration-300 ease-in-out">
           <Link href="">Explore Templates</Link>
-        </div>
+        </div> */}
       </div>
       <h3 className="my-4 ml-2">Learn & get inspired</h3>
       <div className="flex gap-x-4 items-center hover:shadow-5 p-2 mb-2 rounded-lg transition duration-300 ease-in-out">
@@ -477,7 +477,7 @@ function RightSide() {
           </svg>
         </div>
         <div className="">
-          <Link>
+          <Link href={route("project.create")}>
             <h3 className="font-bold">Getting started</h3>
             <p className="text-sm">
               Learn how <i>Gizebet</i> Works

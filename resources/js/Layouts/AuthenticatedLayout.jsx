@@ -20,10 +20,10 @@ export default function AuthenticatedLayout({ header, children, projects }) {
   }
 
   return (
-    <div className="h-screen  relative overflow-x-hidden overflow-y-hidden ">
+    <div className=" h-screen relative overflow-x-hidden overflow-y-hidden ">
       <header className="w-full mb-0.5 sticky top-0 left-0 z-[10000] bg-white">
-        <nav className="bg-white border-gray-200 py-4 shadow-md ">
-          <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
+        <nav className="bg-white border-gray-200 py-4 shadow-md   w-full">
+          <div className="flex flex-wrap items-center justify-between w-full  px-16 mx-auto">
             <div href="#" className="flex items-center">
               <ApplicationLogo />
             </div>
@@ -72,36 +72,36 @@ export default function AuthenticatedLayout({ header, children, projects }) {
                 <li>
                   <Link
                     href={route("home")}
-                    className="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 "
+                    className="block py-2 pl-3 pr-4     rounded lg:bg-transparent  lg:p-0 "
                     aria-current="page"
                   >
                     Home
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     href="#"
                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                   >
                     Templates
                   </a>
+                </li> */}
+                <li>
+                  <Link
+                    href={route("contact")}
+                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
+                  >
+                    Contact us
+                  </Link>
                 </li>
 
                 <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
-                  >
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
+                  <Link
+                    href={route("AboutUs")}
                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                   >
                     About us
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

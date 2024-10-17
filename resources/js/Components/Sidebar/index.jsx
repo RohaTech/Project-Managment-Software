@@ -4,6 +4,7 @@ import { Link, usePage } from "@inertiajs/react";
 const Sidebar = ({ setIsSideBar, isSideBar }) => {
   const [fetchedData, setFetchedData] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const { projects } = usePage().props;
 
   useEffect(() => {
@@ -57,8 +58,8 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
 
   const mappedAsideProjects = projects.slice(0, 5).map((project) => (
     <Link href={route("project.show", project.id)} key={project.id}>
-      <li className="px-1 py-2 hover:text-primary hover:font-bold">
-        <h1 className="text-sm  capitalize">{project.name}</h1>
+      <li className="px-1 py-2 hover:text-primary hover:font-semi-bold -translate-x-4">
+        <h1 className="text-sm text-balance  capitalize">{project.name}</h1>
       </li>
     </Link>
   ));
@@ -76,11 +77,15 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
     ));
 
   return (
-    <div className="fixed left-0 z-[50] h-full   ">
+    <div
+      className={`fixed left-0 z-[50] h-full   ${
+        !isSideBar ? "    w-0   " : "flex "
+      }   `}
+    >
       <aside
         ref={sidebar}
         className={`z-[50]       origin-right  bg-[#f7f8f9] h-screen   w-72.5 flex-col overflow-hidden duration-700 ease-linear ${
-          !isSideBar ? " -translate-x-[300px]    " : "flex "
+          !isSideBar ? " -translate-x-[300px]  z-0   " : "flex "
         }   `}
       >
         <div className="no-scrollbar  flex flex-col overflow-y-auto duration-300 ease-linear">
@@ -108,9 +113,9 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2  ">
                 <Link href={route("home")}>
-                  <div className="flex items-center hover:text-primaryColor  px-6 text gap-x-2 cursor-pointer ">
+                  <div className="flex items-center hover:text-primaryColor hover:font-bold  px-6 text gap-x-2 cursor-pointer ">
                     <svg
                       className="size-4 fill-primaryColor"
                       xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +128,7 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                 </Link>
                 <Link
                   href={route("project.create")}
-                  className="flex  items-center px-6 text gap-x-2 cursor-pointer hover:text-primaryColor  "
+                  className="flex  items-center px-6 text gap-x-2 cursor-pointer hover:font-bold  hover:text-primaryColor  "
                 >
                   <svg
                     className="size-4 fill-primaryColor"
@@ -146,7 +151,13 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                   <div className="absolute inset-y-0 start-0 flex items-center  pointer-events-none"></div>
                   <input
                     type="search"
-                    id="default-search"
+                    id="sidebar-search"
+                    onFocus={() => {
+                      setIsFocused(true);
+                    }}
+                    onBlur={() => {
+                      setIsFocused(false);
+                    }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg group bg-gray-50 focus:ring-blue-500 focus:border-blue-500  "
@@ -176,15 +187,29 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                 </div>
               </form>
 
-              <ul className="flex flex-col px-8 text-sm gap-y-2">
-                {mappedProjects && mappedProjects.length > 0 ? (
-                  mappedProjects
-                ) : (
-                  <h1 className=" hidden">NO Projects Found</h1>
-                )}
+              <ul
+                className={`flex flex-col px-8 text-sm gap-y-2 ${
+                  isFocused ? "" : "hidden"
+                }`}
+              >
+                {mappedProjects &&
+                  mappedProjects.length > 0 &&
+                  searchQuery.length > 0 &&
+                  mappedProjects}
               </ul>
+              {mappedProjects &&
+                mappedProjects.length === 0 &&
+                searchQuery.length > 0 && (
+                  <h1
+                    className={`ml-8 uppercase text-red-500 ${
+                      isFocused ? "" : "hidden"
+                    }  `}
+                  >
+                    NO Projects Found
+                  </h1>
+                )}
 
-              <ul className="mb-6 mt-2 pt-2  border-t  border-graydark  flex flex-col gap-1.5">
+              <ul className="mb-6 mt-2 pt-2  border-t  border-graydark   flex flex-col gap-1.5">
                 {/* <!-- Menu Item Project --> */}
                 <div>
                   <Link href={route("project.index")}>
@@ -268,10 +293,103 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
                   </svg>
                   Dashboard
                 </Link>
+                <Link
+                  href={route("project.copy")}
+                  className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-black duration-1000 ease-linear hover:bg-primary hover:text-white px-6  `}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="fill-black"
+                    width="18"
+                    height="19"
+                    viewBox="0,0,256,256"
+                  >
+                    <defs>
+                      <linearGradient
+                        x1="48.5"
+                        y1="7"
+                        x2="48.5"
+                        y2="16"
+                        gradientUnits="userSpaceOnUse"
+                        id="color-1_43610_gr1"
+                      >
+                        <stop offset="0" stopColor="#1868db"></stop>
+                        <stop offset="1" stopColor="#1868db"></stop>
+                      </linearGradient>
+                      <linearGradient
+                        x1="32"
+                        y1="6"
+                        x2="32"
+                        y2="58"
+                        gradientUnits="userSpaceOnUse"
+                        id="color-2_43610_gr2"
+                      >
+                        <stop offset="0" stopColor="#1a6dff"></stop>
+                        <stop offset="1" stopColor="#1868db"></stop>
+                      </linearGradient>
+                    </defs>
+                    <g
+                      fill="none"
+                      fillRule="nonzero"
+                      stroke="none"
+                      strokeWidth="1"
+                      strokeLinecap="butt"
+                      strokeLinejoin="miter"
+                      strokeMiterlimit="10"
+                      strokeDasharray=""
+                      strokeDashoffset="0"
+                    >
+                      <g transform="scale(4,4)">
+                        <path
+                          d="M44,7v8.1c0,0.497 0.403,0.9 0.9,0.9h8.1z"
+                          fill="url(#color-1_43610_gr1)"
+                        ></path>
+                        <path
+                          d="M53.092,14.527l-7.895,-7.677c-0.564,-0.548 -1.306,-0.85 -2.092,-0.85h-20.105c-1.654,0 -3,1.346 -3,3v5h-7c-1.654,0 -3,1.346 -3,3v38c0,1.654 1.346,3 3,3h28c1.654,0 3,-1.346 3,-3v-5h7c1.654,0 3,-1.346 3,-3v-30.322c0,-0.807 -0.331,-1.59 -0.908,-2.151zM45,9.448l5.709,5.552h-4.709c-0.551,0 -1,-0.448 -1,-1zM51,48h-7h-2h-19c-0.551,0 -1,-0.448 -1,-1v-23h-2v23c0,1.654 1.346,3 3,3h19v5c0,0.552 -0.449,1 -1,1h-28c-0.551,0 -1,-0.448 -1,-1v-38c0,-0.552 0.449,-1 1,-1h7h1.917h0.083v-7c0,-0.552 0.449,-1 1,-1h20v6c0,1.654 1.346,3 3,3h6v30c0,0.552 -0.449,1 -1,1z"
+                          fill="black"
+                        ></path>
+                      </g>
+                    </g>
+                  </svg>{" "}
+                  Duplicate project
+                </Link>
               </ul>
             </div>
           </nav>
           {/* <!-- Sidebar Menu --> */}
+        </div>
+        <div className="border-t border-slate-400 mb-17 space-y-2 mt-auto py-8  ">
+          <Link
+            href={route("profile.edit")}
+            className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-black duration-1000 ease-linear hover:bg-primary hover:text-white px-6  `}
+          >
+            <svg
+              className="fill-black"
+              width="18"
+              height="19"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+            >
+              <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z" />
+            </svg>
+            Profile
+          </Link>
+          <Link
+            method="post"
+            href={route("logout")}
+            className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-red-500  duration-1000 ease-linear hover:bg-primary hover:text-white px-6  `}
+          >
+            <svg
+              className="fill-danger"
+              width="18"
+              height="19"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" />
+            </svg>
+            Log Out
+          </Link>
         </div>
       </aside>
       <div
@@ -279,7 +397,7 @@ const Sidebar = ({ setIsSideBar, isSideBar }) => {
           setIsSideBar(true);
         }}
         className={`  cursor-pointer    left-0  h-full  origin-left    w-[50px] flex-col overflow-hidden bg-[#f7f8f9] duration-1000  ease-linear ${
-          isSideBar ? "w-0 opacity-0 " : "absolute top-1"
+          isSideBar ? "w-0 hidden " : "absolute top-1"
         }`}
       >
         <svg
