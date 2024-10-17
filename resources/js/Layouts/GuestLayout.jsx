@@ -119,29 +119,20 @@ export default function Guest({ children }) {
                 </li>
 
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href={route("contact")}
                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                   >
-                    Templates
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
-                  >
-                    Contact
-                  </a>
+                    Contact us
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href={route("AboutUs")}
                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0  "
                   >
                     About us
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

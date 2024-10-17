@@ -117,9 +117,6 @@ class ProjectController extends Controller
             $parentTasks = $project->tasks()->whereNull('parent_task_id')->get();
             $tasksWithSubtasks = $this->getTasksWithSubtasks($parentTasks);
             $orderedTasks = $tasksWithSubtasks->sortBy('order_column')->values()->toArray();
-            // $orderedTasks = $tasksWithSubtasks->orderBy('order_column', 'asc');
-            // dd($tasksWithSubtasks);
-            // dd($orderedTasks);
             return Inertia::render('Project/ProjectShow', ["project" => $project, "tasks" => $orderedTasks, "members" => $membersInfo, "membersRole" => $members]);
         } catch (Exception $ex) {
             dd($ex);

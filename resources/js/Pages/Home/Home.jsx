@@ -140,7 +140,7 @@ export default function Home({ user, projects, activities }) {
                               <div className="w-4">{ProjectIcon[index]}</div>
                               <Link
                                 href={route("project.show", project.id)}
-                                className="font-bold text-md truncate w-[18ch] hover:text-[gray] transition duration-300 ease-in-out "
+                                className="font-bold text-md truncate w-[18ch] hover:text-primaryColor transition duration-300 ease-in-out "
                               >
                                 {project.name}
                               </Link>

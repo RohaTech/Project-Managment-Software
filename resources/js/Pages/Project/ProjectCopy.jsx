@@ -15,7 +15,7 @@ export default function ProjectCopy() {
         setCurrentProjectT(project);
       }}
       key={index}
-      className="relative justify-center mt-8 cursor-pointer min-h-[170px] flex flex-col group my-4 bg-white shadow-sm border border-slate-200 rounded-lg group w-96 hover:shadow-lg duration-700 ease-linear hover:shadow-gray-400"
+      className="relative justify-center mt-8 cursor-pointer min-h-[170px] flex flex-col group my-4 bg-white shadow-sm border border-slate-200 rounded-lg group w-96 hover:shadow-lg duration-150 ease-linear hover:shadow-gray-400"
     >
       <div className="p-4">
         <h5 className="mb-2 text-slate-800 text-lg font-semibold group-hover:text-primaryColor">
