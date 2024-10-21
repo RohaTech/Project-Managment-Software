@@ -139,8 +139,9 @@ class ProjectMemberController extends Controller
             'member_id' => '|required|numeric'
         ]);
 
-        $newOwner = ProjectMember::where('user_id', $validated['member_id'])->first();
-        $oldOwner = ProjectMember::where('user_id', auth()->user()->id)->first();
+        $newOwner = ProjectMember::where('user_id', $validated['member_id'])->where("project_id", $project->id)->first();
+
+        $oldOwner = ProjectMember::where('user_id', auth()->user()->id)->where("project_id", $project->id)->first();
 
 
         $newOwner->update([
