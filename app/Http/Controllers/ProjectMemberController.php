@@ -17,7 +17,7 @@ class ProjectMemberController extends Controller
     {
         $projectMembers = ProjectMember::latest()->simplePaginate(10);
 
-        return  Inertia::render('projectmember/show', [
+        return Inertia::render('projectmember/show', [
             'projectMembers' => $projectMembers,
             'user' => auth()->user(),
         ]);
@@ -127,31 +127,31 @@ class ProjectMemberController extends Controller
     }
     public function transfer(Request $request, Project $project)
     {
-        try {
+        // try {
 
-            $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
+        $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
 
-            if ($currentMember->role !== "owner") {
-                return back()->withErrors(['Error' => 'Unauthorized Access']);
-            }
-
-            $validated = $request->validate([
-                'member_id' => '|required|numeric'
-            ]);
-
-            $newOwner = ProjectMember::where('user_id', $validated['member_id'])->first();
-            $oldOwner = ProjectMember::where('user_id', auth()->user()->id)->first();
-
-
-            $newOwner->update([
-                'role' => "owner"
-            ]);
-            $oldOwner->update([
-                'role' => "member"
-            ]);
-            return redirect()->route('home')->with('success', 'Project updated successfully.');
-        } catch (Exception $ex) {
-            dd($ex);
+        if ($currentMember->role !== "owner") {
+            return back()->withErrors(['Error' => 'Unauthorized Access']);
         }
+
+        $validated = $request->validate([
+            'member_id' => '|required|numeric'
+        ]);
+
+        $newOwner = ProjectMember::where('user_id', $validated['member_id'])->first();
+        $oldOwner = ProjectMember::where('user_id', auth()->user()->id)->first();
+
+
+        $newOwner->update([
+            'role' => "owner"
+        ]);
+        $oldOwner->update([
+            'role' => "member"
+        ]);
+        return redirect()->route('home')->with('success', 'Project updated successfully.');
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
 }

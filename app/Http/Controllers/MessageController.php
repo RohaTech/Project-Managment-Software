@@ -23,12 +23,12 @@ class MessageController extends Controller
 
     public function index($taskId)
     {
-        try {
-            $Messages = Message::where('task_id', $taskId)->with('user')->get();
-            return response()->json($Messages);
-        } catch (Exception $ex) {
-            dd($ex);
-        }
+        // try {
+        $Messages = Message::where('task_id', $taskId)->with('user')->get();
+        return response()->json($Messages);
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
 
 
@@ -99,7 +99,7 @@ class MessageController extends Controller
         $message->save();
         logger('hellooooooooooo');
         broadcast(new MessageSent($message));
-       
+
     }
 
 
@@ -119,12 +119,12 @@ class MessageController extends Controller
         $Message->save();
         broadcast(new MessageUpdated($Message));
 
-        
+
     }
 
     public function destroy(Message $message)
-    {                 
-        $message->delete();                 
+    {
+        $message->delete();
         // broadcast(new MessageDeleted($message));
 
     }

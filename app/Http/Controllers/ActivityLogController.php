@@ -21,11 +21,11 @@ class ActivityLogController extends Controller
      */
     public function create()
     {
-        try {
-            return Inertia::render('ActivityLog/ActivityLogCreate');
-        } catch (Exception $ex) {
-            dd($ex);
-        }
+        // try {
+        return Inertia::render('ActivityLog/ActivityLogCreate');
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
 
     /**

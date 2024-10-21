@@ -59,41 +59,41 @@ class ApiController extends Controller
 
     public function search(Request $request)
     {
-        try {
+        // try {
 
 
-            if ($request->user()) {
-                $userId = Auth::id();
-                $query = $request->query('query');
+        if ($request->user()) {
+            $userId = Auth::id();
+            $query = $request->query('query');
 
-                $allProjects = Project::whereHas('members', function ($query) use ($userId) {
-                    $query->where('user_id', $userId);
-                });
+            $allProjects = Project::whereHas('members', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            });
 
-                $allTasks = Task::whereIn('project_id', $allProjects->pluck('id'))->whereNull('parent_task_id')->get();
+            $allTasks = Task::whereIn('project_id', $allProjects->pluck('id'))->whereNull('parent_task_id')->get();
 
-                $subtasks = Task::whereIn('parent_task_id', $allTasks->pluck('id'))
-                    ->when($query, function ($q) use ($query) {
-                        $q->where('name', 'like', '%' . $query . '%');
-                    })->latest()
-                    ->get();
-                $tasks = Task::whereIn('project_id', $allProjects->pluck('id'))->whereNull('parent_task_id')
-                    ->when($query, function ($q) use ($query) {
-                        $q->where('name', 'like', '%' . $query . '%');
-                    })->latest()
-                    ->get();
-
-                $projects = $allProjects->when($query, function ($q) use ($query) {
+            $subtasks = Task::whereIn('parent_task_id', $allTasks->pluck('id'))
+                ->when($query, function ($q) use ($query) {
                     $q->where('name', 'like', '%' . $query . '%');
-                })->with(['creator', 'updateBy']) // Load the creator relationship
-                    ->latest()
-                    ->get();
+                })->latest()
+                ->get();
+            $tasks = Task::whereIn('project_id', $allProjects->pluck('id'))->whereNull('parent_task_id')
+                ->when($query, function ($q) use ($query) {
+                    $q->where('name', 'like', '%' . $query . '%');
+                })->latest()
+                ->get();
+
+            $projects = $allProjects->when($query, function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })->with(['creator', 'updateBy']) // Load the creator relationship
+                ->latest()
+                ->get();
 
 
-                return response()->json(['projects' => $projects, 'tasks' => $tasks, 'subtasks' => $subtasks]);
-            }
-        } catch (Exception $ex) {
-            dd($ex);
+            return response()->json(['projects' => $projects, 'tasks' => $tasks, 'subtasks' => $subtasks]);
         }
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
 }

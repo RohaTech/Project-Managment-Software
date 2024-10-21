@@ -154,55 +154,55 @@ class TaskController extends Controller
         if ($members->role === "member" && $task->assigned !== auth()->user()->id) {
             return back()->withErrors(['Error' => 'you are not authorized to change']);
         }
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'type' => 'required|string',
-                'assigned' => 'nullable|exists:users,id',
-                'status' => 'string',
-                'approved' => 'nullable',
-                'priority' => 'nullable|string',
-                'due_date' => 'nullable|date',
-                'description' => 'nullable|string', // add this
-                'parent_task_id' => 'nullable|exists:tasks,id', // add this
-                'additional_column' => 'nullable',
-            ]);
+        // try {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string',
+            'assigned' => 'nullable|exists:users,id',
+            'status' => 'string',
+            'approved' => 'nullable',
+            'priority' => 'nullable|string',
+            'due_date' => 'nullable|date',
+            'description' => 'nullable|string', // add this
+            'parent_task_id' => 'nullable|exists:tasks,id', // add this
+            'additional_column' => 'nullable',
+        ]);
 
-            $task->update([
-                'name' => $validated['name'],
-                'type' => $validated['type'],
-                'assigned' => $validated['assigned'],
-                'status' => $validated['status'] ?? $task->status,
-                'approved' => $validated['approved'] ?? $task->approved,
-                'priority' => $validated['priority'],
-                'due_date' => $validated['due_date'],
-                'additional_column' => $validated['additional_column'] ?? $task->additional_column,
-                'updated_by' => auth()->id(),
-                'description' => $validated['description'] ?? $task->description, // add this
-                'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
-            ]);
+        $task->update([
+            'name' => $validated['name'],
+            'type' => $validated['type'],
+            'assigned' => $validated['assigned'],
+            'status' => $validated['status'] ?? $task->status,
+            'approved' => $validated['approved'] ?? $task->approved,
+            'priority' => $validated['priority'],
+            'due_date' => $validated['due_date'],
+            'additional_column' => $validated['additional_column'] ?? $task->additional_column,
+            'updated_by' => auth()->id(),
+            'description' => $validated['description'] ?? $task->description, // add this
+            'parent_task_id' => $validated['parent_task_id'] ?? $task->parent_task_id
+        ]);
 
 
-            $project = Project::find($task->project_id);
+        $project = Project::find($task->project_id);
 
-            $project->activities()->create([
-                'user_id' => auth()->id(),
-                'activity' => 'Update Task called ' . $request->name,
-            ]);
-        } catch (Exception $ex) {
-            dd($ex);
-        }
+        $project->activities()->create([
+            'user_id' => auth()->id(),
+            'activity' => 'Update Task called ' . $request->name,
+        ]);
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
         // return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
 
     public function approve(Request $request, Task $task)
     {
         // dd($task);
-        try {
-            $task->update(['approved' => 1]);
-        } catch (Exception $ex) {
-            dd($ex);
-        }
+        // try {
+        $task->update(['approved' => 1]);
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
 
 
@@ -211,23 +211,23 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        try {
-            $project = $task->project()->first();
-            $members = ProjectMember::where("user_id", auth()->user()->id)->where('project_id', $project->id)->first();
+        // try {
+        $project = $task->project()->first();
+        $members = ProjectMember::where("user_id", auth()->user()->id)->where('project_id', $project->id)->first();
 
-            if ($members->role === "member" && $task->assigned !== auth()->user()->id) {
-                return back()->withErrors(['Error' => 'you are not authorized to change']);
-            }
-
-            $project->activities()->create([
-                'user_id' => Auth::id(),
-                'activity' => ' Deleted Task called ' . $task->name,
-            ]);
-            $task->delete();
-            return redirect()->route('project.show', $task->project_id)->with('success', 'Task deleted successfully.');
-        } catch (Exception $ex) {
-            dd($ex);
+        if ($members->role === "member" && $task->assigned !== auth()->user()->id) {
+            return back()->withErrors(['Error' => 'you are not authorized to change']);
         }
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Deleted Task called ' . $task->name,
+        ]);
+        $task->delete();
+        return redirect()->route('project.show', $task->project_id)->with('success', 'Task deleted successfully.');
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
     public function updateOrder(Request $request)
     {
