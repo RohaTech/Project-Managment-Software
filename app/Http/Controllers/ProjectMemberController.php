@@ -110,7 +110,7 @@ class ProjectMemberController extends Controller
         $validated = $request->validate([
             'user_id' => '|required|numeric'
         ]);
-        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
+        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->where("project_id", $project->id)->first();
 
         $member = $projectMember->creator()->get();
 
