@@ -21,7 +21,7 @@ export default function MembersDeleteDialog({
     user_id: "",
   });
 
-  console.log(member);
+  //   console.log(member);
 
   const handleSubmit = (e) => {
     console.log("object");

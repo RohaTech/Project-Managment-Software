@@ -65,8 +65,9 @@ class ProjectMemberController extends Controller
 
     public function update(Request $request, Project $project)
     {
-
+        // try {
         $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
+        // dd($project->id);
 
         if ($currentMember->role === "member") {
             return back()->withErrors(['Error' => 'Unauthorized Access']);
@@ -77,8 +78,11 @@ class ProjectMemberController extends Controller
             'user_id' => '|required|numeric'
         ]);
 
-        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
+        // dd($validated);
 
+        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->where("project_id", $project->id)->first();
+
+        // dd($projectMember);
 
         $projectMember->update([
             'role' => $validated['role']
@@ -89,34 +93,37 @@ class ProjectMemberController extends Controller
             'user_id' => Auth::id(),
             'activity' => ' Edited ' . User::find($validated['user_id'])->name . ' Role to  ' . $validated['role'],
         ]);
+        // } catch (Exception $ex) {
+        //     dd($ex);
+        // }
     }
 
     public function destroy(Request $request, Project $project)
     {
-        try {
-            $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
+        // try {
+        $currentMember = $project->members()->where("user_id", auth()->user()->id)->first();
 
-            if ($currentMember->role !== "owner") {
-                return back()->withErrors(['Error' => 'Unauthorized Access']);
-            }
-
-            $validated = $request->validate([
-                'user_id' => '|required|numeric'
-            ]);
-            $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
-
-            $member = $projectMember->creator()->get();
-
-
-
-            $project->activities()->create([
-                'user_id' => Auth::id(),
-                'activity' => ' Removed ' . $member[0]->name . ' from  the project ',
-            ]);
-            $projectMember->delete();
-        } catch (Exception $ex) {
-            dd($ex);
+        if ($currentMember->role !== "owner") {
+            return back()->withErrors(['Error' => 'Unauthorized Access']);
         }
+
+        $validated = $request->validate([
+            'user_id' => '|required|numeric'
+        ]);
+        $projectMember = ProjectMember::where('user_id', $validated['user_id'])->first();
+
+        $member = $projectMember->creator()->get();
+
+
+
+        $project->activities()->create([
+            'user_id' => Auth::id(),
+            'activity' => ' Removed ' . $member[0]->name . ' from  the project ',
+        ]);
+        $projectMember->delete();
+        // } catch (Exception $ex) {
+        //     dd($ex);
+        // }
     }
     public function transfer(Request $request, Project $project)
     {
