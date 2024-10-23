@@ -137,7 +137,7 @@ Feel free to fork the repository and contribute to the development of Gizebet. C
  
 
 ## Contact
-For any questions or support, please contact the Gizebet team at **support@gizebet.com**.
+For any questions or support, please contact the Gizebet team at **gizebetofficial@gmail.com**.
 
 ---
 
