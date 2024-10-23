@@ -119,7 +119,7 @@ This platform offers flexibility, scalability, and an intuitive user experience 
 ## Usage
 
 ### Logging In
-- To log in, use your registered email and password. If you are an admin, ensure that you've seeded or created an admin user.
+- To log in, use your registered email and password..
 
 ### Managing Projects
 - Create a new project, assign tasks to team members, set deadlines, and track project milestones.
