@@ -566,7 +566,7 @@ export default function ProjectShow({
 
                         <th
                           onClick={() => setIsAddFieldOpen(true)}
-                          className="w-[200px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
+                          className=" min-w-[150px]  cursor-pointer px-4 py-2 border text-left border-slate-300"
                         >
                           + Add Column
                         </th>

@@ -15,12 +15,16 @@ export default function MembersEditDialog({
     role: "",
     user_id: "",
   });
+  //   useEffect(() => {
+  console.log("current id " + data.user_id);
+  //   }, [data.user_id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setData("user_id", member?.id);
     patch(route("project-members.update", [project]), {
       onSuccess: (response) => {
+        console.log(response);
         reset();
         close();
       },

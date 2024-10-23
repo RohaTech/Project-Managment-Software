@@ -19,28 +19,28 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
 
-        try {
-            $query = Project::query();
+        // try {
+        $query = Project::query();
 
-            if ($request->has('name')) {
-                $query->where('name', "like", "%" . $request->input('name') . "%");
-            }
-
-            $userId = Auth::id();
-
-            $projects = $query->whereHas('members', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })->with(['creator', 'updateBy']) // Load the creator relationship
-                ->latest()
-                ->get();
-
-            return Inertia::render('Project/ProjectIndex', [
-                'projects' => $projects,
-                'queryParams' => $request->query() ?: null
-            ]);
-        } catch (Exception $ex) {
-            dd($ex);
+        if ($request->has('name')) {
+            $query->where('name', "like", "%" . $request->input('name') . "%");
         }
+
+        $userId = Auth::id();
+
+        $projects = $query->whereHas('members', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->with(['creator', 'updateBy']) // Load the creator relationship
+            ->latest()
+            ->get();
+
+        return Inertia::render('Project/ProjectIndex', [
+            'projects' => $projects,
+            'queryParams' => $request->query() ?: null
+        ]);
+        // } catch (Exception $ex) {
+        // dd($ex);
+        // }
     }
 
 
@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCreate',);
+            return Inertia::render('Project/ProjectCreate', );
         } catch (Exception $ex) {
             dd($ex);
         }
@@ -365,7 +365,7 @@ class ProjectController extends Controller
     {
 
         try {
-            return Inertia::render('Project/ProjectCopy',);
+            return Inertia::render('Project/ProjectCopy', );
         } catch (Exception $ex) {
             dd($ex);
         }
