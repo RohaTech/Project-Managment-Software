@@ -3,7 +3,7 @@
 ## Overview
 **Gizebet** is a comprehensive project management platform designed to streamline and optimize project management activities for teams across various industries. With its powerful features for task management, progress tracking, team collaboration, resource allocation, and project planning, Gizebet is an all-in-one solution for improving productivity and efficiency in managing projects, whether you're working with small teams or large enterprises.
 
-This platform offers flexibility, scalability, and an intuitive user experience to help you organize and manage projects seamlessly, ensuring successful project delivery within deadlines and budgets.
+This platform offers flexibility, scalability, and an intuitive user experience to help you organize and manage projects seamlessly, ensuring successful project delivery within deadlines and budget.
 
 ## Features
 
