@@ -19,7 +19,7 @@ The Home Page is the central hub where you can access all projects and tasks. He
 ### 3. **Project Show Page**
 The Project Show page allows you to view detailed information about a specific project. Here's a screenshot of this page:
 
-![Project Show Page](./public/image/ProjectDashboard.jpg "Project Show Page")
+![Project Show Page](./public/image/ProjectShow.jpg "Project Show Page")
 
 ---
 
