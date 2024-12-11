@@ -24,7 +24,7 @@ The Project Show page allows you to view detailed information about a specific p
 ---
 
 ### 4. **Project Dashboard**
-The Project Dashboard provides a high-level overview of all active projects, tasks, timelines, and resource usage. Here's a screenshot of the dashboard:
+The **Project Dashboard** displays key metrics related to project tasks, providing an overview of task completion and project progress. It includes the total number of tasks, completed tasks, and in-progress tasks. Visualizations such as a pie chart and bar graph give a clear view of task distribution and project status.
 
 ![Project Dashboard](./public/image/ProjectDashboard.jpg "Project Dashboard")
 
