@@ -4,12 +4,38 @@
 **Gizebet** is a comprehensive project management platform designed to streamline and optimize project management activities for teams across various industries. With its powerful features for task management, progress tracking, team collaboration, resource allocation, and project planning, Gizebet is an all-in-one solution for improving productivity and efficiency in managing projects, whether you're working with small teams or large enterprises.
 
 This platform offers flexibility, scalability, and an intuitive user experience to help you organize and manage projects seamlessly, ensuring successful project delivery within deadlines and budget.
-### Landing Page
+### 1. **Landing Page**
 
 Below is the landing page of the Gizebet Project Management System:
 
 ![Landing Page](./public/image/LandingPage.jpg "Gizebet Landing Page")
 
+### 2. **Home Page**
+The Home Page is the central hub where you can access all projects and tasks. Here's a screenshot of the home page:
+
+![Home Page](./public/image/HomePage.jpg "Home Page")
+
+
+### 3. **Project Show Page**
+The Project Show page allows you to view detailed information about a specific project. Here's a screenshot of this page:
+
+![Project Show Page](./public/image/ProjectDashboard.jpg "Project Show Page")
+
+---
+
+### 4. **Project Dashboard**
+The Project Dashboard provides a high-level overview of all active projects, tasks, timelines, and resource usage. Here's a screenshot of the dashboard:
+
+![Project Dashboard](./public/image/ProjectDashboard.jpg "Project Dashboard")
+
+---
+
+### 5. **Discussion Page**
+The **Discussion Page** allows team members to have conversations regarding a specific project, task, or topic. It includes features like comments, file sharing, and notifications to facilitate seamless collaboration. Here's a screenshot of the discussion page:
+
+![Discussion Page](./public/image/Discussion.jpg "Discussion Page")
+
+---
 ## Features
 
 ### 1. **Task Management**
