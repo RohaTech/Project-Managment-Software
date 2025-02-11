@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('approved')->default(false);
             $table->string("priority")->nullable();
             $table->string("due_date")->nullable();
-            $table->json('additional_column')->nullable();
+            // $table->json('additional_column')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('parent_task_id')->nullable(); // Self-referencing foreign key
             $table->foreign('parent_task_id')->references('id')->on('tasks')->onDelete('cascade');
