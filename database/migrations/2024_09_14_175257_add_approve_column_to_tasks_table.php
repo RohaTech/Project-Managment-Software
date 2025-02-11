@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->boolean('approved')->default(true)->after('status');
-        });
+        // Schema::table('tasks', function (Blueprint $table) {
+        //     $table->boolean('approved')->default(true)->after('status');
+        // });
     }
 
     /**
