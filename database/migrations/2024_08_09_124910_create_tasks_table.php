@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId("updated_by")->constrained('users')->onDelete("cascade");
             $table->foreignId("assigned")->nullable()->constrained('users')->onDelete("cascade");
             $table->string("status")->default("Not Started");
-            $table->boolean('approved')->default(false)->after('status');
+            $table->boolean('approved')->default(false);
             $table->string("priority")->nullable();
             $table->string("due_date")->nullable();
             $table->json('additional_column')->nullable();
