@@ -12,7 +12,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->text('description')->nullable();
+            // $table->text('description')->nullable();
             $table->unsignedBigInteger('parent_task_id')->nullable(); // Self-referencing foreign key
             $table->foreign('parent_task_id')->references('id')->on('tasks')->onDelete('cascade');
         });
