@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
 
-            $table->foreignId("assigned")->nullable()->constrained('users')->onDelete("cascade");
+            $table->foreignId("assigneddd")->nullable()->constrained('users')->onDelete("cascade");
         });
     }
 
