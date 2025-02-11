@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sub_tasks', function (Blueprint $table) {
-            $table->dropColumn('assigned');
-        });
+        // Schema::table('sub_tasks', function (Blueprint $table) {
+        //     $table->dropColumn('assigned');
+        // });
 
-        Schema::table('sub_tasks', function (Blueprint $table) {
-            $table->foreignId("assigned")->nullable()->constrained('users')->onDelete("cascade");
-        });
+        // Schema::table('sub_tasks', function (Blueprint $table) {
+        //     $table->foreignId("assigned")->nullable()->constrained('users')->onDelete("cascade");
+        // });
     }
 
     /**
