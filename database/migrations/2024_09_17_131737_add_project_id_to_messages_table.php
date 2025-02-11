@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('messages', callback: function (Blueprint $table) {
-            $table->foreignId("project_id")->nullable()->constrained('projects')->onDelete("cascade");
-        });
+        // Schema::table('messages', callback: function (Blueprint $table) {
+        //     $table->foreignId("project_id")->nullable()->constrained('projects')->onDelete("cascade");
+        // });
     }
 
     /**
