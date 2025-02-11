@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        // Schema::table('tasks', function (Blueprint $table) {
+        //     $table->dropColumn('status');
+        // });
 
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->string("status")->default("Not Started ");
-        });
+        // Schema::table('tasks', function (Blueprint $table) {
+        //     $table->string("status")->default("Not Started ");
+        // });
     }
 
     /**
