@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->string('type')->after('name'); // Add 'type' column
-        });
+        // Schema::table('projects', function (Blueprint $table) {
+        //     $table->string('type')->after('name'); // Add 'type' column
+        // });
     }
 
     /**
